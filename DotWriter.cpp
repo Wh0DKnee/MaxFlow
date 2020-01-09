@@ -5,11 +5,11 @@
 void DotWriter::Write(const std::vector<Vertex>& graph)
 {
 	static const char* prefix = R"(digraph {
-    graph [pad="0.212,0.055" bgcolor="#d1d1d1"]
-    node [style=filled])";
+    graph [pad="0.212,0.055" bgcolor="#d1d1d1" dpi=100 size="12,8!"]
+    node [fillcolor = "#000000" style=filled shape=circle width=0.2 fixedsize=true label = ""])";
 
-	static std::string generalVertexTagsPrePos = " [fillcolor = \"#000000\" pos = \"";
-	static std::string generalVertexTagsPostPos = "!\" shape=circle label = \"\"]";
+	static std::string generalVertexTagsPrePos = " [pos = \"";
+	static std::string generalVertexTagsPostPos = "!\"]";
 
 	std::ofstream outfile("graphviz/graph.dot");
 	outfile << std::fixed;
@@ -21,14 +21,29 @@ void DotWriter::Write(const std::vector<Vertex>& graph)
 	{
 		outfile << index;
 		outfile << generalVertexTagsPrePos;
-		outfile << vert.posX;
+		outfile << vert.pos.x;
 		outfile << ",";
-		outfile << vert.posY;
+		outfile << vert.pos.y;
 		outfile << generalVertexTagsPostPos;
 		outfile << std::endl;
 		++index;
 	}
 
+	index = 0;
+	for (const auto& vert : graph)
+	{
+		for (const auto& neighbor : vert.neighbors)
+		{
+			outfile << index;
+			outfile << " -> ";
+			outfile << neighbor.index;
+			outfile << " [label=\"5/10\"]";
+			outfile << std::endl;
+		}
+		++index;
+	}
+
 	outfile << "}" << std::endl;
+
 	outfile.close();
 }

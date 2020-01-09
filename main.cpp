@@ -42,7 +42,8 @@ int main()
 		{ 
 			auto graph = GraphUtils::GenerateGraph(10, 24);
 			DotWriter::Write(graph);
-			system("cd graphviz & dot -Kfdp -n -Gsize=12,8\! -Gdpi=100 -Tpng graph.dot -o renderedGraph.png");
+			// -Gsize=12,8\! -Gdpi=100
+			system("cd graphviz & dot -Kfdp -n -Tpng graph.dot -o renderedGraph.png");
 			if (!image.loadFromFile("graphviz/renderedGraph.png"))
 			{
 				return -1;
