@@ -21,6 +21,11 @@ int main()
 	sf::Texture texture;
 	sf::Sprite sprite;
 
+	std::vector<Vertex> graph;
+	char labelTags[255] = "[labeldistance=0 labelangle=0 headlabel=\"5/10\" taillabel=\"5/10\"]";
+	int numNodes = 10;
+	int totalCapacity = 100;
+
 	window.resetGLStates();
 	sf::Clock deltaClock;
 	while (window.isOpen()) { // main loop
@@ -38,10 +43,12 @@ int main()
 		ImGui::Begin("Sample window"); // begin window
 		//ImGui::Text(std::to_string(graph[0].posX).c_str());
 
-		if (ImGui::Button("re-render"))
-		{ 
-			auto graph = GraphUtils::GenerateGraph(10, 24);
-			DotWriter::Write(graph);
+		ImGui::InputInt("#nodes", &numNodes);
+		
+		ImGui::InputInt("totalCapacity", &totalCapacity);
+
+		auto rerender = [&] {
+			DotWriter::Write(graph, labelTags);
 			// -Gsize=12,8\! -Gdpi=100
 			system("cd graphviz & dot -Kfdp -n -Tpng graph.dot -o renderedGraph.png");
 			if (!image.loadFromFile("graphviz/renderedGraph.png"))
@@ -52,7 +59,19 @@ int main()
 			texture.loadFromImage(image);  //Load Texture from image
 
 			sprite.setTexture(texture);
+		};
+
+		if (ImGui::Button("re-generate"))
+		{
+			graph = GraphUtils::GenerateGraph(numNodes, totalCapacity);
+			rerender();
 		}
+
+		if (ImGui::Button("re-render"))
+		{ 
+			rerender();
+		}
+		ImGui::InputText("edge label tags", labelTags, 255);
 
 		ImGui::End(); // end window
 

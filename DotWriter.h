@@ -8,6 +8,6 @@
 class DotWriter
 {
 public:
-	static void Write(const std::vector<Vertex>& graph);
+	static void Write(const std::vector<Vertex>& graph, const char* labelTags);
 };
 

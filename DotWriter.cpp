@@ -2,9 +2,10 @@
 #include <string>
 #include <iomanip>
 
-void DotWriter::Write(const std::vector<Vertex>& graph)
+void DotWriter::Write(const std::vector<Vertex>& graph, const char* labelTags)
 {
 	static const char* prefix = R"(digraph {
+	splines=compound
     graph [pad="0.212,0.055" bgcolor="#d1d1d1" dpi=100 size="12,8!"]
     node [fillcolor = "#000000" style=filled shape=circle width=0.2 fixedsize=true label = ""])";
 
@@ -37,7 +38,7 @@ void DotWriter::Write(const std::vector<Vertex>& graph)
 			outfile << index;
 			outfile << " -> ";
 			outfile << neighbor.index;
-			outfile << " [label=\"5/10\"]";
+			outfile << labelTags;
 			outfile << std::endl;
 		}
 		++index;
