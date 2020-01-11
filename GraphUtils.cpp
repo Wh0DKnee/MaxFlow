@@ -14,8 +14,8 @@ bool GraphUtils::intersect(Point a, Point b, Point c, Point d)
 
 std::vector<Vertex> GraphUtils::GenerateGraph(int numNodes, int maxCapacity)
 {
-	static float maxWidth = 10.f;
-	static float maxHeight = 10.f;
+	static float maxWidth = 1200.f;
+	static float maxHeight = 675.f;
 
 	std::vector<Vertex> graph;
 	graph.reserve(numNodes);

@@ -4,10 +4,20 @@
 
 void DotWriter::Write(const std::vector<Vertex>& graph, const char* labelTags)
 {
+	//At present, most device-independent units are either inches or points, which we take as 72 points per inch.
+	//dpi: This specifies the expected number of pixels per inch on a display device
+	// 72 points per inch
+	// 96 pixels per inch
+	// 720 Breite -> 10 inch x 3 inch -> 960 x 289 pixel
+	// 1600 x 900 -> 16.66666 inch x 9.375 -> 1200 x 675
 	static const char* prefix = R"(digraph {
-	splines=compound
-    graph [pad="0.212,0.055" bgcolor="#d1d1d1" dpi=100 size="12,8!"]
-    node [fillcolor = "#000000" style=filled shape=circle width=0.2 fixedsize=true label = ""])";
+	splines=true
+	sep=1
+	dpi=96
+	viewport="1200,675"
+    graph [pad="0.212,0.055" bgcolor="#d1d1d1" size="12,8!"]
+    node [fillcolor = "#000000" style=filled shape=circle width=0.1 fixedsize=true label = ""]
+	edge [arrowhead=halfopen arrowsize=1 fontsize=15 penwidth=1])";
 
 	static std::string generalVertexTagsPrePos = " [pos = \"";
 	static std::string generalVertexTagsPostPos = "!\"]";

@@ -10,7 +10,7 @@
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(1600, 1000), "");
+	sf::RenderWindow window(sf::VideoMode(1600, 900), "");
 	window.setVerticalSyncEnabled(true);
 	ImGui::SFML::Init(window);
 
@@ -22,7 +22,7 @@ int main()
 	sf::Sprite sprite;
 
 	std::vector<Vertex> graph;
-	char labelTags[255] = "[labeldistance=0 labelangle=0 headlabel=\"5/10\" taillabel=\"5/10\"]";
+	char labelTags[255] = "[labeldistance=2 labelangle=0 headlabel=\"5/10\"]";
 	int numNodes = 10;
 	int totalCapacity = 100;
 
@@ -50,7 +50,7 @@ int main()
 		auto rerender = [&] {
 			DotWriter::Write(graph, labelTags);
 			// -Gsize=12,8\! -Gdpi=100
-			system("cd graphviz & dot -Kfdp -n -Tpng graph.dot -o renderedGraph.png");
+			system("cd graphviz & dot -Kneato -n -Tpng graph.dot -o renderedGraph.png");
 			if (!image.loadFromFile("graphviz/renderedGraph.png"))
 			{
 				return -1;
@@ -60,6 +60,19 @@ int main()
 
 			sprite.setTexture(texture);
 		};
+
+		if (ImGui::Button("re-draw")) 
+		{
+			system("cd graphviz & dot -Kneato -n -Tpng graph.dot -o renderedGraph.png");
+			if (!image.loadFromFile("graphviz/renderedGraph.png"))
+			{
+				return -1;
+			}
+
+			texture.loadFromImage(image);  //Load Texture from image
+
+			sprite.setTexture(texture);
+		}
 
 		if (ImGui::Button("re-generate"))
 		{
