@@ -47,10 +47,9 @@ int main()
 			graph = GraphUtils::GenerateGraph(numNodes, totalCapacity, window.getSize().x, window.getSize().y);
 		}
 		
-		ImGui::End(); // end window
-
 		window.clear(sf::Color(209, 209, 209, 255));
 		Renderer::Render(window, graph);
+		ImGui::End(); // end window
 		ImGui::SFML::Render(window);
 		window.display();
 	}

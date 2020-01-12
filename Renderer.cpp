@@ -6,6 +6,9 @@
 #include "LineShape.h"
 #include <cmath>
 
+#include "imgui.h"
+#include "imgui-SFML.h"
+
 sf::Vector2f normalize(const sf::Vector2f& v)
 {
 	return v / std::sqrt(v.x * v.x + v.y * v.y);
@@ -23,6 +26,16 @@ void Renderer::Render(sf::RenderWindow& window, const std::vector<Vertex>& graph
 	static float labelDistance = 0.5f;
 	static float labelSpacing = 20.f;
 	static float labelRadius = 15.f;
+	static int fontSize = 15;
+	
+	if (ImGui::CollapsingHeader("Styling"))
+	{
+		ImGui::SliderFloat("node radius", &nodeRadius, 1.f, 30.f);
+		ImGui::SliderFloat("label distance", &labelDistance, 0.f, 1.f);
+		ImGui::SliderFloat("label spacing", &labelSpacing, 10.f, 100.f);
+		ImGui::SliderFloat("label radius", &labelRadius, 10.f, 40.f);
+		ImGui::SliderInt("font size", &fontSize, 5, 30);
+	}
 
 	for (const auto& vert : graph)
 	{
@@ -55,7 +68,7 @@ void Renderer::Render(sf::RenderWindow& window, const std::vector<Vertex>& graph
 			sf::Text labelText;
 			labelText.setFont(font);
 			labelText.setString("5/10");
-			labelText.setCharacterSize(15);
+			labelText.setCharacterSize(fontSize);
 			labelText.setFillColor(sf::Color::Black);
 			sf::FloatRect textRect = labelText.getLocalBounds();
 			labelText.setOrigin(textRect.left + textRect.width / 2.f,
