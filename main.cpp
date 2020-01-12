@@ -22,7 +22,7 @@ int main()
 	sf::Sprite sprite;
 
 	std::vector<Vertex> graph;
-	char labelTags[255] = "[labeldistance=2 labelangle=0 headlabel=\"5/10\"]";
+	char labelTags[255] = "shape=oval fontsize=9 width=0.5 height=0.2";
 	int numNodes = 10;
 	int totalCapacity = 100;
 
