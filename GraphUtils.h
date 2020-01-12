@@ -6,9 +6,9 @@
 
 namespace GraphUtils
 {
-	float CCW(Point a, Point b, Point c);
+	float CCW(sf::Vector2f a, sf::Vector2f b, sf::Vector2f c);
 
-	bool intersect(Point a, Point b, Point c, Point d);
+	bool intersect(sf::Vector2f a, sf::Vector2f b, sf::Vector2f c, sf::Vector2f d);
 
 	std::vector<Vertex> GenerateGraph(int numNodes, int maxCapacity, int windowWidth, int windowHeight);
 };

@@ -1,10 +1,15 @@
 #include "Renderer.h"
 #include <string>
-#include <iomanip>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "LineShape.h"
+#include <cmath>
+
+sf::Vector2f normalize(const sf::Vector2f& v)
+{
+	return v / std::sqrt(v.x * v.x + v.y * v.y);
+}
 
 void Renderer::Render(sf::RenderWindow& window, const std::vector<Vertex>& graph)
 {
@@ -17,13 +22,14 @@ void Renderer::Render(sf::RenderWindow& window, const std::vector<Vertex>& graph
 	static float nodeRadius = 10.f;
 	static float labelDistance = 0.5f;
 	static float labelSpacing = 20.f;
-	static float labelRadius = 9.f;
+	static float labelRadius = 15.f;
 
 	for (const auto& vert : graph)
 	{
 		sf::CircleShape nodeShape(nodeRadius);
 		nodeShape.setFillColor(sf::Color::Black);
 		nodeShape.setPosition(vert.pos.x, vert.pos.y);
+		nodeShape.setOrigin(nodeRadius, nodeRadius);
 		window.draw(nodeShape);
 	}
 
@@ -32,16 +38,18 @@ void Renderer::Render(sf::RenderWindow& window, const std::vector<Vertex>& graph
 	{
 		for (const auto& neighbor : vert.neighbors)
 		{
-			Point delta = graph[neighbor.index].pos - vert.pos;
-			Point middle = vert.pos + (delta * labelDistance);
-			Point perpendicular = Point(delta.y, -delta.x);
-			Point pos = middle + perpendicular.normalize() * labelSpacing;
+			sf::Vector2f neighborPos = graph[neighbor.index].pos;
+			sf::Vector2f delta = neighborPos - vert.pos;
+			sf::Vector2f middle = vert.pos + (delta * labelDistance);
+			sf::Vector2f perpendicular = sf::Vector2f(delta.y, -delta.x);
+			sf::Vector2f labelPos = middle + normalize(perpendicular) * labelSpacing;
 
 			sf::CircleShape labelNode(labelRadius);
 			labelNode.setOutlineThickness(2.f);
 			labelNode.setOutlineColor(sf::Color::Black);
 
-			labelNode.setPosition(pos.x, pos.y);
+			labelNode.setPosition(labelPos);
+			labelNode.setOrigin(labelRadius, labelRadius);
 			window.draw(labelNode);
 
 			sf::Text labelText;
@@ -49,10 +57,21 @@ void Renderer::Render(sf::RenderWindow& window, const std::vector<Vertex>& graph
 			labelText.setString("5/10");
 			labelText.setCharacterSize(15);
 			labelText.setFillColor(sf::Color::Black);
-			labelText.setPosition(pos.x, pos.y);
+			sf::FloatRect textRect = labelText.getLocalBounds();
+			labelText.setOrigin(textRect.left + textRect.width / 2.f,
+				textRect.top + textRect.height / 2.f);
+			labelText.setPosition(labelPos);
 			window.draw(labelText);
 			
-			LineShape line1(sf::Vector2f(vert.pos.x, vert.pos.y), sf::Vector2f(pos.x, pos.y));
+			sf::Vector2f labelDeltaNormalized = normalize(labelPos - vert.pos);
+			LineShape line1(vert.pos + labelDeltaNormalized * nodeRadius, labelPos - labelDeltaNormalized * labelRadius);
+			line1.setFillColor(sf::Color::Black);
+			window.draw(line1);
+
+			labelDeltaNormalized = normalize(neighborPos - labelPos);
+			LineShape line2(labelPos + labelDeltaNormalized * labelRadius, neighborPos - labelDeltaNormalized * nodeRadius);
+			line2.setFillColor(sf::Color::Black);
+			window.draw(line2);
 		}
 		++index;
 	}

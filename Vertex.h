@@ -1,39 +1,7 @@
 #pragma once
 #include <vector>
 #include <cmath>
-
-struct Point
-{
-	Point(float x_, float y_) : x(x_), y(y_){}
-	float x;
-	float y;
-
-	Point operator-(const Point& rhs) const
-	{
-		return Point(x - rhs.x, y - rhs.y);
-	}
-
-	Point operator+(const Point& rhs) const
-	{
-		return Point(x + rhs.x, y + rhs.y);
-	}
-
-	Point operator/(float div) const
-	{
-		return Point(x / div, y / div);
-	}
-
-	Point operator*(float div) const
-	{
-		return Point(x * div, y * div);
-	}
-
-	// returns normalized version, not in place
-	Point normalize() const
-	{
-		return Point(*this / std::sqrt(x * x + y * y));
-	}
-};
+#include <SFML/System/Vector2.hpp>
 
 struct Neighbor
 {
@@ -45,10 +13,10 @@ struct Neighbor
 struct Vertex
 {
 	Vertex(float x, float y) : pos(x, y){}
-	Vertex(Point p) : pos(p){}
+	Vertex(sf::Vector2f p) : pos(p){}
 
 	// payload
-	Point pos;
+	sf::Vector2f pos;
 	
 	// add additional payload here
 

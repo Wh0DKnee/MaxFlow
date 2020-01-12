@@ -2,12 +2,12 @@
 #include <chrono>
 #include <algorithm>
 
-float GraphUtils::CCW(Point a, Point b, Point c)
+float GraphUtils::CCW(sf::Vector2f a, sf::Vector2f b, sf::Vector2f c)
 {
 	return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
 }
 
-bool GraphUtils::intersect(Point a, Point b, Point c, Point d)
+bool GraphUtils::intersect(sf::Vector2f a, sf::Vector2f b, sf::Vector2f c, sf::Vector2f d)
 {
 	return (CCW(a, b, c) * CCW(a, b, d) < 0 && CCW(c, d, b) * CCW(c, d, a) < 0);
 }
