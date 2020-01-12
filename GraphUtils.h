@@ -10,6 +10,6 @@ namespace GraphUtils
 
 	bool intersect(Point a, Point b, Point c, Point d);
 
-	std::vector<Vertex> GenerateGraph(int numNodes, int maxCapacity);
+	std::vector<Vertex> GenerateGraph(int numNodes, int maxCapacity, int windowWidth, int windowHeight);
 };
 

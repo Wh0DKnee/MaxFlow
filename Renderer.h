@@ -4,10 +4,13 @@
 #include <fstream>
 #include "Vertex.h"
 
+namespace sf {
+	class RenderWindow;
+}
 // Not sure if this will need state at some point, so I made it a class instead of a namespace.
-class DotWriter
+class Renderer
 {
 public:
-	static void Write(const std::vector<Vertex>& graph, const char* labelTags);
+	static void Render(class sf::RenderWindow& window, const std::vector<Vertex>& graph);
 };
 

@@ -6,23 +6,17 @@
 #include <SFML/Window/Event.hpp>
 
 #include "GraphUtils.h"
-#include "DotWriter.h"
+#include "Renderer.h"
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(1600, 900), "");
+	sf::ContextSettings settings;
+	settings.antialiasingLevel = 8;
+	sf::RenderWindow window(sf::VideoMode(1600, 900), "MaxFlow", sf::Style::Default, settings);
 	window.setVerticalSyncEnabled(true);
 	ImGui::SFML::Init(window);
 
-	char windowTitle[255] = "MaxFlow";
-	window.setTitle(windowTitle);
-
-	sf::Image image;
-	sf::Texture texture;
-	sf::Sprite sprite;
-
 	std::vector<Vertex> graph;
-	char labelTags[255] = "shape=oval fontsize=9 width=0.5 height=0.2";
 	int numNodes = 10;
 	int totalCapacity = 100;
 
@@ -38,58 +32,25 @@ int main()
 			}
 		}
 
-		ImGui::SFML::Update(window, deltaClock.restart());
+		sf::Time deltaTime = deltaClock.restart();
+		ImGui::SFML::Update(window, deltaTime);
 
-		ImGui::Begin("Sample window"); // begin window
-		//ImGui::Text(std::to_string(graph[0].posX).c_str());
-
+		ImGui::Begin("Debug"); // begin window
+		//ImGui::Text("FPS: %i", static_cast<int>(1.f / deltaTime.asSeconds()));
+		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::InputInt("#nodes", &numNodes);
-		
 		ImGui::InputInt("totalCapacity", &totalCapacity);
 
-		auto rerender = [&] {
-			DotWriter::Write(graph, labelTags);
-			// -Gsize=12,8\! -Gdpi=100
-			system("cd graphviz & dot -Kneato -n -Tpng graph.dot -o renderedGraph.png");
-			if (!image.loadFromFile("graphviz/renderedGraph.png"))
-			{
-				return -1;
-			}
-
-			texture.loadFromImage(image);  //Load Texture from image
-
-			sprite.setTexture(texture);
-		};
-
-		if (ImGui::Button("re-draw")) 
-		{
-			system("cd graphviz & dot -Kneato -n -Tpng graph.dot -o renderedGraph.png");
-			if (!image.loadFromFile("graphviz/renderedGraph.png"))
-			{
-				return -1;
-			}
-
-			texture.loadFromImage(image);  //Load Texture from image
-
-			sprite.setTexture(texture);
-		}
 
 		if (ImGui::Button("re-generate"))
 		{
-			graph = GraphUtils::GenerateGraph(numNodes, totalCapacity);
-			rerender();
+			graph = GraphUtils::GenerateGraph(numNodes, totalCapacity, window.getSize().x, window.getSize().y);
 		}
-
-		if (ImGui::Button("re-render"))
-		{ 
-			rerender();
-		}
-		ImGui::InputText("edge label tags", labelTags, 255);
-
+		
 		ImGui::End(); // end window
 
 		window.clear(sf::Color(209, 209, 209, 255));
-		window.draw(sprite);
+		Renderer::Render(window, graph);
 		ImGui::SFML::Render(window);
 		window.display();
 	}

@@ -39,7 +39,10 @@
     <ClCompile Include="Vertex.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="DotWriter.cpp">
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="LineShape.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
@@ -50,7 +53,10 @@
     <ClInclude Include="Vertex.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="DotWriter.h">
+    <ClInclude Include="Renderer.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="LineShape.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

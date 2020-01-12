@@ -12,11 +12,9 @@ bool GraphUtils::intersect(Point a, Point b, Point c, Point d)
 	return (CCW(a, b, c) * CCW(a, b, d) < 0 && CCW(c, d, b) * CCW(c, d, a) < 0);
 }
 
-std::vector<Vertex> GraphUtils::GenerateGraph(int numNodes, int maxCapacity)
+std::vector<Vertex> GraphUtils::GenerateGraph(int numNodes, int maxCapacity, int windowWidth, int windowHeight)
 {
-	static float maxWidth = 1200.f;
-	static float maxHeight = 675.f;
-
+	static int margin = 20;
 	std::vector<Vertex> graph;
 	graph.reserve(numNodes);
 
@@ -24,8 +22,8 @@ std::vector<Vertex> GraphUtils::GenerateGraph(int numNodes, int maxCapacity)
 	{
 		static std::default_random_engine e;
 		e.seed(std::chrono::system_clock::now().time_since_epoch().count());
-		static std::uniform_real_distribution<float> xDis(0, maxWidth);
-		static std::uniform_real_distribution<float> yDis(0, maxHeight);
+		static std::uniform_real_distribution<float> xDis(0 + margin, windowWidth - margin);
+		static std::uniform_real_distribution<float> yDis(0 + margin, windowHeight - margin);
 		float x = xDis(e);
 		float y = yDis(e);
 

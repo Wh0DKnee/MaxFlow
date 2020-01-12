@@ -129,7 +129,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DotWriter.cpp" />
+    <ClCompile Include="LineShape.cpp" />
+    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="GraphUtils.cpp" />
     <ClCompile Include="imgui-SFML.cpp" />
     <ClCompile Include="imgui.cpp" />
@@ -140,7 +141,8 @@
     <ClCompile Include="Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DotWriter.h" />
+    <ClInclude Include="LineShape.h" />
+    <ClInclude Include="Renderer.h" />
     <ClInclude Include="GraphUtils.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
