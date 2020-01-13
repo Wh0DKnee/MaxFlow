@@ -129,6 +129,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ArrowShape.cpp" />
     <ClCompile Include="LineShape.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="GraphUtils.cpp" />
@@ -138,12 +139,15 @@
     <ClCompile Include="imgui_draw.cpp" />
     <ClCompile Include="imgui_widgets.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="VectorUtils.cpp" />
     <ClCompile Include="Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ArrowShape.h" />
     <ClInclude Include="LineShape.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="GraphUtils.h" />
+    <ClInclude Include="VectorUtils.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

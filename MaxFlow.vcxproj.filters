@@ -45,6 +45,12 @@
     <ClCompile Include="LineShape.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="ArrowShape.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="VectorUtils.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphUtils.h">
@@ -57,6 +63,12 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="LineShape.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="ArrowShape.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="VectorUtils.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

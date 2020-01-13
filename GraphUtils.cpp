@@ -12,7 +12,7 @@ bool GraphUtils::intersect(sf::Vector2f a, sf::Vector2f b, sf::Vector2f c, sf::V
 	return (CCW(a, b, c) * CCW(a, b, d) < 0 && CCW(c, d, b) * CCW(c, d, a) < 0);
 }
 
-std::vector<Vertex> GraphUtils::GenerateGraph(int numNodes, int maxCapacity, int windowWidth, int windowHeight)
+std::vector<Vertex> GraphUtils::generateGraph(int numNodes, int maxCapacity, int windowWidth, int windowHeight)
 {
 	static int margin = 20;
 	std::vector<Vertex> graph;

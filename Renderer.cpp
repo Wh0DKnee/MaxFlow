@@ -4,18 +4,32 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "LineShape.h"
+#include "VectorUtils.h"
+#include "ArrowShape.h"
 #include <cmath>
 
 #include "imgui.h"
 #include "imgui-SFML.h"
 
-sf::Vector2f normalize(const sf::Vector2f& v)
-{
-	return v / std::sqrt(v.x * v.x + v.y * v.y);
-}
-
 void Renderer::Render(sf::RenderWindow& window, const std::vector<Vertex>& graph)
 {
+	sf::RectangleShape background = sf::RectangleShape(sf::Vector2f(window.getSize().x, window.getSize().y));
+	background.setFillColor(sf::Color(209, 209, 209, 255));
+	window.draw(background);
+	/*
+	static float start[] = { 200.f, 200.f };
+	static float end[] = { 400.f, 400.f };
+
+	ImGui::InputFloat2("start", start, 2);
+	ImGui::InputFloat2("end", end, 2);
+	ArrowShape arrow = ArrowShape(sf::Vector2f(start[0], start[1]), sf::Vector2f(end[0], end[1]));
+	arrow.setFillColor(sf::Color::Black);
+	window.draw(arrow);
+	//LineShape line(sf::Vector2f(start[0], start[1]), sf::Vector2f(end[0], end[1]));
+	//line.setFillColor(sf::Color::Black);
+	//window.draw(line);
+	return;*/
+
 	sf::Font font;
 	if (!font.loadFromFile("fonts/arial.ttf"))
 	{
@@ -37,6 +51,7 @@ void Renderer::Render(sf::RenderWindow& window, const std::vector<Vertex>& graph
 		ImGui::SliderInt("font size", &fontSize, 5, 30);
 	}
 
+
 	for (const auto& vert : graph)
 	{
 		sf::CircleShape nodeShape(nodeRadius);
@@ -45,6 +60,12 @@ void Renderer::Render(sf::RenderWindow& window, const std::vector<Vertex>& graph
 		nodeShape.setOrigin(nodeRadius, nodeRadius);
 		window.draw(nodeShape);
 	}
+
+	sf::Color regularColor = sf::Color(125, 125, 125, 255);
+	std::vector<LineShape> edges;
+	std::vector<sf::CircleShape> labelCircles;
+	std::vector<sf::Text> labelTexts;
+	std::vector<ArrowShape> arrows;
 
 	size_t index = 0;
 	for (const auto& vert : graph)
@@ -55,15 +76,14 @@ void Renderer::Render(sf::RenderWindow& window, const std::vector<Vertex>& graph
 			sf::Vector2f delta = neighborPos - vert.pos;
 			sf::Vector2f middle = vert.pos + (delta * labelDistance);
 			sf::Vector2f perpendicular = sf::Vector2f(delta.y, -delta.x);
-			sf::Vector2f labelPos = middle + normalize(perpendicular) * labelSpacing;
+			sf::Vector2f labelPos = middle + VectorUtils::normalize(perpendicular) * labelSpacing;
 
 			sf::CircleShape labelNode(labelRadius);
 			labelNode.setOutlineThickness(2.f);
-			labelNode.setOutlineColor(sf::Color::Black);
-
+			labelNode.setOutlineColor(regularColor);
 			labelNode.setPosition(labelPos);
 			labelNode.setOrigin(labelRadius, labelRadius);
-			window.draw(labelNode);
+			labelCircles.push_back(labelNode);
 
 			sf::Text labelText;
 			labelText.setFont(font);
@@ -72,20 +92,52 @@ void Renderer::Render(sf::RenderWindow& window, const std::vector<Vertex>& graph
 			labelText.setFillColor(sf::Color::Black);
 			sf::FloatRect textRect = labelText.getLocalBounds();
 			labelText.setOrigin(textRect.left + textRect.width / 2.f,
-				textRect.top + textRect.height / 2.f);
+								textRect.top + textRect.height / 2.f);
 			labelText.setPosition(labelPos);
-			window.draw(labelText);
+			labelTexts.push_back(labelText);
 			
-			sf::Vector2f labelDeltaNormalized = normalize(labelPos - vert.pos);
+			sf::Vector2f labelDelta = labelPos - vert.pos;
+			sf::Vector2f labelDeltaNormalized = VectorUtils::normalize(labelDelta);
 			LineShape line1(vert.pos + labelDeltaNormalized * nodeRadius, labelPos - labelDeltaNormalized * labelRadius);
-			line1.setFillColor(sf::Color::Black);
-			window.draw(line1);
+			line1.setFillColor(regularColor);
+			edges.push_back(line1);
 
-			labelDeltaNormalized = normalize(neighborPos - labelPos);
+			ArrowShape arrow1 = ArrowShape(vert.pos + labelDelta / 2.f, labelPos);
+			arrow1.setFillColor(regularColor);
+			arrows.push_back(arrow1);
+
+			labelDelta = neighborPos - labelPos;
+			labelDeltaNormalized = VectorUtils::normalize(labelDelta);
 			LineShape line2(labelPos + labelDeltaNormalized * labelRadius, neighborPos - labelDeltaNormalized * nodeRadius);
-			line2.setFillColor(sf::Color::Black);
-			window.draw(line2);
+			line2.setFillColor(regularColor);
+			edges.push_back(line2);
+
+			ArrowShape arrow2 = ArrowShape(labelPos + labelDelta / 2.f, neighborPos);
+			arrow2.setFillColor(regularColor);
+			arrows.push_back(arrow2);
 		}
 		++index;
+	}
+
+	// SFML doesnt have z-ordering, so we draw edges first...
+	for (const auto& drawable : edges)
+	{
+		window.draw(drawable);
+	}
+
+	for (const auto& drawable : arrows)
+	{
+		window.draw(drawable);
+	}
+
+	// ... and labels second, so that edges dont hide the labels.
+	for (const auto& drawable : labelCircles)
+	{
+		window.draw(drawable);
+	}
+
+	for (const auto& drawable : labelTexts)
+	{
+		window.draw(drawable);
 	}
 }

@@ -44,7 +44,7 @@ int main()
 
 		if (ImGui::Button("re-generate"))
 		{
-			graph = GraphUtils::GenerateGraph(numNodes, totalCapacity, window.getSize().x, window.getSize().y);
+			graph = GraphUtils::generateGraph(numNodes, totalCapacity, window.getSize().x, window.getSize().y);
 		}
 		
 		window.clear(sf::Color(209, 209, 209, 255));
