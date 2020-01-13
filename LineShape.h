@@ -20,7 +20,7 @@ public:
 
 private:
 
-	sf::Vector2f dir; // Direction of the line
-	float thickness;    // Thickness of the line
+	sf::Vector2f m_direction; ///< Direction of the line
+	float m_thickness;    ///< Thickness of the line
 };
 
