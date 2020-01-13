@@ -17,7 +17,7 @@ size_t ArrowShape::getPointCount() const
 
 sf::Vector2f ArrowShape::getPoint(size_t index) const
 {
-	sf::Vector2f unitPerpendicular(-dir.y, dir.x);
+	sf::Vector2f unitPerpendicular(dir.y, -dir.x);
 	
 	switch (index)
 	{

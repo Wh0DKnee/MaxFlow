@@ -11,24 +11,11 @@
 #include "imgui.h"
 #include "imgui-SFML.h"
 
-void Renderer::Render(sf::RenderWindow& window, const std::vector<Vertex>& graph)
+void Renderer::Render(sf::RenderWindow& window, const std::vector<Vertex>& graph, float deltaTime)
 {
 	sf::RectangleShape background = sf::RectangleShape(sf::Vector2f(window.getSize().x, window.getSize().y));
 	background.setFillColor(sf::Color(209, 209, 209, 255));
 	window.draw(background);
-	/*
-	static float start[] = { 200.f, 200.f };
-	static float end[] = { 400.f, 400.f };
-
-	ImGui::InputFloat2("start", start, 2);
-	ImGui::InputFloat2("end", end, 2);
-	ArrowShape arrow = ArrowShape(sf::Vector2f(start[0], start[1]), sf::Vector2f(end[0], end[1]));
-	arrow.setFillColor(sf::Color::Black);
-	window.draw(arrow);
-	//LineShape line(sf::Vector2f(start[0], start[1]), sf::Vector2f(end[0], end[1]));
-	//line.setFillColor(sf::Color::Black);
-	//window.draw(line);
-	return;*/
 
 	sf::Font font;
 	if (!font.loadFromFile("fonts/arial.ttf"))
@@ -40,7 +27,13 @@ void Renderer::Render(sf::RenderWindow& window, const std::vector<Vertex>& graph
 	static float labelDistance = 0.5f;
 	static float labelSpacing = 20.f;
 	static float labelRadius = 15.f;
+	static float arrowDistance = 0.5f;
+	static float arrowLength = 10.f;
+	static float arrowSpeed = 0.5f;
 	static int fontSize = 15;
+
+	arrowDistance += deltaTime * arrowSpeed;
+	arrowDistance = std::fmod(arrowDistance, 1.f);
 	
 	if (ImGui::CollapsingHeader("Styling"))
 	{
@@ -48,6 +41,9 @@ void Renderer::Render(sf::RenderWindow& window, const std::vector<Vertex>& graph
 		ImGui::SliderFloat("label distance", &labelDistance, 0.f, 1.f);
 		ImGui::SliderFloat("label spacing", &labelSpacing, 10.f, 100.f);
 		ImGui::SliderFloat("label radius", &labelRadius, 10.f, 40.f);
+		ImGui::SliderFloat("arrow distance", &arrowDistance, 0.f, 1.f);
+		ImGui::SliderFloat("arrow size", &arrowLength, 10.f, 100.f);
+		ImGui::SliderFloat("arrow speed", &arrowSpeed, 0.1f, 3.f);
 		ImGui::SliderInt("font size", &fontSize, 5, 30);
 	}
 
@@ -61,7 +57,7 @@ void Renderer::Render(sf::RenderWindow& window, const std::vector<Vertex>& graph
 		window.draw(nodeShape);
 	}
 
-	sf::Color regularColor = sf::Color(125, 125, 125, 255);
+	sf::Color regularColor = sf::Color(0, 0, 0, 255);
 	std::vector<LineShape> edges;
 	std::vector<sf::CircleShape> labelCircles;
 	std::vector<sf::Text> labelTexts;
@@ -102,7 +98,7 @@ void Renderer::Render(sf::RenderWindow& window, const std::vector<Vertex>& graph
 			line1.setFillColor(regularColor);
 			edges.push_back(line1);
 
-			ArrowShape arrow1 = ArrowShape(vert.pos + labelDelta / 2.f, labelPos);
+			ArrowShape arrow1 = ArrowShape(vert.pos + labelDelta * arrowDistance, labelPos, arrowLength, arrowLength / 2.f);
 			arrow1.setFillColor(regularColor);
 			arrows.push_back(arrow1);
 
@@ -112,7 +108,7 @@ void Renderer::Render(sf::RenderWindow& window, const std::vector<Vertex>& graph
 			line2.setFillColor(regularColor);
 			edges.push_back(line2);
 
-			ArrowShape arrow2 = ArrowShape(labelPos + labelDelta / 2.f, neighborPos);
+			ArrowShape arrow2 = ArrowShape(labelPos + labelDelta * arrowDistance, neighborPos, arrowLength, arrowLength / 2.f);
 			arrow2.setFillColor(regularColor);
 			arrows.push_back(arrow2);
 		}
