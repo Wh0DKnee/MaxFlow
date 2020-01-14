@@ -26,11 +26,11 @@ void Renderer::Render(sf::RenderWindow& window, const std::vector<Vertex>& graph
 	static float nodeRadius = 10.f;
 	static float labelDistance = 0.5f;
 	static float labelSpacing = 20.f;
-	static float labelRadius = 15.f;
+	static float labelRadius = 10.f;
 	static float arrowDistance = 0.5f;
 	static float arrowLength = 10.f;
 	static float arrowSpeed = 0.5f;
-	static int fontSize = 15;
+	static int fontSize = 8;
 
 	arrowDistance += deltaTime * arrowSpeed;
 	arrowDistance = std::fmod(arrowDistance, 1.f);
@@ -40,11 +40,11 @@ void Renderer::Render(sf::RenderWindow& window, const std::vector<Vertex>& graph
 		ImGui::SliderFloat("node radius", &nodeRadius, 1.f, 30.f);
 		ImGui::SliderFloat("label distance", &labelDistance, 0.f, 1.f);
 		ImGui::SliderFloat("label spacing", &labelSpacing, 10.f, 100.f);
-		ImGui::SliderFloat("label radius", &labelRadius, 10.f, 40.f);
+		ImGui::SliderFloat("label radius", &labelRadius, 0.f, 40.f);
 		ImGui::SliderFloat("arrow distance", &arrowDistance, 0.f, 1.f);
 		ImGui::SliderFloat("arrow size", &arrowLength, 10.f, 100.f);
-		ImGui::SliderFloat("arrow speed", &arrowSpeed, 0.1f, 3.f);
-		ImGui::SliderInt("font size", &fontSize, 5, 30);
+		ImGui::SliderFloat("arrow speed", &arrowSpeed, 0.f, 3.f);
+		ImGui::SliderInt("font size", &fontSize, 0, 30);
 	}
 
 
