@@ -22,8 +22,10 @@ std::deque<size_t> Algorithm::DFS(const std::vector<Vertex>& graph, size_t start
 				{
 					continue;
 				}
-
-				visitedFrom[neighbor.index] = v;
+				if (!visited[neighbor.index])
+				{
+					visitedFrom[neighbor.index] = v;
+				}
 				if (neighbor.index == target)
 				{
 					return traceBack(visitedFrom, target);

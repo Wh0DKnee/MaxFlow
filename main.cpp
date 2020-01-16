@@ -50,6 +50,17 @@ int main()
 		if (ImGui::Button("DFS"))
 		{
 			auto path = Algorithm::DFS(graph, 0, 1);
+			size_t index = 0;
+			for (const auto& v : path)
+			{
+				graph[v].renderInfo.isHighlighted = true;
+				if (index < path.size() - 1)
+				{
+					graph[v].renderInfo.successor = path[index + 1];
+				}
+
+				++index;
+			}
 		}
 		
 		window.clear(sf::Color(209, 209, 209, 255));

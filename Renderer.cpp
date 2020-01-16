@@ -12,7 +12,7 @@
 #include "imgui.h"
 #include "imgui-SFML.h"
 
-using namespace UIConfig;
+namespace UI = UIConfig; // alias
 
 void Renderer::render(sf::RenderWindow& window, const std::vector<Vertex>& graph, float deltaTime)
 {
@@ -26,33 +26,34 @@ void Renderer::render(sf::RenderWindow& window, const std::vector<Vertex>& graph
 		std::cout << "COULD NOT LOAD FONT, STOPPING RENDER" << std::endl;
 	}
 
-	arrowDistance += deltaTime * arrowSpeed;
-	arrowDistance = std::fmod(arrowDistance, 1.f);
+	UI::arrowDistance += deltaTime * UI::arrowSpeed;
+	UI::arrowDistance = std::fmod(UI::arrowDistance, 1.f);
 	
 	if (ImGui::CollapsingHeader("Styling"))
 	{
-		ImGui::SliderFloat("node radius", &nodeRadius, 0.f, 30.f);
-		ImGui::SliderFloat("label distance", &labelDistance, 0.f, 1.f);
-		ImGui::SliderFloat("label spacing", &labelSpacing, 0.f, 100.f);
-		ImGui::SliderFloat("label radius", &labelRadius, 0.f, 40.f);
-		ImGui::SliderFloat("arrow distance", &arrowDistance, 0.f, 1.f);
-		ImGui::SliderFloat("arrow size", &arrowLength, 0.f, 100.f);
-		ImGui::SliderFloat("arrow speed", &arrowSpeed, 0.f, 3.f);
-		ImGui::SliderInt("font size", &fontSize, 0, 30);
-		ImGui::Checkbox("node labels", &drawNodeLabels);
+		ImGui::SliderFloat("node radius", &UI::nodeRadius, 0.f, 30.f);
+		ImGui::SliderFloat("label distance", &UI::labelDistance, 0.f, 1.f);
+		ImGui::SliderFloat("label spacing", &UI::labelSpacing, 0.f, 100.f);
+		ImGui::SliderFloat("label radius", &UI::labelRadius, 0.f, 40.f);
+		ImGui::SliderFloat("arrow distance", &UI::arrowDistance, 0.f, 1.f);
+		ImGui::SliderFloat("arrow size", &UI::arrowLength, 0.f, 100.f);
+		ImGui::SliderFloat("arrow speed", &UI::arrowSpeed, 0.f, 3.f);
+		ImGui::SliderInt("font size", &UI::fontSize, 0, 30);
+		ImGui::Checkbox("node labels", &UI::drawNodeLabels);
 	}
 
 	for (const auto& vert : graph)
 	{
-		sf::CircleShape nodeShape(nodeRadius);
-		nodeShape.setFillColor(sf::Color::Black);
+		sf::CircleShape nodeShape(UI::nodeRadius);
+		auto color = vert.renderInfo.isHighlighted ? UI::highlightColor : UI::regularColor;
+		nodeShape.setFillColor(color);
 		nodeShape.setPosition(vert.pos.x, vert.pos.y);
-		nodeShape.setOrigin(nodeRadius, nodeRadius);
+		nodeShape.setOrigin(UI::nodeRadius, UI::nodeRadius);
 		window.draw(nodeShape);
 
 	}
 
-	if (drawNodeLabels)
+	if (UI::drawNodeLabels)
 	{
 		size_t index = 0;
 		for (const auto& vert : graph)
@@ -60,7 +61,7 @@ void Renderer::render(sf::RenderWindow& window, const std::vector<Vertex>& graph
 			sf::Text nodeText;
 			nodeText.setFont(font);
 			nodeText.setString(std::to_string(index));
-			nodeText.setCharacterSize(nodeRadius*2);
+			nodeText.setCharacterSize(UI::nodeRadius*2);
 			nodeText.setFillColor(sf::Color::White);
 			sf::FloatRect textRect = nodeText.getLocalBounds();
 			nodeText.setOrigin(textRect.left + textRect.width / 2.f,
@@ -71,8 +72,6 @@ void Renderer::render(sf::RenderWindow& window, const std::vector<Vertex>& graph
 		}
 	}
 
-
-	sf::Color regularColor = sf::Color(0, 0, 0, 255);
 	std::vector<LineShape> edges;
 	std::vector<sf::CircleShape> labelCircles;
 	std::vector<sf::Text> labelTexts;
@@ -85,46 +84,55 @@ void Renderer::render(sf::RenderWindow& window, const std::vector<Vertex>& graph
 		{
 			sf::Vector2f neighborPos = graph[neighbor.index].pos;
 			sf::Vector2f delta = neighborPos - vert.pos;
-			sf::Vector2f middle = vert.pos + (delta * labelDistance);
+			sf::Vector2f middle = vert.pos + (delta * UI::labelDistance);
 			sf::Vector2f perpendicular = sf::Vector2f(delta.y, -delta.x);
-			sf::Vector2f labelPos = middle + VectorUtils::normalize(perpendicular) * labelSpacing;
+			sf::Vector2f labelPos = middle + VectorUtils::normalize(perpendicular) * UI::labelSpacing;
 
-			sf::CircleShape labelNode(labelRadius);
+			sf::CircleShape labelNode(UI::labelRadius);
 			labelNode.setOutlineThickness(2.f);
-			labelNode.setOutlineColor(regularColor);
+			labelNode.setOutlineColor(sf::Color::Black);
 			labelNode.setPosition(labelPos);
-			labelNode.setOrigin(labelRadius, labelRadius);
+			labelNode.setOrigin(UI::labelRadius, UI::labelRadius);
 			labelCircles.push_back(labelNode);
 
 			sf::Text labelText;
 			labelText.setFont(font);
 			labelText.setString("10");
-			labelText.setCharacterSize(fontSize);
+			labelText.setCharacterSize(UI::fontSize);
 			labelText.setFillColor(sf::Color::Black);
 			sf::FloatRect textRect = labelText.getLocalBounds();
 			labelText.setOrigin(textRect.left + textRect.width / 2.f,
 								textRect.top + textRect.height / 2.f);
 			labelText.setPosition(labelPos);
 			labelTexts.push_back(labelText);
+
+			sf::Color lineColor = UI::regularColor;
+			if (vert.renderInfo.hasSuccessor())
+			{
+				if (vert.renderInfo.successor == neighbor.index)
+				{
+					lineColor = UI::highlightColor;
+				}
+			}
 			
 			sf::Vector2f labelDelta = labelPos - vert.pos;
 			sf::Vector2f labelDeltaNormalized = VectorUtils::normalize(labelDelta);
-			LineShape line1(vert.pos + labelDeltaNormalized * nodeRadius, labelPos - labelDeltaNormalized * labelRadius);
-			line1.setFillColor(regularColor);
+			LineShape line1(vert.pos + labelDeltaNormalized * UI::nodeRadius, labelPos - labelDeltaNormalized * UI::labelRadius);
+			line1.setFillColor(lineColor);
 			edges.push_back(line1);
 
-			ArrowShape arrow1 = ArrowShape(vert.pos + labelDelta * arrowDistance, labelPos, arrowLength, arrowLength / 2.f);
-			arrow1.setFillColor(regularColor);
+			ArrowShape arrow1 = ArrowShape(vert.pos + labelDelta * UI::arrowDistance, labelPos, UI::arrowLength, UI::arrowLength / 2.f);
+			arrow1.setFillColor(lineColor);
 			arrows.push_back(arrow1);
 
 			labelDelta = neighborPos - labelPos;
 			labelDeltaNormalized = VectorUtils::normalize(labelDelta);
-			LineShape line2(labelPos + labelDeltaNormalized * labelRadius, neighborPos - labelDeltaNormalized * nodeRadius);
-			line2.setFillColor(regularColor);
+			LineShape line2(labelPos + labelDeltaNormalized * UI::labelRadius, neighborPos - labelDeltaNormalized * UI::nodeRadius);
+			line2.setFillColor(lineColor);
 			edges.push_back(line2);
 
-			ArrowShape arrow2 = ArrowShape(labelPos + labelDelta * arrowDistance, neighborPos, arrowLength, arrowLength / 2.f);
-			arrow2.setFillColor(regularColor);
+			ArrowShape arrow2 = ArrowShape(labelPos + labelDelta * UI::arrowDistance, neighborPos, UI::arrowLength, UI::arrowLength / 2.f);
+			arrow2.setFillColor(lineColor);
 			arrows.push_back(arrow2);
 		}
 		++index;

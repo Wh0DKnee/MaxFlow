@@ -2,10 +2,20 @@
 #include <vector>
 #include <cmath>
 #include <SFML/System/Vector2.hpp>
+#include <limits>
 
 struct RenderInfo
 {
 	bool isHighlighted = false;
+	size_t successor = std::numeric_limits<size_t>::max();
+
+	bool hasSuccessor() const { return successor != std::numeric_limits<size_t>::max(); }
+	
+	void reset()
+	{
+		isHighlighted = false;
+		successor = std::numeric_limits<size_t>::max();
+	}
 };
 
 struct Neighbor
@@ -26,6 +36,8 @@ struct Vertex
 
 	// payload
 	sf::Vector2f pos;
+	
+	RenderInfo renderInfo;
 
 	// add additional payload here
 
