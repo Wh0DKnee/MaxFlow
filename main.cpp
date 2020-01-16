@@ -7,6 +7,7 @@
 
 #include "GraphUtils.h"
 #include "Renderer.h"
+#include "Algorithm.h"
 
 int main()
 {
@@ -45,9 +46,14 @@ int main()
 		{
 			graph = GraphUtils::generateGraph(numNodes, totalCapacity, window.getSize().x, window.getSize().y);
 		}
+
+		if (ImGui::Button("DFS"))
+		{
+			auto path = Algorithm::DFS(graph, 0, 1);
+		}
 		
 		window.clear(sf::Color(209, 209, 209, 255));
-		Renderer::Render(window, graph, deltaTime.asSeconds());
+		Renderer::render(window, graph, deltaTime.asSeconds());
 		ImGui::End(); // end window
 		ImGui::SFML::Render(window);
 		window.display();

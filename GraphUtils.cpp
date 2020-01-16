@@ -149,8 +149,8 @@ std::vector<Vertex> GraphUtils::generateGraph(int numNodes, int maxCapacity, int
 			continue; // cant insert without intersection, next.
 		}
 
-		graph[pair.first].neighbors.emplace_back(pair.second, 0);
-		graph[pair.second].neighbors.emplace_back(pair.first, 0);
+		graph[pair.first].neighbors.emplace_back(pair.second, 10);
+		graph[pair.second].neighbors.emplace_back(pair.first, 10);
 	}
 
 

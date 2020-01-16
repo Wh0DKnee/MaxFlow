@@ -11,6 +11,6 @@ namespace sf {
 class Renderer
 {
 public:
-	static void Render(class sf::RenderWindow& window, const std::vector<Vertex>& graph, float deltaTime);
+	static void render(class sf::RenderWindow& window, const std::vector<Vertex>& graph, float deltaTime);
 };
 

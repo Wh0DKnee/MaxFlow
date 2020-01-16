@@ -3,6 +3,11 @@
 #include <cmath>
 #include <SFML/System/Vector2.hpp>
 
+struct RenderInfo
+{
+	bool isHighlighted = false;
+};
+
 struct Neighbor
 {
 	Neighbor(size_t ind, int c) : index(ind), capacity(c){}

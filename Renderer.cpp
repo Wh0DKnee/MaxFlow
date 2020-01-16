@@ -14,7 +14,7 @@
 
 using namespace UIConfig;
 
-void Renderer::Render(sf::RenderWindow& window, const std::vector<Vertex>& graph, float deltaTime)
+void Renderer::render(sf::RenderWindow& window, const std::vector<Vertex>& graph, float deltaTime)
 {
 	sf::RectangleShape background = sf::RectangleShape(sf::Vector2f(static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y)));
 	background.setFillColor(sf::Color(209, 209, 209, 255));
@@ -39,8 +39,8 @@ void Renderer::Render(sf::RenderWindow& window, const std::vector<Vertex>& graph
 		ImGui::SliderFloat("arrow size", &arrowLength, 0.f, 100.f);
 		ImGui::SliderFloat("arrow speed", &arrowSpeed, 0.f, 3.f);
 		ImGui::SliderInt("font size", &fontSize, 0, 30);
+		ImGui::Checkbox("node labels", &drawNodeLabels);
 	}
-
 
 	for (const auto& vert : graph)
 	{
@@ -49,7 +49,28 @@ void Renderer::Render(sf::RenderWindow& window, const std::vector<Vertex>& graph
 		nodeShape.setPosition(vert.pos.x, vert.pos.y);
 		nodeShape.setOrigin(nodeRadius, nodeRadius);
 		window.draw(nodeShape);
+
 	}
+
+	if (drawNodeLabels)
+	{
+		size_t index = 0;
+		for (const auto& vert : graph)
+		{
+			sf::Text nodeText;
+			nodeText.setFont(font);
+			nodeText.setString(std::to_string(index));
+			nodeText.setCharacterSize(nodeRadius*2);
+			nodeText.setFillColor(sf::Color::White);
+			sf::FloatRect textRect = nodeText.getLocalBounds();
+			nodeText.setOrigin(textRect.left + textRect.width / 2.f,
+				textRect.top + textRect.height / 2.f);
+			nodeText.setPosition(vert.pos.x, vert.pos.y);
+			window.draw(nodeText);
+			++index;
+		}
+	}
+
 
 	sf::Color regularColor = sf::Color(0, 0, 0, 255);
 	std::vector<LineShape> edges;

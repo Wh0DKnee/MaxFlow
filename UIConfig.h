@@ -1,4 +1,5 @@
 #pragma once
+#include <SFML/Graphics/Color.hpp>
 
 namespace UIConfig
 {
@@ -10,4 +11,8 @@ namespace UIConfig
 	static float arrowLength = 10.f;
 	static float arrowSpeed = 0.5f;
 	static int fontSize = 8;
+	static bool drawNodeLabels = true;
+
+	static sf::Color regularColor = sf:Color::Black;
+
 }
