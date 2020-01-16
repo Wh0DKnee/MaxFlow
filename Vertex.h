@@ -23,10 +23,13 @@ struct Neighbor
 	Neighbor(size_t ind, int c) : index(ind), capacity(c){}
 
 	size_t index;
-	int capacity;
 	int flow = 0;
 
 	int getRemainingCapacity() const { return capacity - flow; }
+	void setCapacity(int c) { capacity = c; }
+
+private:
+	int capacity;
 };
 
 struct Vertex

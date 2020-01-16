@@ -93,14 +93,15 @@ std::vector<Vertex> GraphUtils::generateGraph(int numNodes, int maxCapacity, int
 	std::vector<Vertex> graph;
 	graph.reserve(numNodes);
 
+	static std::default_random_engine randEngine;
+	static std::uniform_real_distribution<float> xDis(static_cast<float>(0 + margin), static_cast<float>(windowWidth - margin));
+	static std::uniform_real_distribution<float> yDis(static_cast<float>(0 + margin), static_cast<float>(windowHeight - margin));
+	randEngine.seed(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
+
 	for (int i = 0; i < numNodes; ++i)
 	{
-		static std::default_random_engine e;
-		e.seed(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
-		static std::uniform_real_distribution<float> xDis(static_cast<float>(0 + margin), static_cast<float>(windowWidth - margin));
-		static std::uniform_real_distribution<float> yDis(static_cast<float>(0 + margin), static_cast<float>(windowHeight - margin));
-		float x = xDis(e);
-		float y = yDis(e);
+		float x = xDis(randEngine);
+		float y = yDis(randEngine);
 
 		graph.push_back(Vertex(x, y));
 	}
@@ -128,6 +129,8 @@ std::vector<Vertex> GraphUtils::generateGraph(int numNodes, int maxCapacity, int
 			return lhsDistSquared < rhsDistSquared;
 		});
 
+	long long edgeCount = 0;
+
 	for (auto& pair : vertexPairs)
 	{
 		bool intersectsAny = false;
@@ -151,8 +154,34 @@ std::vector<Vertex> GraphUtils::generateGraph(int numNodes, int maxCapacity, int
 
 		graph[pair.first].neighbors.emplace_back(pair.second, 10);
 		graph[pair.second].neighbors.emplace_back(pair.first, 10);
+		++edgeCount;
 	}
+
+	setCapacitiesRandomly(graph, edgeCount, maxCapacity);
 
 
 	return graph;
+}
+
+void GraphUtils::setCapacitiesRandomly(std::vector<Vertex>& graph, long long edgeCount, int maxCapacity)
+{
+	std::default_random_engine randEngine;
+	randEngine.seed(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
+	static std::uniform_real_distribution<float> capacityDist(0.f, 1.f);
+
+	std::vector<float> randZeroToOne;
+	randZeroToOne.reserve(edgeCount);
+	float sum = 0;
+	for (int i = 0; i < edgeCount; ++i)
+	{
+		float rnd = capacityDist(randEngine);
+		sum += rnd;
+		randZeroToOne.push_back(rnd);
+	}
+
+	for (auto& f : randZeroToOne)
+	{
+		f /= sum;
+	}
+
 }
