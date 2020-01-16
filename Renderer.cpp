@@ -97,6 +97,7 @@ void Renderer::render(sf::RenderWindow& window, const std::vector<Vertex>& graph
 
 			sf::Text labelText;
 			labelText.setFont(font);
+			labelText.setStyle(sf::Text::Bold);
 			labelText.setString("10");
 			labelText.setCharacterSize(UI::fontSize);
 			labelText.setFillColor(sf::Color::Black);
