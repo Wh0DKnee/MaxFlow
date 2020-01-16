@@ -119,6 +119,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Program Files\SFML\SFML-2.5.1\include;C:\Users\simon\Desktop\Tools\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -147,6 +148,7 @@
     <ClInclude Include="LineShape.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="GraphUtils.h" />
+    <ClInclude Include="UIConfig.h" />
     <ClInclude Include="VectorUtils.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>

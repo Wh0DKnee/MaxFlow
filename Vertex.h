@@ -5,9 +5,13 @@
 
 struct Neighbor
 {
-	Neighbor(int ind, int w) : index(ind), weight(w){}
-	int index;
-	int weight;
+	Neighbor(size_t ind, int c) : index(ind), capacity(c){}
+
+	size_t index;
+	int capacity;
+	int flow = 0;
+
+	int getRemainingCapacity() const { return capacity - flow; }
 };
 
 struct Vertex
@@ -17,7 +21,7 @@ struct Vertex
 
 	// payload
 	sf::Vector2f pos;
-	
+
 	// add additional payload here
 
 	// neighborIndex and weight

@@ -41,7 +41,6 @@ int main()
 		ImGui::InputInt("#nodes", &numNodes);
 		ImGui::InputInt("totalCapacity", &totalCapacity);
 
-
 		if (ImGui::Button("re-generate"))
 		{
 			graph = GraphUtils::generateGraph(numNodes, totalCapacity, window.getSize().x, window.getSize().y);

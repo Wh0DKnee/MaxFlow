@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "UIConfig.h"
 #include <string>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
@@ -11,9 +12,11 @@
 #include "imgui.h"
 #include "imgui-SFML.h"
 
+using namespace UIConfig;
+
 void Renderer::Render(sf::RenderWindow& window, const std::vector<Vertex>& graph, float deltaTime)
 {
-	sf::RectangleShape background = sf::RectangleShape(sf::Vector2f(window.getSize().x, window.getSize().y));
+	sf::RectangleShape background = sf::RectangleShape(sf::Vector2f(static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y)));
 	background.setFillColor(sf::Color(209, 209, 209, 255));
 	window.draw(background);
 
@@ -23,26 +26,17 @@ void Renderer::Render(sf::RenderWindow& window, const std::vector<Vertex>& graph
 		std::cout << "COULD NOT LOAD FONT, STOPPING RENDER" << std::endl;
 	}
 
-	static float nodeRadius = 10.f;
-	static float labelDistance = 0.5f;
-	static float labelSpacing = 20.f;
-	static float labelRadius = 10.f;
-	static float arrowDistance = 0.5f;
-	static float arrowLength = 10.f;
-	static float arrowSpeed = 0.5f;
-	static int fontSize = 8;
-
 	arrowDistance += deltaTime * arrowSpeed;
 	arrowDistance = std::fmod(arrowDistance, 1.f);
 	
 	if (ImGui::CollapsingHeader("Styling"))
 	{
-		ImGui::SliderFloat("node radius", &nodeRadius, 1.f, 30.f);
+		ImGui::SliderFloat("node radius", &nodeRadius, 0.f, 30.f);
 		ImGui::SliderFloat("label distance", &labelDistance, 0.f, 1.f);
-		ImGui::SliderFloat("label spacing", &labelSpacing, 10.f, 100.f);
+		ImGui::SliderFloat("label spacing", &labelSpacing, 0.f, 100.f);
 		ImGui::SliderFloat("label radius", &labelRadius, 0.f, 40.f);
 		ImGui::SliderFloat("arrow distance", &arrowDistance, 0.f, 1.f);
-		ImGui::SliderFloat("arrow size", &arrowLength, 10.f, 100.f);
+		ImGui::SliderFloat("arrow size", &arrowLength, 0.f, 100.f);
 		ImGui::SliderFloat("arrow speed", &arrowSpeed, 0.f, 3.f);
 		ImGui::SliderInt("font size", &fontSize, 0, 30);
 	}
@@ -83,7 +77,7 @@ void Renderer::Render(sf::RenderWindow& window, const std::vector<Vertex>& graph
 
 			sf::Text labelText;
 			labelText.setFont(font);
-			labelText.setString("5/10");
+			labelText.setString("10");
 			labelText.setCharacterSize(fontSize);
 			labelText.setFillColor(sf::Color::Black);
 			sf::FloatRect textRect = labelText.getLocalBounds();

@@ -10,6 +10,8 @@ namespace GraphUtils
 
 	bool intersect(sf::Vector2f a, sf::Vector2f b, sf::Vector2f c, sf::Vector2f d);
 
+	bool intersectWithWidth(sf::Vector2f a, sf::Vector2f b, sf::Vector2f c, sf::Vector2f d, float width = 20.f);
+
 	std::vector<Vertex> generateGraph(int numNodes, int maxCapacity, int windowWidth, int windowHeight);
 };
 
