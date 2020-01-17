@@ -20,13 +20,14 @@ struct RenderInfo
 
 struct Neighbor
 {
-	Neighbor(size_t ind, int c) : index(ind), capacity(c){}
+	Neighbor(size_t ind, int c, int f = 0) : index(ind), capacity(c), flow(f){}
 
 	size_t index;
-	int flow = 0;
+	int flow;
 
 	int getRemainingCapacity() const { return capacity - flow; }
 	void setCapacity(int c) { capacity = c; }
+	int getCapacity() { return capacity; }
 
 private:
 	int capacity;

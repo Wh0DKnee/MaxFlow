@@ -215,6 +215,20 @@ void GraphUtils::setCapacitiesRandomly(std::vector<Vertex>& graph, long long edg
 		}
 	}
 
-	// TODO: add backward edges.
+	// We don't want to add edges while we iterate the actual graph,
+	// because that might invalidate the iterator and bring us to UB land.
+	// Also, it would not be the behavior we want (we dont want backward
+	// edges for backward edges).
+	auto nonResidualGraph = graph; 
+
+	index = 0;
+	for (auto& vert : nonResidualGraph)
+	{
+		for (auto& neighbor : vert.neighbors)
+		{
+			graph[neighbor.index].neighbors.emplace_back(index, neighbor.getCapacity(), neighbor.getCapacity());
+		}
+		++index;
+	}
 
 }
