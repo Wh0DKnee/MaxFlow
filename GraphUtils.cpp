@@ -3,6 +3,7 @@
 #include <chrono>
 #include <algorithm>
 #include <array>
+#include <cassert>
 
 float GraphUtils::CCW(sf::Vector2f a, sf::Vector2f b, sf::Vector2f c)
 {
@@ -153,12 +154,11 @@ std::vector<Vertex> GraphUtils::generateGraph(int numNodes, int maxCapacity, int
 		}
 
 		graph[pair.first].neighbors.emplace_back(pair.second, 10);
-		graph[pair.second].neighbors.emplace_back(pair.first, 10);
+		//graph[pair.second].neighbors.emplace_back(pair.first, 10);
 		++edgeCount;
 	}
 
 	setCapacitiesRandomly(graph, edgeCount, maxCapacity);
-
 
 	return graph;
 }
@@ -169,19 +169,52 @@ void GraphUtils::setCapacitiesRandomly(std::vector<Vertex>& graph, long long edg
 	randEngine.seed(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
 	static std::uniform_real_distribution<float> capacityDist(0.f, 1.f);
 
-	std::vector<float> randZeroToOne;
-	randZeroToOne.reserve(edgeCount);
-	float sum = 0;
-	for (int i = 0; i < edgeCount; ++i)
+	std::vector<float> randFloats;
+	std::vector<int> randCapacities;
+	while (true)
 	{
-		float rnd = capacityDist(randEngine);
-		sum += rnd;
-		randZeroToOne.push_back(rnd);
+		randFloats.clear();
+		randFloats.reserve(edgeCount);
+		randCapacities.clear();
+		randCapacities.reserve(edgeCount);
+		float sum = 0;
+		for (int i = 0; i < edgeCount; ++i)
+		{
+			float rnd = capacityDist(randEngine);
+			sum += rnd;
+			randFloats.push_back(rnd);
+		}
+
+		for (auto& f : randFloats)
+		{
+			f /= sum;
+			f *= maxCapacity;
+			randCapacities.push_back(static_cast<int>(f + 0.5f));
+		}
+
+		int capacitySum = 0;
+		for (const auto& i : randCapacities)
+		{
+			capacitySum += i;
+		}
+
+		if (capacitySum == maxCapacity) // Do rounded results add up to maxCapacity or did we get unlucky with rounding?
+		{
+			break;
+		}
 	}
 
-	for (auto& f : randZeroToOne)
+	size_t index = 0;
+	for (auto& vert : graph)
 	{
-		f /= sum;
+		for (auto& neighbor : vert.neighbors)
+		{
+			assert(index < randCapacities.size());
+			neighbor.setCapacity(randCapacities[index]);
+			++index;
+		}
 	}
+
+	// TODO: add backward edges.
 
 }
