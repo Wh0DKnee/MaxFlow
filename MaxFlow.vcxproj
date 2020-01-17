@@ -132,6 +132,7 @@
   <ItemGroup>
     <ClCompile Include="Algorithm.cpp" />
     <ClCompile Include="ArrowShape.cpp" />
+    <ClCompile Include="Graph.cpp" />
     <ClCompile Include="LineShape.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="GraphUtils.cpp" />
@@ -147,6 +148,7 @@
   <ItemGroup>
     <ClInclude Include="Algorithm.h" />
     <ClInclude Include="ArrowShape.h" />
+    <ClInclude Include="Graph.h" />
     <ClInclude Include="LineShape.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="GraphUtils.h" />

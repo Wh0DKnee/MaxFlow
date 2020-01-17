@@ -8,6 +8,7 @@
 #include "GraphUtils.h"
 #include "Renderer.h"
 #include "Algorithm.h"
+#include "Graph.h"
 
 int main()
 {
@@ -17,7 +18,7 @@ int main()
 	window.setVerticalSyncEnabled(true);
 	ImGui::SFML::Init(window);
 
-	std::vector<Vertex> graph;
+	Graph graph;
 	int numNodes = 10;
 	int totalCapacity = 100;
 
@@ -44,7 +45,7 @@ int main()
 
 		if (ImGui::Button("re-generate"))
 		{
-			graph = GraphUtils::generateGraph(numNodes, totalCapacity, window.getSize().x, window.getSize().y);
+			graph = Graph(numNodes, totalCapacity, window.getSize().x, window.getSize().y);
 		}
 
 		if (ImGui::Button("DFS"))

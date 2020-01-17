@@ -2,7 +2,7 @@
 #include <stack>
 #include <limits>
 
-std::deque<size_t> Algorithm::DFS(const std::vector<Vertex>& graph, size_t start, size_t target)
+std::deque<size_t> Algorithm::DFS(const Graph& graph, size_t start, size_t target)
 {
 	std::deque<bool> visited(graph.size());
 	std::stack<size_t> stack;

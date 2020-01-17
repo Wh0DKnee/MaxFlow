@@ -8,13 +8,14 @@
 #include "VectorUtils.h"
 #include "ArrowShape.h"
 #include <cmath>
+#include "Graph.h"
 
 #include "imgui.h"
 #include "imgui-SFML.h"
 
 namespace UI = UIConfig; // alias
 
-void Renderer::render(sf::RenderWindow& window, const std::vector<Vertex>& graph, float deltaTime)
+void Renderer::render(sf::RenderWindow& window, const Graph& graph, float deltaTime)
 {
 	sf::RectangleShape background = sf::RectangleShape(sf::Vector2f(static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y)));
 	background.setFillColor(sf::Color(209, 209, 209, 255));
