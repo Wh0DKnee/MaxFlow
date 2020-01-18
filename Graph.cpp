@@ -79,6 +79,21 @@ Graph::Graph(int numNodes, int maxCapacity, int windowWidth, int windowHeight)
 	setBackwardEdgePointers();
 }
 
+void Graph::resetRenderInfo()
+{
+	for (auto& v : vertices)
+	{
+		TODO
+		/*
+		Currently we store render info on the vertex, not the edges.
+		Is this correct? Should we store it on both, or just the edges?
+		If we store it in the edges only, how do we highlight nodes?
+		While we iterate over the nodes to render them, we could check if
+		any of its edges are highlighted.
+		*/
+	}
+}
+
 void Graph::setCapacitiesRandomly(long long edgeCount, int maxCapacity)
 {
 	std::default_random_engine randEngine;

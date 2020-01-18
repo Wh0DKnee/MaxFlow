@@ -14,5 +14,7 @@ namespace Algorithm
 	void traceBack(const std::vector<Edge*>& visitedFrom, size_t target, std::deque<Edge*>& outPath);
 
 	void fordFulkerson(Graph& graph);
+
+	void fordFulkersonStep(Graph& graph);
 };
 

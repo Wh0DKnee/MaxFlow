@@ -64,6 +64,11 @@ int main()
 			Algorithm::fordFulkerson(graph);
 		}
 		
+		if (ImGui::Button("Ford Fulkerson Step"))
+		{
+			Algorithm::fordFulkersonStep(graph);
+		}
+
 		window.clear(sf::Color(209, 209, 209, 255));
 		Renderer::render(window, graph, deltaTime.asSeconds());
 		ImGui::End(); // end window

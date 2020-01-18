@@ -73,3 +73,23 @@ void Algorithm::fordFulkerson(Graph& graph)
 		}
 	}
 }
+
+void Algorithm::fordFulkersonStep(Graph& graph)
+{
+	std::deque<Edge*> path;
+	if(DFS(graph, path))
+	{
+		int minResidualCap = std::numeric_limits<int>::max();
+		for (const auto& edge : path)
+		{
+			if (edge->getRemainingCapacity() < minResidualCap)
+			{
+				minResidualCap = edge->getRemainingCapacity();
+			}
+		}
+		for (auto& edge : path)
+		{
+			edge->addResidualFlow(minResidualCap);
+		}
+	}
+}

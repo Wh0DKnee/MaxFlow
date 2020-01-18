@@ -14,6 +14,8 @@ public:
 	size_t getStart() const { return start; }
 	size_t getTarget() const { return target; }
 
+	void resetRenderInfo();
+
 	// Proxy functions for vertices vector:
 
 	// Returns # of vertices in this graph.
