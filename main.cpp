@@ -58,6 +58,11 @@ int main()
 				graph[v->startNode].renderInfo.successor = v->targetNode;
 			}
 		}
+
+		if (ImGui::Button("Ford Fulkerson"))
+		{
+			Algorithm::fordFulkerson(graph);
+		}
 		
 		window.clear(sf::Color(209, 209, 209, 255));
 		Renderer::render(window, graph, deltaTime.asSeconds());

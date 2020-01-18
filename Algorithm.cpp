@@ -24,6 +24,9 @@ bool Algorithm::DFS(Graph& graph, std::deque<Edge*>& outPath)
 				}
 				if (!visited[edge.targetNode])
 				{
+					// TODO: Understand why we can't just push edge onto the stack here
+					// and omit the if(visisted[v]) check. 
+					// See: https://stackoverflow.com/questions/25990706/breadth-first-search-the-timing-of-checking-visitation-status
 					visitedFrom[edge.targetNode] = &edge;
 				}
 				if (edge.targetNode == graph.getTarget())
@@ -56,6 +59,17 @@ void Algorithm::fordFulkerson(Graph& graph)
 	std::deque<Edge*> path;
 	while (DFS(graph, path))
 	{
-
+		int minResidualCap = std::numeric_limits<int>::max();
+		for (const auto& edge : path)
+		{
+			if (edge->getRemainingCapacity() < minResidualCap)
+			{
+				minResidualCap = edge->getRemainingCapacity();
+			}
+		}
+		for (auto& edge : path)
+		{
+			edge->addResidualFlow(minResidualCap);
+		}
 	}
 }
