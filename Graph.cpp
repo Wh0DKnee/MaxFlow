@@ -2,6 +2,7 @@
 #include "GraphUtils.h"
 #include <chrono>
 #include <cassert>
+#include "Algorithm.h"
 
 Graph::Graph(int numNodes, int maxCapacity, int windowWidth, int windowHeight)
 {
@@ -73,6 +74,8 @@ Graph::Graph(int numNodes, int maxCapacity, int windowWidth, int windowHeight)
 	}
 
 	setCapacitiesRandomly(edgeCount, maxCapacity);
+
+	selectStartAndTargetNodes();
 }
 
 void Graph::setCapacitiesRandomly(long long edgeCount, int maxCapacity)
@@ -141,5 +144,36 @@ void Graph::setCapacitiesRandomly(long long edgeCount, int maxCapacity)
 			vertices[neighbor.index].neighbors.emplace_back(index, neighbor.getCapacity(), neighbor.getCapacity());
 		}
 		++index;
+	}
+}
+
+void Graph::selectStartAndTargetNodes()
+{
+	start = 0;
+	target = 0;
+
+	std::random_device rd;
+	auto rng = std::default_random_engine(rd());
+	
+	std::vector<size_t> nodes;
+	nodes.reserve(size());
+	for (size_t i = 1; i < size(); ++i)
+	{
+		nodes.push_back(i);
+	}
+
+	std::shuffle(nodes.begin(), nodes.end(), rng);
+
+	for (const auto& i : nodes)
+	{
+		if (std::find_if(vertices[i].neighbors.begin(), vertices[i].neighbors.end(), [](const Neighbor& n) { return n.index == 0; })
+			== vertices[i].neighbors.end())
+		{
+			target = i;
+			if (!Algorithm::DFS(*this).empty()) // any path from start to target?
+			{
+				break;
+			}
+		}
 	}
 }

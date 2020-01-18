@@ -7,13 +7,16 @@ class Graph
 public:
 
 	Graph() = default;
+
+	// Randomly generates graph based on parameters.
 	Graph(int numNodes, int maxCapacity, int windowWidth, int windowHeight);
 
-	void setCapacitiesRandomly(long long edgeCount, int maxCapacity);
-
-
+	size_t getStart() const { return start; }
+	size_t getTarget() const { return target; }
 
 	// Proxy functions for vertices vector:
+
+	// Returns # of vertices in this graph.
 	size_t size() const { return vertices.size(); }
 
 	Vertex& operator[](size_t i) { return vertices[i]; }
@@ -30,5 +33,9 @@ private:
 	std::vector<Vertex> vertices;
 	size_t start;
 	size_t target;
+
+	void setCapacitiesRandomly(long long edgeCount, int maxCapacity);
+
+	void selectStartAndTargetNodes();
 };
 

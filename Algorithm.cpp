@@ -2,12 +2,12 @@
 #include <stack>
 #include <limits>
 
-std::deque<size_t> Algorithm::DFS(const Graph& graph, size_t start, size_t target)
+std::deque<size_t> Algorithm::DFS(const Graph& graph)
 {
 	std::deque<bool> visited(graph.size());
 	std::stack<size_t> stack;
 	std::vector<size_t> visitedFrom(graph.size(), std::numeric_limits<size_t>::max());
-	stack.push(start);
+	stack.push(graph.getStart());
 
 	while (!stack.empty())
 	{
@@ -26,9 +26,9 @@ std::deque<size_t> Algorithm::DFS(const Graph& graph, size_t start, size_t targe
 				{
 					visitedFrom[neighbor.index] = v;
 				}
-				if (neighbor.index == target)
+				if (neighbor.index == graph.getTarget())
 				{
-					return traceBack(visitedFrom, target);
+					return traceBack(visitedFrom, graph.getTarget());
 				}
 				stack.push(neighbor.index);
 			}

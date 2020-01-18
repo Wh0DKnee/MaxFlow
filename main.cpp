@@ -50,7 +50,7 @@ int main()
 
 		if (ImGui::Button("DFS"))
 		{
-			auto path = Algorithm::DFS(graph, 0, 1);
+			auto path = Algorithm::DFS(graph);
 			size_t index = 0;
 			for (const auto& v : path)
 			{
