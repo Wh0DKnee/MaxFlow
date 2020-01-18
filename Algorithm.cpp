@@ -49,3 +49,7 @@ std::deque<size_t> Algorithm::traceBack(const std::vector<size_t>& visitedFrom, 
 	}
 	return path;
 }
+
+void Algorithm::fordFulkerson(Graph& graph)
+{
+}

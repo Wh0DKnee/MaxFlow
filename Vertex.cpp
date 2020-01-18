@@ -4,7 +4,8 @@
 void Edge::addResidualFlow(int amount)
 {
 	assert(flow + amount <= capacity);
-	
-	flow += amount;
+	assert(backward->getFlow() > amount);
 
+	flow += amount;
+	backward->addFlow(-amount);
 }

@@ -76,6 +76,8 @@ Graph::Graph(int numNodes, int maxCapacity, int windowWidth, int windowHeight)
 	setCapacitiesRandomly(edgeCount, maxCapacity);
 
 	selectStartAndTargetNodes();
+
+	setBackwardEdgePointers();
 }
 
 void Graph::setCapacitiesRandomly(long long edgeCount, int maxCapacity)
@@ -175,5 +177,29 @@ void Graph::selectStartAndTargetNodes()
 				break;
 			}
 		}
+	}
+}
+
+void Graph::setBackwardEdgePointers()
+{
+	// I don't like this, but if we try and do this at the point
+	// where we initially add the backward edges, we might invalidate the
+	// pointer as more edges might be added to a vertex, so a pointer
+	// pointing into the edges vector could be invalidated.
+
+	size_t index = 0;
+	for (auto& vert : vertices)
+	{
+		for (auto& edge : vert.edges)
+		{
+			for (auto& targetEdge : vertices[edge.targetNode].edges)
+			{
+				if (targetEdge.targetNode == index)
+				{
+					edge.setBackwardEdge(&targetEdge);
+				}
+			}
+		}
+		++index;
 	}
 }

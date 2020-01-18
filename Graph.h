@@ -38,5 +38,7 @@ private:
 	void setCapacitiesRandomly(long long edgeCount, int maxCapacity);
 
 	void selectStartAndTargetNodes();
+
+	void setBackwardEdgePointers();
 };
 
