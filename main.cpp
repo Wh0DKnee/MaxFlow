@@ -50,17 +50,12 @@ int main()
 
 		if (ImGui::Button("DFS"))
 		{
-			auto path = Algorithm::DFS(graph);
-			size_t index = 0;
+			std::deque<Edge*> path;
+			Algorithm::DFS(graph, path);
 			for (const auto& v : path)
 			{
-				graph[v].renderInfo.isHighlighted = true;
-				if (index < path.size() - 1)
-				{
-					graph[v].renderInfo.successor = path[index + 1];
-				}
-
-				++index;
+				graph[v->startNode].renderInfo.isHighlighted = true;
+				graph[v->startNode].renderInfo.successor = v->targetNode;
 			}
 		}
 		

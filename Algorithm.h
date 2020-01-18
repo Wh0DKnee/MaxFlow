@@ -6,9 +6,12 @@
 
 namespace Algorithm
 {
-	std::deque<size_t> DFS(const Graph& graph);
+	// TODO: figure out how to make graph a const ref,
+	// the problem is that we need to output a vector
+	// of non-const Edge ptrs so that FF can modify them.
+	bool DFS(Graph& graph, std::deque<Edge*>& outPath);
 
-	std::deque<size_t> traceBack(const std::vector<size_t>& visitedFrom, size_t target);
+	void traceBack(const std::vector<Edge*>& visitedFrom, size_t target, std::deque<Edge*>& outPath);
 
 	void fordFulkerson(Graph& graph);
 };

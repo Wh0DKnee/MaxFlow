@@ -20,8 +20,9 @@ struct RenderInfo
 
 struct Edge
 {
-	Edge(size_t ind, int c, int f = 0) : targetNode(ind), capacity(c), flow(f){}
+	Edge(size_t startInd, size_t targetInd, int c, int f = 0) : startNode(startInd), targetNode(targetInd), capacity(c), flow(f) {}
 
+	size_t startNode;
 	size_t targetNode;
 
 	int getRemainingCapacity() const { return capacity - flow; }

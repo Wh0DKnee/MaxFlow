@@ -2,11 +2,11 @@
 #include <stack>
 #include <limits>
 
-std::deque<size_t> Algorithm::DFS(const Graph& graph)
+bool Algorithm::DFS(Graph& graph, std::deque<Edge*>& outPath)
 {
 	std::deque<bool> visited(graph.size());
 	std::stack<size_t> stack;
-	std::vector<size_t> visitedFrom(graph.size(), std::numeric_limits<size_t>::max());
+	std::vector<Edge*> visitedFrom(graph.size(), nullptr);
 	stack.push(graph.getStart());
 
 	while (!stack.empty())
@@ -16,7 +16,7 @@ std::deque<size_t> Algorithm::DFS(const Graph& graph)
 		if (!visited[v])
 		{
 			visited[v] = true;
-			for (const auto& edge : graph[v].edges)
+			for (auto& edge : graph[v].edges)
 			{
 				if (edge.getRemainingCapacity() <= 0)
 				{
@@ -24,32 +24,38 @@ std::deque<size_t> Algorithm::DFS(const Graph& graph)
 				}
 				if (!visited[edge.targetNode])
 				{
-					visitedFrom[edge.targetNode] = v;
+					visitedFrom[edge.targetNode] = &edge;
 				}
 				if (edge.targetNode == graph.getTarget())
 				{
-					return traceBack(visitedFrom, graph.getTarget());
+					traceBack(visitedFrom, graph.getTarget(), outPath);
+					return true;
 				}
 				stack.push(edge.targetNode);
 			}
 		}
 	}
 	
-	return std::deque<size_t>();
+	return false;
 }
 
-std::deque<size_t> Algorithm::traceBack(const std::vector<size_t>& visitedFrom, size_t target)
+void Algorithm::traceBack(const std::vector<Edge*>& visitedFrom, size_t target, std::deque<Edge*>& outPath)
 {
-	std::deque<size_t> path;
+	outPath.clear();
 	size_t current = target;
-	while (current != std::numeric_limits<size_t>::max())
+	while (visitedFrom[current] != nullptr)
 	{
-		path.push_front(current);
-		current = visitedFrom[current];
+		outPath.push_front(visitedFrom[current]);
+		current = visitedFrom[current]->startNode;
 	}
-	return path;
+	return;
 }
 
 void Algorithm::fordFulkerson(Graph& graph)
 {
+	std::deque<Edge*> path;
+	while (DFS(graph, path))
+	{
+
+	}
 }

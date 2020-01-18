@@ -68,8 +68,7 @@ Graph::Graph(int numNodes, int maxCapacity, int windowWidth, int windowHeight)
 			continue; // cant insert without intersection, next.
 		}
 
-		vertices[pair.first].edges.emplace_back(pair.second, 10);
-		//graph[pair.second].edges.emplace_back(pair.first, 10);
+		vertices[pair.first].edges.emplace_back(pair.first, pair.second, 10);
 		++edgeCount;
 	}
 
@@ -143,7 +142,7 @@ void Graph::setCapacitiesRandomly(long long edgeCount, int maxCapacity)
 	{
 		for (auto& edge : vert.edges)
 		{
-			vertices[edge.targetNode].edges.emplace_back(index, edge.getCapacity(), edge.getCapacity());
+			vertices[edge.targetNode].edges.emplace_back(edge.targetNode, index, edge.getCapacity(), edge.getCapacity());
 		}
 		++index;
 	}
@@ -172,7 +171,8 @@ void Graph::selectStartAndTargetNodes()
 			== vertices[i].edges.end())
 		{
 			target = i;
-			if (!Algorithm::DFS(*this).empty()) // any path from start to target?
+			std::deque<Edge*> path;
+			if (Algorithm::DFS(*this, path)) // any path from start to target?
 			{
 				break;
 			}
@@ -197,6 +197,7 @@ void Graph::setBackwardEdgePointers()
 				if (targetEdge.targetNode == index)
 				{
 					edge.setBackwardEdge(&targetEdge);
+					break;
 				}
 			}
 		}
