@@ -16,21 +16,21 @@ std::deque<size_t> Algorithm::DFS(const Graph& graph)
 		if (!visited[v])
 		{
 			visited[v] = true;
-			for (const auto& neighbor : graph[v].neighbors)
+			for (const auto& edge : graph[v].edges)
 			{
-				if (neighbor.getRemainingCapacity() <= 0)
+				if (edge.getRemainingCapacity() <= 0)
 				{
 					continue;
 				}
-				if (!visited[neighbor.index])
+				if (!visited[edge.targetNode])
 				{
-					visitedFrom[neighbor.index] = v;
+					visitedFrom[edge.targetNode] = v;
 				}
-				if (neighbor.index == graph.getTarget())
+				if (edge.targetNode == graph.getTarget())
 				{
 					return traceBack(visitedFrom, graph.getTarget());
 				}
-				stack.push(neighbor.index);
+				stack.push(edge.targetNode);
 			}
 		}
 	}

@@ -1,6 +1,10 @@
 #include "Vertex.h"
+#include <cassert>
 
-void Neighbor::addResidualFlow(int amount)
+void Edge::addResidualFlow(int amount)
 {
+	assert(flow + amount <= capacity);
+	
+	flow += amount;
 
 }

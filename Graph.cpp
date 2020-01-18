@@ -52,9 +52,9 @@ Graph::Graph(int numNodes, int maxCapacity, int windowWidth, int windowHeight)
 		bool intersectsAny = false;
 		for (auto& vert : vertices)
 		{
-			for (auto& neighbor : vert.neighbors)
+			for (auto& edge : vert.edges)
 			{
-				if (GraphUtils::intersectWithWidth(vertices[pair.first].pos, vertices[pair.second].pos, vert.pos, vertices[neighbor.index].pos, 0.f))
+				if (GraphUtils::intersectWithWidth(vertices[pair.first].pos, vertices[pair.second].pos, vert.pos, vertices[edge.targetNode].pos, 0.f))
 				{
 					intersectsAny = true;
 					break;
@@ -68,8 +68,8 @@ Graph::Graph(int numNodes, int maxCapacity, int windowWidth, int windowHeight)
 			continue; // cant insert without intersection, next.
 		}
 
-		vertices[pair.first].neighbors.emplace_back(pair.second, 10);
-		//graph[pair.second].neighbors.emplace_back(pair.first, 10);
+		vertices[pair.first].edges.emplace_back(pair.second, 10);
+		//graph[pair.second].edges.emplace_back(pair.first, 10);
 		++edgeCount;
 	}
 
@@ -122,10 +122,10 @@ void Graph::setCapacitiesRandomly(long long edgeCount, int maxCapacity)
 	size_t index = 0;
 	for (auto& vert : vertices)
 	{
-		for (auto& neighbor : vert.neighbors)
+		for (auto& edge : vert.edges)
 		{
 			assert(index < randCapacities.size());
-			neighbor.setCapacity(randCapacities[index]);
+			edge.setCapacity(randCapacities[index]);
 			++index;
 		}
 	}
@@ -139,9 +139,9 @@ void Graph::setCapacitiesRandomly(long long edgeCount, int maxCapacity)
 	index = 0;
 	for (auto& vert : nonResidualGraph)
 	{
-		for (auto& neighbor : vert.neighbors)
+		for (auto& edge : vert.edges)
 		{
-			vertices[neighbor.index].neighbors.emplace_back(index, neighbor.getCapacity(), neighbor.getCapacity());
+			vertices[edge.targetNode].edges.emplace_back(index, edge.getCapacity(), edge.getCapacity());
 		}
 		++index;
 	}
@@ -166,8 +166,8 @@ void Graph::selectStartAndTargetNodes()
 
 	for (const auto& i : nodes)
 	{
-		if (std::find_if(vertices[i].neighbors.begin(), vertices[i].neighbors.end(), [](const Neighbor& n) { return n.index == 0; })
-			== vertices[i].neighbors.end())
+		if (std::find_if(vertices[i].edges.begin(), vertices[i].edges.end(), [](const Edge& n) { return n.targetNode == 0; })
+			== vertices[i].edges.end())
 		{
 			target = i;
 			if (!Algorithm::DFS(*this).empty()) // any path from start to target?

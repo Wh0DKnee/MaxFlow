@@ -81,9 +81,9 @@ void Renderer::render(sf::RenderWindow& window, const Graph& graph, float deltaT
 	size_t index = 0;
 	for (const auto& vert : graph)
 	{
-		for (const auto& neighbor : vert.neighbors)
+		for (const auto& edge : vert.edges)
 		{
-			sf::Vector2f neighborPos = graph[neighbor.index].pos;
+			sf::Vector2f neighborPos = graph[edge.targetNode].pos;
 			sf::Vector2f delta = neighborPos - vert.pos;
 			sf::Vector2f middle = vert.pos + (delta * UI::labelDistance);
 			sf::Vector2f perpendicular = sf::Vector2f(delta.y, -delta.x);
@@ -99,7 +99,7 @@ void Renderer::render(sf::RenderWindow& window, const Graph& graph, float deltaT
 			sf::Text labelText;
 			labelText.setFont(font);
 			labelText.setStyle(sf::Text::Bold);
-			labelText.setString(std::to_string(neighbor.getRemainingCapacity()));
+			labelText.setString(std::to_string(edge.getRemainingCapacity()));
 			labelText.setCharacterSize(UI::fontSize);
 			labelText.setFillColor(sf::Color::Black);
 			sf::FloatRect textRect = labelText.getLocalBounds();
@@ -111,7 +111,7 @@ void Renderer::render(sf::RenderWindow& window, const Graph& graph, float deltaT
 			sf::Color lineColor = UI::regularColor;
 			if (vert.renderInfo.hasSuccessor())
 			{
-				if (vert.renderInfo.successor == neighbor.index)
+				if (vert.renderInfo.successor == edge.targetNode)
 				{
 					lineColor = UI::highlightColor;
 				}

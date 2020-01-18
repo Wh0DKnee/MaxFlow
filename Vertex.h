@@ -18,11 +18,11 @@ struct RenderInfo
 	}
 };
 
-struct Neighbor
+struct Edge
 {
-	Neighbor(size_t ind, int c, int f = 0) : index(ind), capacity(c), flow(f){}
+	Edge(size_t ind, int c, int f = 0) : targetNode(ind), capacity(c), flow(f){}
 
-	size_t index;
+	size_t targetNode;
 	int flow;
 
 	int getRemainingCapacity() const { return capacity - flow; }
@@ -47,7 +47,7 @@ struct Vertex
 
 	// add additional payload here
 
-	std::vector<Neighbor> neighbors;
+	std::vector<Edge> edges;
 };
 
 
