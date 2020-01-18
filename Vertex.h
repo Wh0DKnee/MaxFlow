@@ -29,6 +29,8 @@ struct Neighbor
 	void setCapacity(int c) { capacity = c; }
 	int getCapacity() { return capacity; }
 
+	void addResidualFlow(int amount);
+
 private:
 	int capacity;
 };
@@ -45,7 +47,6 @@ struct Vertex
 
 	// add additional payload here
 
-	// neighborIndex and weight
 	std::vector<Neighbor> neighbors;
 };
 

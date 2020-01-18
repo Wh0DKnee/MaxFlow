@@ -34,6 +34,7 @@ private:
 	size_t start;
 	size_t target;
 
+	// TODO: This is super slow, check if this is actually necessary.
 	void setCapacitiesRandomly(long long edgeCount, int maxCapacity);
 
 	void selectStartAndTargetNodes();
