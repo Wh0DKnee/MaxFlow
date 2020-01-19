@@ -108,14 +108,7 @@ void Renderer::render(sf::RenderWindow& window, const Graph& graph, float deltaT
 			labelText.setPosition(labelPos);
 			labelTexts.push_back(labelText);
 
-			sf::Color lineColor = UI::regularColor;
-			if (vert.renderInfo.hasSuccessor())
-			{
-				if (vert.renderInfo.successor == edge.targetNode)
-				{
-					lineColor = UI::highlightColor;
-				}
-			}
+			sf::Color lineColor = edge.renderInfo.isHighlighted ? UI::highlightColor : UI::regularColor;
 			
 			sf::Vector2f labelDelta = labelPos - vert.pos;
 			sf::Vector2f labelDeltaNormalized = VectorUtils::normalize(labelDelta);

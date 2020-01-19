@@ -79,18 +79,27 @@ Graph::Graph(int numNodes, int maxCapacity, int windowWidth, int windowHeight)
 	setBackwardEdgePointers();
 }
 
+void Graph::highlightPath(const std::deque<Edge*>& path)
+{
+	for (const auto& e : path)
+	{
+		// We are unnecessarily setting this flag on nodes multiple times,
+		// but it doesn't really matter.
+		vertices[e->startNode].renderInfo.isHighlighted = true;
+		vertices[e->targetNode].renderInfo.isHighlighted = true;
+		e->renderInfo.isHighlighted = true;
+	}
+}
+
 void Graph::resetRenderInfo()
 {
 	for (auto& v : vertices)
 	{
-		TODO
-		/*
-		Currently we store render info on the vertex, not the edges.
-		Is this correct? Should we store it on both, or just the edges?
-		If we store it in the edges only, how do we highlight nodes?
-		While we iterate over the nodes to render them, we could check if
-		any of its edges are highlighted.
-		*/
+		v.renderInfo.reset();
+		for (auto& e : v.edges)
+		{
+			e.renderInfo.reset();
+		}
 	}
 }
 

@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <deque>
 #include "Vertex.h"
 
 class Graph
@@ -14,6 +15,7 @@ public:
 	size_t getStart() const { return start; }
 	size_t getTarget() const { return target; }
 
+	void highlightPath(const std::deque<Edge*>& path);
 	void resetRenderInfo();
 
 	// Proxy functions for vertices vector:

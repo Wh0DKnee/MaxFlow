@@ -32,6 +32,7 @@ bool Algorithm::DFS(Graph& graph, std::deque<Edge*>& outPath)
 				if (edge.targetNode == graph.getTarget())
 				{
 					traceBack(visitedFrom, graph.getTarget(), outPath);
+					graph.highlightPath(outPath);
 					return true;
 				}
 				stack.push(edge.targetNode);

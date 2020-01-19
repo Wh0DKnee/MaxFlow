@@ -52,11 +52,6 @@ int main()
 		{
 			std::deque<Edge*> path;
 			Algorithm::DFS(graph, path);
-			for (const auto& v : path)
-			{
-				graph[v->startNode].renderInfo.isHighlighted = true;
-				graph[v->startNode].renderInfo.successor = v->targetNode;
-			}
 		}
 
 		if (ImGui::Button("Ford Fulkerson"))
@@ -66,6 +61,7 @@ int main()
 		
 		if (ImGui::Button("Ford Fulkerson Step"))
 		{
+			graph.resetRenderInfo();
 			Algorithm::fordFulkersonStep(graph);
 		}
 

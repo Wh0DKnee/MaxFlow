@@ -7,14 +7,10 @@
 struct RenderInfo
 {
 	bool isHighlighted = false;
-	size_t successor = std::numeric_limits<size_t>::max();
-
-	bool hasSuccessor() const { return successor != std::numeric_limits<size_t>::max(); }
 	
 	void reset()
 	{
 		isHighlighted = false;
-		successor = std::numeric_limits<size_t>::max();
 	}
 };
 
@@ -24,6 +20,8 @@ struct Edge
 
 	size_t startNode;
 	size_t targetNode;
+
+	RenderInfo renderInfo;
 
 	int getRemainingCapacity() const { return capacity - flow; }
 	void setCapacity(int c) { capacity = c; }
