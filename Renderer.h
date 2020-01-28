@@ -12,5 +12,8 @@ class Renderer
 {
 public:
 	static void render(class sf::RenderWindow& window, const class Graph& graph, float deltaTime);
+
+private:
+	static void renderImGUI();
 };
 

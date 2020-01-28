@@ -10,7 +10,9 @@ namespace UIConfig
 	static float arrowDistance = 0.5f;
 	static float arrowLength = 10.f;
 	static float arrowSpeed = 0.3f;
-	static int fontSize = 8;
+	static const char* fonts[] = { "arial", "times", "segoeui", "calibri" };
+	static const char* font = "segoeui";
+	static int fontSize = 12;
 	static bool drawNodeLabels = true;
 
 	static sf::Color regularColor = sf::Color::Black;

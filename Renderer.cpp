@@ -21,26 +21,17 @@ void Renderer::render(sf::RenderWindow& window, const Graph& graph, float deltaT
 	background.setFillColor(sf::Color(209, 209, 209, 255));
 	window.draw(background);
 
-	sf::Font font;
-	if (!font.loadFromFile("fonts/arial.ttf"))
-	{
-		std::cout << "COULD NOT LOAD FONT, STOPPING RENDER" << std::endl;
-	}
+	renderImGUI();
 
 	UI::arrowDistance += deltaTime * UI::arrowSpeed;
 	UI::arrowDistance = std::fmod(UI::arrowDistance, 1.f);
 	
-	if (ImGui::CollapsingHeader("Styling"))
+	sf::Font font;
+	std::string fontPath = "fonts/" + std::string(UI::font) + ".ttf";
+	if (!font.loadFromFile(fontPath))
 	{
-		ImGui::SliderFloat("node radius", &UI::nodeRadius, 0.f, 30.f);
-		ImGui::SliderFloat("label distance", &UI::labelDistance, 0.f, 1.f);
-		ImGui::SliderFloat("label spacing", &UI::labelSpacing, 0.f, 100.f);
-		ImGui::SliderFloat("label radius", &UI::labelRadius, 0.f, 40.f);
-		ImGui::SliderFloat("arrow distance", &UI::arrowDistance, 0.f, 1.f);
-		ImGui::SliderFloat("arrow size", &UI::arrowLength, 0.f, 100.f);
-		ImGui::SliderFloat("arrow speed", &UI::arrowSpeed, 0.f, 3.f);
-		ImGui::SliderInt("font size", &UI::fontSize, 0, 30);
-		ImGui::Checkbox("node labels", &UI::drawNodeLabels);
+		std::cout << "COULD NOT LOAD FONT, STOPPING RENDER" << std::endl;
+		return;
 	}
 
 	for (const auto& vert : graph)
@@ -153,5 +144,35 @@ void Renderer::render(sf::RenderWindow& window, const Graph& graph, float deltaT
 	for (const auto& drawable : labelTexts)
 	{
 		window.draw(drawable);
+	}
+}
+
+void Renderer::renderImGUI()
+{
+	if (ImGui::CollapsingHeader("Styling"))
+	{
+		ImGui::SliderFloat("node radius", &UI::nodeRadius, 0.f, 30.f);
+		ImGui::SliderFloat("label distance", &UI::labelDistance, 0.f, 1.f);
+		ImGui::SliderFloat("label spacing", &UI::labelSpacing, 0.f, 100.f);
+		ImGui::SliderFloat("label radius", &UI::labelRadius, 0.f, 40.f);
+		ImGui::SliderFloat("arrow distance", &UI::arrowDistance, 0.f, 1.f);
+		ImGui::SliderFloat("arrow size", &UI::arrowLength, 0.f, 100.f);
+		ImGui::SliderFloat("arrow speed", &UI::arrowSpeed, 0.f, 3.f);
+		ImGui::SliderInt("font size", &UI::fontSize, 0, 30);
+		ImGui::Checkbox("node labels", &UI::drawNodeLabels);
+
+		if (ImGui::BeginCombo("font", UI::font))
+		{
+			for (int n = 0; n < IM_ARRAYSIZE(UI::fonts); n++)
+			{
+				bool is_selected = (UI::font == UI::fonts[n]);
+				if (ImGui::Selectable(UI::fonts[n], is_selected))
+					UI::font = UI::fonts[n];
+				if (is_selected)
+					ImGui::SetItemDefaultFocus();
+			}
+			ImGui::EndCombo();
+		}
+
 	}
 }
