@@ -21,6 +21,7 @@ int main()
 	Graph graph;
 	int numNodes = 10;
 	int totalCapacity = 100;
+	float minDistance = 150.f;
 
 	window.resetGLStates();
 	sf::Clock deltaClock;
@@ -42,10 +43,11 @@ int main()
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::InputInt("#nodes", &numNodes);
 		ImGui::InputInt("totalCapacity", &totalCapacity);
+		ImGui::InputFloat("minDistance", &minDistance);
 
 		if (ImGui::Button("re-generate"))
 		{
-			graph = Graph(numNodes, totalCapacity, window.getSize().x, window.getSize().y);
+			graph = Graph(numNodes, totalCapacity, window.getSize().x, window.getSize().y, minDistance);
 		}
 
 		if (ImGui::Button("DFS"))

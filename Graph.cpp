@@ -4,7 +4,7 @@
 #include <cassert>
 #include "Algorithm.h"
 
-Graph::Graph(int numNodes, int maxCapacity, int windowWidth, int windowHeight)
+Graph::Graph(int numNodes, int maxCapacity, int windowWidth, int windowHeight, float minDist) : minDist(minDist)
 {
 	static int margin = 20;
 	vertices.reserve(numNodes);
@@ -15,12 +15,26 @@ Graph::Graph(int numNodes, int maxCapacity, int windowWidth, int windowHeight)
 	std::uniform_int_distribution<> capacityDis(1, maxCapacity);
 	randEngine.seed(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
 
-	for (int i = 0; i < numNodes; ++i)
+	// We re-generate nodes that are too close until we've reached the
+	// maximum # of re-generation tries (so that we don't run in to an
+	// infinite loop for some inputs)
+	int tries = 0;
+	static int maxTries = 10000;
+	for (int i = 0; i < numNodes; )
 	{
 		float x = xDis(randEngine);
 		float y = yDis(randEngine);
+		sf::Vector2f pos(x, y);
 
-		vertices.push_back(Vertex(x, y));
+		if (hasMinDistance(pos) || tries > maxTries)
+		{
+			vertices.push_back(Vertex(pos));
+			++i;
+		}
+		else
+		{
+			++tries;
+		}
 	}
 
 	std::vector<std::pair<size_t, size_t>> vertexPairs;
@@ -159,4 +173,19 @@ void Graph::setBackwardEdgePointers()
 		}
 		++index;
 	}
+}
+
+bool Graph::hasMinDistance(const sf::Vector2f& p)
+{
+	const float minDistSquared = minDist * minDist;
+	for (const auto& v : vertices)
+	{
+		sf::Vector2f diff = v.pos - p;
+
+		if ((diff.x * diff.x + diff.y * diff.y) < minDistSquared)
+		{
+			return false;
+		}
+	}
+	return true;
 }

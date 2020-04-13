@@ -10,7 +10,7 @@ public:
 	Graph() = default;
 
 	// Randomly generates graph based on parameters.
-	Graph(int numNodes, int maxCapacity, int windowWidth, int windowHeight);
+	Graph(int numNodes, int maxCapacity, int windowWidth, int windowHeight, float minDist = 0.f);
 
 	size_t getStart() const { return start; }
 	size_t getTarget() const { return target; }
@@ -37,9 +37,12 @@ private:
 	std::vector<Vertex> vertices;
 	size_t start;
 	size_t target;
+	float minDist = 0.f;
 
 	void selectStartAndTargetNodes();
 
 	void setBackwardEdgePointers();
+
+	bool hasMinDistance(const sf::Vector2f& p);
 };
 
