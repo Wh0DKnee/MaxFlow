@@ -40,6 +40,10 @@ struct Edge
 
 	void setCombinedEdge(Edge* c) { combined = c; }
 
+	void highlight();
+
+	void resetHighlight();
+
 private:
 	int flow;
 	int capacity;

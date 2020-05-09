@@ -101,7 +101,7 @@ void Graph::highlightPath(const std::deque<Edge*>& path)
 		// but it doesn't really matter.
 		vertices[e->startNode].renderInfo.isHighlighted = true;
 		vertices[e->targetNode].renderInfo.isHighlighted = true;
-		e->renderInfo.isHighlighted = true;
+		e->highlight();
 	}
 }
 
@@ -112,7 +112,7 @@ void Graph::resetRenderInfo()
 		v.renderInfo.reset();
 		for (auto& e : v.edges)
 		{
-			e.renderInfo.reset();
+			e.resetHighlight();
 		}
 	}
 }

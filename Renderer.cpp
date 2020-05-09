@@ -72,7 +72,7 @@ void Renderer::render(sf::RenderWindow& window, const Graph& graph, float deltaT
 	size_t index = 0;
 	for (const auto& vert : graph)
 	{
-		for (const auto& edge : vert.edges)
+		for (const auto& edge : vert.renderedEdges)
 		{
 			sf::Vector2f neighborPos = graph[edge.targetNode].pos;
 			sf::Vector2f delta = neighborPos - vert.pos;
