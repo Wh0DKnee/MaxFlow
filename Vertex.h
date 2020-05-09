@@ -17,7 +17,8 @@ struct RenderInfo
 struct Edge
 {
 	Edge(size_t startInd, size_t targetInd, int c, int f = 0) : startNode(startInd), targetNode(targetInd), capacity(c), flow(f) {}
-
+	
+	// TODO: Rethink why we store these as indexes and not as references/pointers. Maybe there was a reason for it but I forgot.
 	size_t startNode;
 	size_t targetNode;
 
@@ -63,6 +64,7 @@ struct Vertex
 
 	// add additional payload here
 
+	// outgoing edges
 	std::vector<Edge> edges;
 };
 

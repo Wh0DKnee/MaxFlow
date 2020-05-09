@@ -41,7 +41,7 @@ private:
 
 	void selectStartAndTargetNodes();
 
-	void setBackwardEdgePointers();
+	void addBackwardEdges();
 
 	bool hasMinDistance(const sf::Vector2f& p);
 };

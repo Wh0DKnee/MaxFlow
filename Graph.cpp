@@ -15,8 +15,8 @@ Graph::Graph(int numNodes, int maxCapacity, int windowWidth, int windowHeight, f
 	std::uniform_int_distribution<> capacityDis(1, maxCapacity);
 	randEngine.seed(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
 
-	// We re-generate nodes that are too close until we've reached the
-	// maximum # of re-generation tries (so that we don't run in to an
+	// We re-generate nodes that are too close (for visualization purposes) until we've
+	// reached the maximum # of re-generation tries (so that we don't run into an
 	// infinite loop for some inputs)
 	int tries = 0;
 	static int maxTries = 10000;
@@ -60,8 +60,6 @@ Graph::Graph(int numNodes, int maxCapacity, int windowWidth, int windowHeight, f
 			return lhsDistSquared < rhsDistSquared;
 		});
 
-	long long edgeCount = 0;
-
 	for (auto& pair : vertexPairs)
 	{
 		bool intersectsAny = false;
@@ -83,15 +81,14 @@ Graph::Graph(int numNodes, int maxCapacity, int windowWidth, int windowHeight, f
 			continue; // cant insert without intersection, next.
 		}
 
+		// add two edges, one in each direction
 		vertices[pair.first].edges.emplace_back(pair.first, pair.second, capacityDis(randEngine));
 		vertices[pair.second].edges.emplace_back(pair.second, pair.first, capacityDis(randEngine));
-
-		++edgeCount;
 	}
 
-	selectStartAndTargetNodes();
+	addBackwardEdges();
 
-	setBackwardEdgePointers();
+	selectStartAndTargetNodes();
 }
 
 void Graph::highlightPath(const std::deque<Edge*>& path)
@@ -150,29 +147,48 @@ void Graph::selectStartAndTargetNodes()
 	}
 }
 
-void Graph::setBackwardEdgePointers()
+void Graph::addBackwardEdges()
 {
-	// I don't like this, but if we try and do this at the point
-	// where we initially add the backward edges, we might invalidate the
-	// pointer as more edges might be added to a vertex, so a pointer
-	// pointing into the edges vector could be invalidated.
+	std::vector<size_t> originalNumEdges;
 
 	size_t index = 0;
 	for (auto& vert : vertices)
 	{
-		for (auto& edge : vert.edges)
-		{
-			for (auto& targetEdge : vertices[edge.targetNode].edges)
-			{
-				if (targetEdge.targetNode == index)
-				{
-					edge.setBackwardEdge(&targetEdge);
-					break;
-				}
-			}
-		}
+		// Allocate memory for back edges, so that no resizing
+		// happens when we add them in the for loop below. This way,
+		// we can safely store pointers into the edges vector,
+		// as this will be its final size for the rest of its
+		// life time.
+		// In this process, all vertices will double its # of
+		// edges, because for every edge, there is a reverse edge
+		// in the original graph, so #edges in = #edges out
+		vert.edges.reserve(2 * vert.edges.size());
+
+		// we only want to add backward edges for the original edges
+		// (read: we don't want additional backward edges for backward edges)
+		originalNumEdges.push_back(vert.edges.size());
 		++index;
 	}
+
+	index = 0;
+	for (auto& vert : vertices)
+	{
+
+		for (size_t i = 0; i < originalNumEdges[index]; ++i)
+		{
+			auto& curEdge = vert.edges[i];
+			auto& targetVertEdges = vertices[curEdge.targetNode].edges;
+
+			// Forward edge starts with 0 flow, so backward edge has full flow initially -> no remaining capacity.
+			Edge e(curEdge.targetNode, curEdge.startNode, curEdge.getCapacity(), curEdge.getCapacity());
+			targetVertEdges.push_back(e);
+			curEdge.setBackwardEdge(&targetVertEdges[targetVertEdges.size() - 1]);
+			targetVertEdges[targetVertEdges.size() - 1].setBackwardEdge(&curEdge);
+		}
+
+		++index;
+	}
+
 }
 
 bool Graph::hasMinDistance(const sf::Vector2f& p)
