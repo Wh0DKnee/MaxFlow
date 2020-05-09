@@ -88,6 +88,8 @@ Graph::Graph(int numNodes, int maxCapacity, int windowWidth, int windowHeight, f
 
 	addBackwardEdges();
 
+	addCombinedEdges();
+
 	selectStartAndTargetNodes();
 }
 
@@ -159,6 +161,8 @@ void Graph::addBackwardEdges()
 		// we can safely store pointers into the edges vector,
 		// as this will be its final size for the rest of its
 		// life time.
+		// Should this ever change, change the edge vector in
+		// Vertex to a list!!!
 		// In this process, all vertices will double its # of
 		// edges, because for every edge, there is a reverse edge
 		// in the original graph, so #edges in = #edges out
@@ -189,6 +193,32 @@ void Graph::addBackwardEdges()
 		++index;
 	}
 
+}
+
+void Graph::addCombinedEdges()
+{
+	for (auto& v : vertices)
+	{
+		for (size_t i = 0; i < v.edges.size(); ++i)
+		{
+			size_t targetNode = v.edges[i].targetNode;
+			
+			for (size_t j = i + 1; j < v.edges.size(); ++j)
+			{
+				if (v.edges[j].targetNode == targetNode)
+				{
+					Edge e(	v.edges[i].startNode,
+							v.edges[i].targetNode,
+							v.edges[i].getCapacity() + v.edges[j].getCapacity(),
+							v.edges[i].getFlow() + v.edges[j].getFlow());
+
+					v.renderedEdges.push_back(e);
+					v.edges[i].setCombinedEdge(&v.renderedEdges.back());
+					v.edges[j].setCombinedEdge(&v.renderedEdges.back());
+				}
+			}
+		}
+	}
 }
 
 bool Graph::hasMinDistance(const sf::Vector2f& p)

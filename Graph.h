@@ -43,6 +43,8 @@ private:
 
 	void addBackwardEdges();
 
+	void addCombinedEdges();
+
 	bool hasMinDistance(const sf::Vector2f& p);
 };
 

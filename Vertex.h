@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <list>
 #include <cmath>
 #include <SFML/System/Vector2.hpp>
 #include <limits>
@@ -19,6 +20,8 @@ struct Edge
 	Edge(size_t startInd, size_t targetInd, int c, int f = 0) : startNode(startInd), targetNode(targetInd), capacity(c), flow(f) {}
 	
 	// TODO: Rethink why we store these as indexes and not as references/pointers. Maybe there was a reason for it but I forgot.
+	// Probably because pointers would point into a vector and if that changes the pointers would be invalidated. Could use a std::list
+	// instead to avoid reallocation, but would lose performance.
 	size_t startNode;
 	size_t targetNode;
 
@@ -26,13 +29,16 @@ struct Edge
 
 	int getRemainingCapacity() const { return capacity - flow; }
 	void setCapacity(int c) { capacity = c; }
-	int getCapacity() { return capacity; }
+	int getCapacity() const { return capacity; }
 
-	int getFlow() { return flow; }
+	int getFlow() const { return flow; }
 
+	// Adds flow to edge
 	void addResidualFlow(int amount);
 
 	void setBackwardEdge(Edge* b) { backward = b; }
+
+	void setCombinedEdge(Edge* c) { combined = c; }
 
 private:
 	int flow;
@@ -46,10 +52,16 @@ private:
 	  object is also destructed.
 	  We could instead also store the index into the targetNode's edges
 	  vector, but for that we'd have to store a reference to the graph
-	  to access the targetNode.*/
+	  to access the targetNode.
+	  We could also just use a std::list for edges, which doesn't invalidate
+	  iterators/pointers when inserting or deleting elements.*/
 	Edge* backward = nullptr;
 
-	void addFlow(int amount) { flow += amount; }
+	// Pointer to edge that gets rendered and combines the edge pair
+	// with equal start and target vertices.
+	Edge* combined = nullptr;
+
+	void addFlow(int amount);
 };
 
 struct Vertex
@@ -66,6 +78,9 @@ struct Vertex
 
 	// outgoing edges
 	std::vector<Edge> edges;
+
+	// combined edges for rendering only (don't wanna draw four edges between each vertex pair)
+	std::list<Edge> renderedEdges;
 };
 
 
