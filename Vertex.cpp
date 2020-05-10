@@ -17,15 +17,15 @@ void Edge::addResidualFlow(int amount)
 void Edge::highlight()
 {
 	assert(combined != nullptr);
-	renderInfo.isHighlighted = true;
-	combined->renderInfo.isHighlighted = true;
+	renderInfo.highlight();
+	combined->renderInfo.highlight();
 }
 
 void Edge::resetHighlight()
 {
 	assert(combined != nullptr);
-	renderInfo.reset();
-	combined->renderInfo.reset();
+	renderInfo.resetHighlight();
+	combined->renderInfo.resetHighlight();
 }
 
 void Edge::addFlow(int amount)
@@ -34,4 +34,34 @@ void Edge::addFlow(int amount)
 
 	flow += amount;
 	combined->flow += amount;
+}
+
+void RenderInfo::highlight()
+{
+	isHighlighted = true;
+	color = highlightColor;
+}
+
+void RenderInfo::resetHighlight()
+{
+	isHighlighted = false;
+	color = regularColor;
+}
+
+void RenderInfo::setRegularColor(sf::Color c)
+{
+	regularColor = c;
+	if (!isHighlighted)
+	{
+		color = c;
+	}
+}
+
+void RenderInfo::setHighlightColor(sf::Color c)
+{
+	highlightColor = c;
+	if (isHighlighted)
+	{
+		color = c;
+	}
 }

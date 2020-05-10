@@ -3,6 +3,7 @@
 #include <chrono>
 #include <cassert>
 #include "Algorithm.h"
+#include "UIConfig.h"
 
 Graph::Graph(int numNodes, int maxCapacity, int windowWidth, int windowHeight, float minDist) : minDist(minDist)
 {
@@ -99,8 +100,8 @@ void Graph::highlightPath(const std::deque<Edge*>& path)
 	{
 		// We are unnecessarily setting this flag on nodes multiple times,
 		// but it doesn't really matter.
-		vertices[e->startNode].renderInfo.isHighlighted = true;
-		vertices[e->targetNode].renderInfo.isHighlighted = true;
+		vertices[e->startNode].renderInfo.highlight();
+		vertices[e->targetNode].renderInfo.highlight();
 		e->highlight();
 	}
 }
@@ -109,7 +110,7 @@ void Graph::resetRenderInfo()
 {
 	for (auto& v : vertices)
 	{
-		v.renderInfo.reset();
+		v.renderInfo.resetHighlight();
 		for (auto& e : v.edges)
 		{
 			e.resetHighlight();
@@ -119,9 +120,6 @@ void Graph::resetRenderInfo()
 
 void Graph::selectStartAndTargetNodes()
 {
-	start = 0;
-	target = 0;
-
 	std::random_device rd;
 	auto rng = std::default_random_engine(rd());
 	
@@ -143,6 +141,10 @@ void Graph::selectStartAndTargetNodes()
 			std::deque<Edge*> path;
 			if (Algorithm::DFS(*this, path)) // any path from start to target?
 			{
+				vertices[start].renderInfo.setRegularColor(UIConfig::startColor);
+				vertices[start].renderInfo.setHighlightColor(UIConfig::startColor);
+				vertices[target].renderInfo.setRegularColor(UIConfig::targetColor);
+				vertices[target].renderInfo.setHighlightColor(UIConfig::targetColor);
 				break;
 			}
 		}

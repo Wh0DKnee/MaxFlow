@@ -20,7 +20,7 @@ int main()
 
 	Graph graph;
 	int numNodes = 10;
-	int totalCapacity = 100;
+	int totalCapacity = 10;
 	float minDistance = 150.f;
 
 	window.resetGLStates();
@@ -49,23 +49,28 @@ int main()
 		{
 			graph = Graph(numNodes, totalCapacity, window.getSize().x, window.getSize().y, minDistance);
 		}
+		if (ImGui::CollapsingHeader("Algo"))
+		{
 
-		if (ImGui::Button("DFS"))
-		{
-			std::deque<Edge*> path;
-			Algorithm::DFS(graph, path);
-			graph.highlightPath(path);
-		}
+			if (ImGui::Button("DFS"))
+			{
+				graph.resetRenderInfo();
+				std::deque<Edge*> path;
+				Algorithm::DFS(graph, path);
+				graph.highlightPath(path);
+			}
 
-		if (ImGui::Button("Ford Fulkerson"))
-		{
-			Algorithm::fordFulkerson(graph);
-		}
-		
-		if (ImGui::Button("Ford Fulkerson Step"))
-		{
-			graph.resetRenderInfo();
-			Algorithm::fordFulkersonStep(graph);
+			if (ImGui::Button("Ford Fulkerson"))
+			{
+				graph.resetRenderInfo();
+				Algorithm::fordFulkerson(graph);
+			}
+
+			if (ImGui::Button("Ford Fulkerson Step"))
+			{
+				graph.resetRenderInfo();
+				Algorithm::fordFulkersonStep(graph);
+			}
 		}
 
 		window.clear(sf::Color(209, 209, 209, 255));

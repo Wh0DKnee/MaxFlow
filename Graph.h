@@ -35,8 +35,8 @@ public:
 
 private:
 	std::vector<Vertex> vertices;
-	size_t start;
-	size_t target;
+	size_t start = 0;
+	size_t target = 0;
 	float minDist = 0.f;
 
 	void selectStartAndTargetNodes();

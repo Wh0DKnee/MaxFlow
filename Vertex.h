@@ -3,16 +3,27 @@
 #include <list>
 #include <cmath>
 #include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/Color.hpp>
 #include <limits>
+#include "UIConfig.h"
 
 struct RenderInfo
 {
-	bool isHighlighted = false;
-	
-	void reset()
-	{
-		isHighlighted = false;
-	}
+	void highlight();
+
+	void resetHighlight();
+
+	sf::Color getColor() const { return color; }
+
+	void setRegularColor(sf::Color c);
+	void setHighlightColor(sf::Color c);
+
+private:
+
+	bool isHighlighted = false; // TODO: need this?
+	sf::Color regularColor = sf::Color::Black;
+	sf::Color highlightColor = sf::Color::Blue;
+	sf::Color color = regularColor;
 };
 
 struct Edge

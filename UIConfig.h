@@ -15,7 +15,7 @@ namespace UIConfig
 	static int fontSize = 12;
 	static bool drawNodeLabels = true;
 
-	static sf::Color regularColor = sf::Color::Black;
-	static sf::Color highlightColor = sf::Color::Blue;
+	static sf::Color startColor = sf::Color(45, 102, 43);
+	static sf::Color targetColor = sf::Color(112, 31, 31);
 
 }

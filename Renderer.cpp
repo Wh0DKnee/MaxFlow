@@ -37,8 +37,7 @@ void Renderer::render(sf::RenderWindow& window, const Graph& graph, float deltaT
 	for (const auto& vert : graph)
 	{
 		sf::CircleShape nodeShape(UI::nodeRadius);
-		auto color = vert.renderInfo.isHighlighted ? UI::highlightColor : UI::regularColor;
-		nodeShape.setFillColor(color);
+		nodeShape.setFillColor(vert.renderInfo.getColor());
 		nodeShape.setPosition(vert.pos.x, vert.pos.y);
 		nodeShape.setOrigin(UI::nodeRadius, UI::nodeRadius);
 		window.draw(nodeShape);
@@ -53,7 +52,7 @@ void Renderer::render(sf::RenderWindow& window, const Graph& graph, float deltaT
 			sf::Text nodeText;
 			nodeText.setFont(font);
 			nodeText.setString(std::to_string(index));
-			nodeText.setCharacterSize(UI::nodeRadius*2);
+			nodeText.setCharacterSize(static_cast<unsigned int>(UI::nodeRadius * 2.f));
 			nodeText.setFillColor(sf::Color::White);
 			sf::FloatRect textRect = nodeText.getLocalBounds();
 			nodeText.setOrigin(textRect.left + textRect.width / 2.f,
@@ -98,27 +97,25 @@ void Renderer::render(sf::RenderWindow& window, const Graph& graph, float deltaT
 								textRect.top + textRect.height / 2.f);
 			labelText.setPosition(labelPos);
 			labelTexts.push_back(labelText);
-
-			sf::Color lineColor = edge.renderInfo.isHighlighted ? UI::highlightColor : UI::regularColor;
 			
 			sf::Vector2f labelDelta = labelPos - vert.pos;
 			sf::Vector2f labelDeltaNormalized = VectorUtils::normalize(labelDelta);
 			LineShape line1(vert.pos + labelDeltaNormalized * UI::nodeRadius, labelPos - labelDeltaNormalized * UI::labelRadius);
-			line1.setFillColor(lineColor);
+			line1.setFillColor(edge.renderInfo.getColor());
 			edges.push_back(line1);
 
 			ArrowShape arrow1 = ArrowShape(vert.pos + labelDelta * UI::arrowDistance, labelPos, UI::arrowLength, UI::arrowLength / 2.f);
-			arrow1.setFillColor(lineColor);
+			arrow1.setFillColor(edge.renderInfo.getColor());
 			arrows.push_back(arrow1);
 
 			labelDelta = neighborPos - labelPos;
 			labelDeltaNormalized = VectorUtils::normalize(labelDelta);
 			LineShape line2(labelPos + labelDeltaNormalized * UI::labelRadius, neighborPos - labelDeltaNormalized * UI::nodeRadius);
-			line2.setFillColor(lineColor);
+			line2.setFillColor(edge.renderInfo.getColor());
 			edges.push_back(line2);
 
 			ArrowShape arrow2 = ArrowShape(labelPos + labelDelta * UI::arrowDistance, neighborPos, UI::arrowLength, UI::arrowLength / 2.f);
-			arrow2.setFillColor(lineColor);
+			arrow2.setFillColor(edge.renderInfo.getColor());
 			arrows.push_back(arrow2);
 		}
 		++index;
@@ -149,30 +146,30 @@ void Renderer::render(sf::RenderWindow& window, const Graph& graph, float deltaT
 
 void Renderer::renderImGUI()
 {
-	if (ImGui::CollapsingHeader("Styling"))
+	ImGui::Begin("Styling");
+
+	ImGui::SliderFloat("node radius", &UI::nodeRadius, 0.f, 30.f);
+	ImGui::SliderFloat("label distance", &UI::labelDistance, 0.f, 1.f);
+	ImGui::SliderFloat("label spacing", &UI::labelSpacing, 0.f, 100.f);
+	ImGui::SliderFloat("label radius", &UI::labelRadius, 0.f, 40.f);
+	ImGui::SliderFloat("arrow distance", &UI::arrowDistance, 0.f, 1.f);
+	ImGui::SliderFloat("arrow size", &UI::arrowLength, 0.f, 100.f);
+	ImGui::SliderFloat("arrow speed", &UI::arrowSpeed, 0.f, 3.f);
+	ImGui::SliderInt("font size", &UI::fontSize, 0, 30);
+	ImGui::Checkbox("node labels", &UI::drawNodeLabels);
+
+	if (ImGui::BeginCombo("font", UI::font))
 	{
-		ImGui::SliderFloat("node radius", &UI::nodeRadius, 0.f, 30.f);
-		ImGui::SliderFloat("label distance", &UI::labelDistance, 0.f, 1.f);
-		ImGui::SliderFloat("label spacing", &UI::labelSpacing, 0.f, 100.f);
-		ImGui::SliderFloat("label radius", &UI::labelRadius, 0.f, 40.f);
-		ImGui::SliderFloat("arrow distance", &UI::arrowDistance, 0.f, 1.f);
-		ImGui::SliderFloat("arrow size", &UI::arrowLength, 0.f, 100.f);
-		ImGui::SliderFloat("arrow speed", &UI::arrowSpeed, 0.f, 3.f);
-		ImGui::SliderInt("font size", &UI::fontSize, 0, 30);
-		ImGui::Checkbox("node labels", &UI::drawNodeLabels);
-
-		if (ImGui::BeginCombo("font", UI::font))
+		for (int n = 0; n < IM_ARRAYSIZE(UI::fonts); n++)
 		{
-			for (int n = 0; n < IM_ARRAYSIZE(UI::fonts); n++)
-			{
-				bool is_selected = (UI::font == UI::fonts[n]);
-				if (ImGui::Selectable(UI::fonts[n], is_selected))
-					UI::font = UI::fonts[n];
-				if (is_selected)
-					ImGui::SetItemDefaultFocus();
-			}
-			ImGui::EndCombo();
+			bool is_selected = (UI::font == UI::fonts[n]);
+			if (ImGui::Selectable(UI::fonts[n], is_selected))
+				UI::font = UI::fonts[n];
+			if (is_selected)
+				ImGui::SetItemDefaultFocus();
 		}
-
+		ImGui::EndCombo();
 	}
+
+	ImGui::End();
 }
