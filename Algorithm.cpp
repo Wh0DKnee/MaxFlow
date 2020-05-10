@@ -32,7 +32,6 @@ bool Algorithm::DFS(Graph& graph, std::deque<Edge*>& outPath)
 				if (edge.targetNode == graph.getTarget())
 				{
 					traceBack(visitedFrom, graph.getTarget(), outPath);
-					graph.highlightPath(outPath);
 					return true;
 				}
 				stack.push(edge.targetNode);
@@ -60,18 +59,7 @@ void Algorithm::fordFulkerson(Graph& graph)
 	std::deque<Edge*> path;
 	while (DFS(graph, path))
 	{
-		int minResidualCap = std::numeric_limits<int>::max();
-		for (const auto& edge : path)
-		{
-			if (edge->getRemainingCapacity() < minResidualCap)
-			{
-				minResidualCap = edge->getRemainingCapacity();
-			}
-		}
-		for (auto& edge : path)
-		{
-			edge->addResidualFlow(minResidualCap);
-		}
+		exhaustPath(path);
 	}
 }
 
@@ -80,17 +68,23 @@ void Algorithm::fordFulkersonStep(Graph& graph)
 	std::deque<Edge*> path;
 	if(DFS(graph, path))
 	{
-		int minResidualCap = std::numeric_limits<int>::max();
-		for (const auto& edge : path)
+		exhaustPath(path);
+		graph.highlightPath(path);
+	}
+}
+
+void Algorithm::exhaustPath(std::deque<Edge*>& path)
+{
+	int minResidualCap = std::numeric_limits<int>::max();
+	for (const auto& edge : path)
+	{
+		if (edge->getRemainingCapacity() < minResidualCap)
 		{
-			if (edge->getRemainingCapacity() < minResidualCap)
-			{
-				minResidualCap = edge->getRemainingCapacity();
-			}
+			minResidualCap = edge->getRemainingCapacity();
 		}
-		for (auto& edge : path)
-		{
-			edge->addResidualFlow(minResidualCap);
-		}
+	}
+	for (auto& edge : path)
+	{
+		edge->addResidualFlow(minResidualCap);
 	}
 }

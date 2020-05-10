@@ -16,5 +16,7 @@ namespace Algorithm
 	void fordFulkerson(Graph& graph);
 
 	void fordFulkersonStep(Graph& graph);
+
+	void exhaustPath(std::deque<Edge*>& path);
 };
 

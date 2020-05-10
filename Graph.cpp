@@ -137,7 +137,7 @@ void Graph::selectStartAndTargetNodes()
 	for (const auto& i : nodes)
 	{
 		if (std::find_if(vertices[i].edges.begin(), vertices[i].edges.end(), [](const Edge& n) { return n.targetNode == 0; })
-			== vertices[i].edges.end())
+			== vertices[i].edges.end()) // if not adjacent
 		{
 			target = i;
 			std::deque<Edge*> path;

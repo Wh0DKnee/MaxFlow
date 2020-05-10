@@ -54,6 +54,7 @@ int main()
 		{
 			std::deque<Edge*> path;
 			Algorithm::DFS(graph, path);
+			graph.highlightPath(path);
 		}
 
 		if (ImGui::Button("Ford Fulkerson"))
