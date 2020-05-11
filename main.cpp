@@ -9,6 +9,7 @@
 #include "Renderer.h"
 #include "Algorithm.h"
 #include "Graph.h"
+#include "FordFulkersonVis.h"
 
 int main()
 {
@@ -22,6 +23,9 @@ int main()
 	int numNodes = 10;
 	int totalCapacity = 10;
 	float minDistance = 150.f;
+
+	FordFulkersonVis ffVis;
+	Visualizer* currentVisualizer = nullptr;
 
 	window.resetGLStates();
 	sf::Clock deltaClock;
@@ -48,10 +52,13 @@ int main()
 		if (ImGui::Button("re-generate"))
 		{
 			graph = Graph(numNodes, totalCapacity, window.getSize().x, window.getSize().y, minDistance);
+			if (currentVisualizer != nullptr)
+			{
+				currentVisualizer->reset();
+			}
 		}
 		if (ImGui::CollapsingHeader("Algo"))
 		{
-
 			if (ImGui::Button("DFS"))
 			{
 				graph.resetRenderInfo();
@@ -68,9 +75,14 @@ int main()
 
 			if (ImGui::Button("Ford Fulkerson Step"))
 			{
-				graph.resetRenderInfo();
-				Algorithm::fordFulkersonStep(graph);
+				currentVisualizer = &ffVis;
+				ffVis.next(graph);
 			}
+		}
+
+		if (currentVisualizer != nullptr)
+		{
+			currentVisualizer->update(graph);
 		}
 
 		window.clear(sf::Color(209, 209, 209, 255));

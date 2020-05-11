@@ -14,6 +14,7 @@ struct RenderInfo
 	void resetHighlight();
 
 	sf::Color getColor() const { return color; }
+	void setColor(sf::Color c) { color = c; }
 
 	void setRegularColor(sf::Color c);
 	void setHighlightColor(sf::Color c);
@@ -54,6 +55,8 @@ struct Edge
 	void highlight();
 
 	void resetHighlight();
+
+	void setColor(sf::Color c);
 
 private:
 	int flow;

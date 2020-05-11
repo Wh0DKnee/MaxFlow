@@ -18,5 +18,7 @@ namespace Algorithm
 	void fordFulkersonStep(Graph& graph);
 
 	void exhaustPath(std::deque<Edge*>& path);
+
+	int getMinResidualCapacity(const std::deque<Edge*>& path, Edge** outLimitingEdge = nullptr);
 };
 

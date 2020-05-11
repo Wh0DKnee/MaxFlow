@@ -75,16 +75,26 @@ void Algorithm::fordFulkersonStep(Graph& graph)
 
 void Algorithm::exhaustPath(std::deque<Edge*>& path)
 {
+	int minResidualCap = getMinResidualCapacity(path);
+	for (auto& edge : path)
+	{
+		edge->addResidualFlow(minResidualCap);
+	}
+}
+
+int Algorithm::getMinResidualCapacity(const std::deque<Edge*>& path, Edge** outLimitingEdge /*= nullptr*/)
+{
 	int minResidualCap = std::numeric_limits<int>::max();
 	for (const auto& edge : path)
 	{
 		if (edge->getRemainingCapacity() < minResidualCap)
 		{
 			minResidualCap = edge->getRemainingCapacity();
+			if (outLimitingEdge != nullptr)
+			{
+				*outLimitingEdge = edge;
+			}
 		}
 	}
-	for (auto& edge : path)
-	{
-		edge->addResidualFlow(minResidualCap);
-	}
+	return minResidualCap;
 }

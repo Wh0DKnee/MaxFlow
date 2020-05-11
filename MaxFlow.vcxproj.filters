@@ -57,6 +57,12 @@
     <ClCompile Include="Graph.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="FordFulkersonVis.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Visualizer.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphUtils.h">
@@ -84,6 +90,12 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="Graph.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="FordFulkersonVis.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Visualizer.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

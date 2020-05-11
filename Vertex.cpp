@@ -28,6 +28,13 @@ void Edge::resetHighlight()
 	combined->renderInfo.resetHighlight();
 }
 
+void Edge::setColor(sf::Color c)
+{
+	assert(combined != nullptr);
+	renderInfo.setColor(c);
+	combined->renderInfo.setColor(c);
+}
+
 void Edge::addFlow(int amount)
 {
 	assert(combined != nullptr);

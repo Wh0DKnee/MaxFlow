@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -132,6 +132,7 @@
   <ItemGroup>
     <ClCompile Include="Algorithm.cpp" />
     <ClCompile Include="ArrowShape.cpp" />
+    <ClCompile Include="FordFulkersonVis.cpp" />
     <ClCompile Include="Graph.cpp" />
     <ClCompile Include="LineShape.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -144,10 +145,12 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="VectorUtils.cpp" />
     <ClCompile Include="Vertex.cpp" />
+    <ClCompile Include="Visualizer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Algorithm.h" />
     <ClInclude Include="ArrowShape.h" />
+    <ClInclude Include="FordFulkersonVis.h" />
     <ClInclude Include="Graph.h" />
     <ClInclude Include="LineShape.h" />
     <ClInclude Include="Renderer.h" />
@@ -155,6 +158,7 @@
     <ClInclude Include="UIConfig.h" />
     <ClInclude Include="VectorUtils.h" />
     <ClInclude Include="Vertex.h" />
+    <ClInclude Include="Visualizer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
