@@ -69,7 +69,6 @@ void Algorithm::fordFulkersonStep(Graph& graph)
 	if(DFS(graph, path))
 	{
 		exhaustPath(path);
-		graph.highlightPath(path);
 	}
 }
 

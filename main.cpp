@@ -57,26 +57,41 @@ int main()
 				currentVisualizer->reset();
 			}
 		}
+
 		if (ImGui::CollapsingHeader("Algo"))
 		{
-			if (ImGui::Button("DFS"))
+			/*if (ImGui::Button("DFS"))
 			{
 				graph.resetRenderInfo();
 				std::deque<Edge*> path;
 				Algorithm::DFS(graph, path);
 				graph.highlightPath(path);
+			}*/
+
+			if (ImGui::CollapsingHeader("Ford Fulkerson"))
+			{
+				if (ImGui::Button("Run"))
+				{
+					graph.resetRenderInfo();
+					Algorithm::fordFulkerson(graph);
+				}
+
+				ImGui::SameLine();
+				if (ImGui::Button("Step"))
+				{
+					currentVisualizer = &ffVis;
+					ffVis.next(graph);
+				}
+
+				ImGui::SameLine();
+				if (ImGui::Button("Auto-Step"))
+				{
+
+				}
 			}
 
-			if (ImGui::Button("Ford Fulkerson"))
+			if (ImGui::CollapsingHeader("Other Algo"))
 			{
-				graph.resetRenderInfo();
-				Algorithm::fordFulkerson(graph);
-			}
-
-			if (ImGui::Button("Ford Fulkerson Step"))
-			{
-				currentVisualizer = &ffVis;
-				ffVis.next(graph);
 			}
 		}
 

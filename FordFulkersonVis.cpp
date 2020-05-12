@@ -10,10 +10,11 @@ void FordFulkersonVis::update(Graph& graph)
 	case DFS:
 		break;
 	case minCap:
-		ImGui::SameLine();
+		ImGui::Begin(" ");
 		ImGui::Text("minimum residual capacity on path: ");
 		ImGui::SameLine();
 		ImGui::Text(std::to_string(Algorithm::getMinResidualCapacity(path)).c_str());
+		ImGui::End();
 		break;
 	default:
 		break;
@@ -33,13 +34,15 @@ void FordFulkersonVis::next(Graph& graph)
 	case DFS:
 		{
 			graph.resetRenderInfo();
-			Algorithm::DFS(graph, path);
-			graph.highlightPath(path);
-			Edge* limitingEdge = nullptr;
-			minCapacity = Algorithm::getMinResidualCapacity(path, &limitingEdge);
-			assert(limitingEdge != nullptr);
-			limitingEdge->setColor(sf::Color(209, 192, 4));
-			state = minCap;
+			if (Algorithm::DFS(graph, path))
+			{
+				graph.highlightPath(path);
+				Edge* limitingEdge = nullptr;
+				minCapacity = Algorithm::getMinResidualCapacity(path, &limitingEdge);
+				assert(limitingEdge != nullptr);
+				limitingEdge->setColor(sf::Color(140, 0, 186));
+				state = minCap;
+			}
 			break;
 		}
 	case minCap:
