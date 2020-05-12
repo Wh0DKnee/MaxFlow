@@ -23,6 +23,7 @@ int main()
 	int numNodes = 10;
 	int totalCapacity = 10;
 	float minDistance = 150.f;
+	
 
 	FordFulkersonVis ffVis;
 	Visualizer* currentVisualizer = nullptr;
@@ -42,6 +43,7 @@ int main()
 		sf::Time deltaTime = deltaClock.restart();
 		ImGui::SFML::Update(window, deltaTime);
 
+		ImGui::SetNextWindowBgAlpha(0.8f);
 		ImGui::Begin("Debug"); // begin window
 		//ImGui::Text("FPS: %i", static_cast<int>(1.f / deltaTime.asSeconds()));
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
@@ -51,6 +53,7 @@ int main()
 
 		if (ImGui::Button("re-generate"))
 		{
+			assert(numNodes >= 0 && totalCapacity >= 0);
 			graph = Graph(numNodes, totalCapacity, window.getSize().x, window.getSize().y, minDistance);
 			if (currentVisualizer != nullptr)
 			{
@@ -60,44 +63,56 @@ int main()
 
 		if (ImGui::CollapsingHeader("Algo"))
 		{
-			/*if (ImGui::Button("DFS"))
+
+			static int currentAlgoSelection = 0;
+			ImGui::RadioButton("Ford Fulkerson", &currentAlgoSelection, 0); ImGui::SameLine();
+			ImGui::RadioButton("Edmons Karp", &currentAlgoSelection, 1);
+			ImGui::RadioButton("Dinic", &currentAlgoSelection, 2);
+
+			static float autoStepDelay = 1.f;
+
+			if (currentAlgoSelection == 0) //TODO: remove these ifs here. Just have a vector of Visualizer* that match index of radio buttons (dont hard code this).
 			{
-				graph.resetRenderInfo();
-				std::deque<Edge*> path;
-				Algorithm::DFS(graph, path);
-				graph.highlightPath(path);
-			}*/
-
-			if (ImGui::CollapsingHeader("Ford Fulkerson"))
-			{
-				if (ImGui::Button("Run"))
-				{
-					graph.resetRenderInfo();
-					Algorithm::fordFulkerson(graph);
-				}
-
-				ImGui::SameLine();
-				if (ImGui::Button("Step"))
-				{
-					currentVisualizer = &ffVis;
-					ffVis.next(graph);
-				}
-
-				ImGui::SameLine();
-				if (ImGui::Button("Auto-Step"))
-				{
-
-				}
+				currentVisualizer = &ffVis;
 			}
 
-			if (ImGui::CollapsingHeader("Other Algo"))
+			if (currentAlgoSelection == 1)
 			{
+				// other algo
 			}
+
+			if (currentAlgoSelection == 2)
+			{
+				// other algo
+			}
+
+			assert(currentVisualizer != nullptr);
+
+			if (ImGui::Button("Run"))
+			{
+				currentVisualizer->runAlgorithm(graph);
+			}
+
+			ImGui::SameLine();
+			if (ImGui::Button("Step"))
+			{
+				currentVisualizer->step(graph);
+			}
+
+			ImGui::SameLine();
+			if (ImGui::Button("Auto-Step"))
+			{
+				currentVisualizer->setAutoStepDelay(autoStepDelay);
+				currentVisualizer->autoStep(graph);
+			}
+
+			ImGui::SliderFloat("Auto-Step Delay", &autoStepDelay, 0.1f, 5.f);
+			
 		}
 
 		if (currentVisualizer != nullptr)
 		{
-			currentVisualizer->update(graph);
+			currentVisualizer->update(graph, deltaTime.asSeconds());
 		}
 
 		window.clear(sf::Color(209, 209, 209, 255));

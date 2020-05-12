@@ -8,11 +8,11 @@ class Graph;
 class FordFulkersonVis : public Visualizer
 {
 public:
-	void update(Graph& graph) override;
-
 	void reset() override;
 
-	void next(Graph& graph);
+	void runAlgorithm(Graph& graph) override;
+
+	void step(Graph& graph) override;
 
 private:
 	enum State {DFS, minCap, exhaustPath};

@@ -3,31 +3,18 @@
 #include "imgui.h"
 #include <string>
 
-void FordFulkersonVis::update(Graph& graph)
-{
-	switch (state)
-	{
-	case DFS:
-		break;
-	case minCap:
-		ImGui::Begin(" ");
-		ImGui::Text("minimum residual capacity on path: ");
-		ImGui::SameLine();
-		ImGui::Text(std::to_string(Algorithm::getMinResidualCapacity(path)).c_str());
-		ImGui::End();
-		break;
-	default:
-		break;
-	}
-
-}
-
 void FordFulkersonVis::reset()
 {
+	Visualizer::reset();
 	state = DFS;
 }
 
-void FordFulkersonVis::next(Graph& graph)
+void FordFulkersonVis::runAlgorithm(Graph& graph)
+{
+	Algorithm::fordFulkerson(graph);
+}
+
+void FordFulkersonVis::step(Graph& graph)
 {
 	switch (state)
 	{
