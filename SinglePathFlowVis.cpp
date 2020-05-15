@@ -8,21 +8,26 @@ void SinglePathFlowVis::reset()
 	state = search;
 }
 
-void SinglePathFlowVis::runAlgorithm(Graph& graph)
+void SinglePathFlowVis::runAlgorithm()
 {
-	algo(graph);
+	if (graph != nullptr)
+	{
+		algo(*graph);
+	}
 }
 
-void SinglePathFlowVis::step(Graph& graph)
+void SinglePathFlowVis::step()
 {
+	assert(graph != nullptr);
+
 	switch (state)
 	{
 	case search:
 		{
-			graph.resetRenderInfo();
-			if (searchAlgo(graph, path))
+			graph->resetRenderInfo();
+			if (searchAlgo(*graph, path))
 			{
-				graph.highlightPath(path);
+				graph->highlightPath(path);
 				Edge* limitingEdge = nullptr;
 				minCapacity = Algorithm::getMinResidualCapacity(path, &limitingEdge);
 				assert(limitingEdge != nullptr);
@@ -32,7 +37,7 @@ void SinglePathFlowVis::step(Graph& graph)
 			break;
 		}
 	case minCap:
-		algoStep(graph);
+		algoStep(*graph);
 		state = search;
 		break;
 	default:
@@ -57,6 +62,4 @@ void SinglePathFlowVis::setAlgo(Algorithm::AlgoType a)
 	default:
 		break;
 	}
-
-	reset();
 }

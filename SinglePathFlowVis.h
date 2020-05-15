@@ -4,7 +4,6 @@
 #include <deque>
 
 struct Edge;
-class Graph;
 
 typedef bool(*SearchAlgo)(Graph& graph, std::deque<Edge*>& outPath);
 typedef void(*Algo)(Graph& graph);
@@ -14,9 +13,9 @@ class SinglePathFlowVis : public Visualizer
 public:
 	void reset() override;
 
-	void runAlgorithm(Graph& graph) override;
+	void runAlgorithm() override;
 
-	void step(Graph& graph) override;
+	void step() override;
 
 	void setAlgo(Algorithm::AlgoType a);
 

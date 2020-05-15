@@ -25,7 +25,9 @@ int main()
 	float minDistance = 150.f;
 	
 
+	std::vector<Visualizer*> visualizers;
 	SinglePathFlowVis singlePathFlowVis; // Ford Fulkerson and Edmonds Karp
+	visualizers.push_back(&singlePathFlowVis);
 	Visualizer* currentVisualizer = &singlePathFlowVis; // default
 
 	window.resetGLStates();
@@ -55,9 +57,11 @@ int main()
 		{
 			assert(numNodes >= 0 && totalCapacity >= 0);
 			graph = Graph(numNodes, totalCapacity, window.getSize().x, window.getSize().y, minDistance);
-			if (currentVisualizer != nullptr)
+
+			for (auto& v : visualizers)
 			{
-				currentVisualizer->reset();
+				v->setGraph(graph);
+				v->reset();
 			}
 		}
 
@@ -67,6 +71,7 @@ int main()
 
 			if (ImGui::Button("FordFulkerson"))
 			{
+				singlePathFlowVis.reset();
 				singlePathFlowVis.setAlgo(Algorithm::AlgoType::FORD_FULKERSON);
 				currentVisualizer = &singlePathFlowVis;
 				currentAlgorithmText = "Ford Fulkerson";
@@ -75,6 +80,7 @@ int main()
 
 			if (ImGui::Button("Edmonds Karp"))
 			{
+				singlePathFlowVis.reset();
 				singlePathFlowVis.setAlgo(Algorithm::AlgoType::EDMONDS_KARP);
 				currentVisualizer = &singlePathFlowVis;
 				currentAlgorithmText = "Edmonds Karp";
@@ -93,20 +99,20 @@ int main()
 
 			if (ImGui::Button("Run"))
 			{
-				currentVisualizer->runAlgorithm(graph);
+				currentVisualizer->runAlgorithm();
 			}
 
 			ImGui::SameLine();
 			if (ImGui::Button("Step"))
 			{
-				currentVisualizer->step(graph);
+				currentVisualizer->step();
 			}
 
 			ImGui::SameLine();
 			if (ImGui::Button("Auto-Step"))
 			{
 				currentVisualizer->setAutoStepDelay(autoStepDelay);
-				currentVisualizer->autoStep(graph);
+				currentVisualizer->autoStep();
 			}
 
 			ImGui::SliderFloat("Auto-Step Delay", &autoStepDelay, 0.1f, 5.f);
@@ -115,7 +121,7 @@ int main()
 
 		if (currentVisualizer != nullptr)
 		{
-			currentVisualizer->update(graph, deltaTime.asSeconds());
+			currentVisualizer->update(deltaTime.asSeconds());
 		}
 
 		window.clear(sf::Color(209, 209, 209, 255));
