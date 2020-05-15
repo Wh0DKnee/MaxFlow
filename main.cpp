@@ -52,7 +52,7 @@ int main()
 		static float minDistance = 150.f;
 		ImGui::InputFloat("minDistance", &minDistance);
 
-		// A bit of ugly UI code - okay for now though (AKA "I'll never touch this again")
+		// A bit of ugly UI code - okay for now though (AKA I'll never touch this again)
 		if (ImGui::Button("re-generate"))
 		{
 			assert(numNodes >= 0 && totalCapacity >= 0);
