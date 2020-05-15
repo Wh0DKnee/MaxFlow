@@ -20,10 +20,6 @@ int main()
 	ImGui::SFML::Init(window);
 
 	Graph graph;
-	int numNodes = 10;
-	int totalCapacity = 10;
-	float minDistance = 150.f;
-	
 
 	std::vector<Visualizer*> visualizers;
 	SinglePathFlowVis singlePathFlowVis; // Ford Fulkerson and Edmonds Karp
@@ -47,12 +43,16 @@ int main()
 
 		ImGui::SetNextWindowBgAlpha(0.8f);
 		ImGui::Begin("Debug"); // begin window
-		//ImGui::Text("FPS: %i", static_cast<int>(1.f / deltaTime.asSeconds()));
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
+		static int numNodes = 10;
 		ImGui::InputInt("#nodes", &numNodes);
+		static int totalCapacity = 10;
 		ImGui::InputInt("totalCapacity", &totalCapacity);
+		static float minDistance = 150.f;
 		ImGui::InputFloat("minDistance", &minDistance);
 
+		// A bit of ugly UI code - okay for now though (AKA "I'll never touch this again")
 		if (ImGui::Button("re-generate"))
 		{
 			assert(numNodes >= 0 && totalCapacity >= 0);
@@ -93,8 +93,6 @@ int main()
 
 			ImGui::Text(currentAlgorithmText.c_str());
 
-			static float autoStepDelay = 1.f;
-
 			assert(currentVisualizer != nullptr);
 
 			if (ImGui::Button("Run"))
@@ -107,6 +105,8 @@ int main()
 			{
 				currentVisualizer->step();
 			}
+
+			static float autoStepDelay = 1.f;
 
 			ImGui::SameLine();
 			if (ImGui::Button("Auto-Step"))
