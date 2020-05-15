@@ -1,6 +1,8 @@
 #include "Algorithm.h"
 #include <stack>
+#include <queue>
 #include <limits>
+#include <cassert>
 
 bool Algorithm::DFS(Graph& graph, std::deque<Edge*>& outPath)
 {
@@ -42,8 +44,47 @@ bool Algorithm::DFS(Graph& graph, std::deque<Edge*>& outPath)
 	return false;
 }
 
+bool Algorithm::BFS(Graph& graph, std::deque<Edge*>& outPath)
+{
+	std::deque<bool> visited(graph.size());
+	std::queue<size_t> queue;
+	std::vector<Edge*> visitedFrom(graph.size(), nullptr);
+	queue.push(graph.getStart());
+	visited[graph.getStart()] = true;
+
+	while (!queue.empty())
+	{
+		size_t v = queue.front();
+		queue.pop();
+
+		if (v == graph.getTarget())
+		{
+			traceBack(visitedFrom, graph.getTarget(), outPath);
+			return true;
+		}
+
+		for (auto& edge : graph[v].edges)
+		{
+			if (edge.getRemainingCapacity() <= 0)
+			{
+				continue;
+			}
+
+			if (!visited[edge.targetNode])
+			{
+				visited[edge.targetNode] = true;
+				visitedFrom[edge.targetNode] = &edge;
+				queue.push(edge.targetNode);
+			}
+		}
+	}
+
+	return false;
+}
+
 void Algorithm::traceBack(const std::vector<Edge*>& visitedFrom, size_t target, std::deque<Edge*>& outPath)
 {
+	
 	outPath.clear();
 	size_t current = target;
 	while (visitedFrom[current] != nullptr)
@@ -52,6 +93,24 @@ void Algorithm::traceBack(const std::vector<Edge*>& visitedFrom, size_t target, 
 		current = visitedFrom[current]->startNode;
 	}
 	return;
+}
+
+void Algorithm::edmondsKarp(Graph& graph)
+{
+	std::deque<Edge*> path;
+	while (BFS(graph, path))
+	{
+		exhaustPath(path);
+	}
+}
+
+void Algorithm::edmondsKarpStep(Graph& graph)
+{
+	std::deque<Edge*> path;
+	if (BFS(graph, path))
+	{
+		exhaustPath(path);
+	}
 }
 
 void Algorithm::fordFulkerson(Graph& graph)

@@ -9,7 +9,7 @@
 #include "Renderer.h"
 #include "Algorithm.h"
 #include "Graph.h"
-#include "FordFulkersonVis.h"
+#include "SinglePathFlowVis.h"
 
 int main()
 {
@@ -25,8 +25,8 @@ int main()
 	float minDistance = 150.f;
 	
 
-	FordFulkersonVis ffVis;
-	Visualizer* currentVisualizer = nullptr;
+	SinglePathFlowVis singlePathFlowVis; // Ford Fulkerson and Edmonds Karp
+	Visualizer* currentVisualizer = &singlePathFlowVis; // default
 
 	window.resetGLStates();
 	sf::Clock deltaClock;
@@ -63,28 +63,31 @@ int main()
 
 		if (ImGui::CollapsingHeader("Algo"))
 		{
+			static std::string currentAlgorithmText = "Choose Algorithm";
 
-			static int currentAlgoSelection = 0;
-			ImGui::RadioButton("Ford Fulkerson", &currentAlgoSelection, 0); ImGui::SameLine();
-			ImGui::RadioButton("Edmons Karp", &currentAlgoSelection, 1);
-			ImGui::RadioButton("Dinic", &currentAlgoSelection, 2);
+			if (ImGui::Button("FordFulkerson"))
+			{
+				singlePathFlowVis.setAlgo(Algorithm::AlgoType::FORD_FULKERSON);
+				currentVisualizer = &singlePathFlowVis;
+				currentAlgorithmText = "Ford Fulkerson";
+			}
+			ImGui::SameLine();
+
+			if (ImGui::Button("Edmonds Karp"))
+			{
+				singlePathFlowVis.setAlgo(Algorithm::AlgoType::EDMONDS_KARP);
+				currentVisualizer = &singlePathFlowVis;
+				currentAlgorithmText = "Edmonds Karp";
+			}
+			ImGui::SameLine();
+
+			if (ImGui::Button("Dinic TODO"))
+			{
+			}
+
+			ImGui::Text(currentAlgorithmText.c_str());
 
 			static float autoStepDelay = 1.f;
-
-			if (currentAlgoSelection == 0) //TODO: remove these ifs here. Just have a vector of Visualizer* that match index of radio buttons (dont hard code this).
-			{
-				currentVisualizer = &ffVis;
-			}
-
-			if (currentAlgoSelection == 1)
-			{
-				// other algo
-			}
-
-			if (currentAlgoSelection == 2)
-			{
-				// other algo
-			}
 
 			assert(currentVisualizer != nullptr);
 

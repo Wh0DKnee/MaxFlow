@@ -132,7 +132,7 @@
   <ItemGroup>
     <ClCompile Include="Algorithm.cpp" />
     <ClCompile Include="ArrowShape.cpp" />
-    <ClCompile Include="FordFulkersonVis.cpp" />
+    <ClCompile Include="SinglePathFlowVis.cpp" />
     <ClCompile Include="Graph.cpp" />
     <ClCompile Include="LineShape.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -150,7 +150,7 @@
   <ItemGroup>
     <ClInclude Include="Algorithm.h" />
     <ClInclude Include="ArrowShape.h" />
-    <ClInclude Include="FordFulkersonVis.h" />
+    <ClInclude Include="SinglePathFlowVis.h" />
     <ClInclude Include="Graph.h" />
     <ClInclude Include="LineShape.h" />
     <ClInclude Include="Renderer.h" />

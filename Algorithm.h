@@ -4,14 +4,24 @@
 #include "Vertex.h"
 #include "Graph.h"
 
+typedef bool (*SearchAlgo) (Graph& graph, std::deque<Edge*>& outPath);
+
 namespace Algorithm
 {
+	enum AlgoType { FORD_FULKERSON, EDMONDS_KARP };
+
 	// TODO: figure out how to make graph a const ref,
 	// the problem is that we need to output a vector
 	// of non-const Edge ptrs so that FF can modify them.
 	bool DFS(Graph& graph, std::deque<Edge*>& outPath);
 
+	bool BFS(Graph& graph, std::deque<Edge*>& outPath);
+
 	void traceBack(const std::vector<Edge*>& visitedFrom, size_t target, std::deque<Edge*>& outPath);
+
+	void edmondsKarp(Graph& graph);
+
+	void edmondsKarpStep(Graph& graph);
 
 	void fordFulkerson(Graph& graph);
 

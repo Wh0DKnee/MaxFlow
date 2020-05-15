@@ -57,10 +57,10 @@
     <ClCompile Include="Graph.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="FordFulkersonVis.cpp">
+    <ClCompile Include="Visualizer.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="Visualizer.cpp">
+    <ClCompile Include="SinglePathFlowVis.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
@@ -92,10 +92,10 @@
     <ClInclude Include="Graph.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="FordFulkersonVis.h">
+    <ClInclude Include="Visualizer.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="Visualizer.h">
+    <ClInclude Include="SinglePathFlowVis.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,17 +1,16 @@
-#include "FordFulkersonVis.h"
-#include "Algorithm.h"
+#include "SinglePathFlowVis.h"
 #include "imgui.h"
 #include <string>
 
 void SinglePathFlowVis::reset()
 {
 	Visualizer::reset();
-	state = DFS;
+	state = search;
 }
 
 void SinglePathFlowVis::runAlgorithm(Graph& graph)
 {
-	Algorithm::fordFulkerson(graph);
+	algo(graph);
 }
 
 void SinglePathFlowVis::step(Graph& graph)
@@ -21,7 +20,7 @@ void SinglePathFlowVis::step(Graph& graph)
 	case search:
 		{
 			graph.resetRenderInfo();
-			if (Algorithm::DFS(graph, path))
+			if (searchAlgo(graph, path))
 			{
 				graph.highlightPath(path);
 				Edge* limitingEdge = nullptr;
@@ -33,10 +32,31 @@ void SinglePathFlowVis::step(Graph& graph)
 			break;
 		}
 	case minCap:
-		Algorithm::fordFulkersonStep(graph);
-		state = DFS;
+		algoStep(graph);
+		state = search;
 		break;
 	default:
 		break;
 	}
+}
+
+void SinglePathFlowVis::setAlgo(Algorithm::AlgoType a)
+{
+	switch (a)
+	{
+	case Algorithm::AlgoType::FORD_FULKERSON:
+		searchAlgo = &Algorithm::DFS;
+		algo = &Algorithm::fordFulkerson;
+		algoStep = &Algorithm::fordFulkersonStep;
+		break;
+	case Algorithm::AlgoType::EDMONDS_KARP:
+		searchAlgo = &Algorithm::BFS;
+		algo = &Algorithm::edmondsKarp;
+		algoStep = &Algorithm::edmondsKarpStep;
+		break;
+	default:
+		break;
+	}
+
+	reset();
 }
