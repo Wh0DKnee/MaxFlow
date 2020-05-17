@@ -103,6 +103,7 @@ void Renderer::render(sf::RenderWindow& window, const Graph& graph, float deltaT
 			sf::Vector2f labelDeltaNormalized = VectorUtils::normalize(labelDelta);
 			LineShape line1(vert.pos + labelDeltaNormalized * UI::nodeRadius, labelPos - labelDeltaNormalized * UI::labelRadius);
 			line1.setFillColor(edge.renderInfo.getColor());
+			//line1.setFillColor(edge.isInLevelGraph(graph) ? edge.renderInfo.getHighlightColor() : edge.renderInfo.getRegularColor());
 			edges.push_back(line1);
 
 			ArrowShape arrow1 = ArrowShape(vert.pos + labelDelta * UI::arrowDistance, labelPos, UI::arrowLength, UI::arrowLength / 2.f);
@@ -113,6 +114,7 @@ void Renderer::render(sf::RenderWindow& window, const Graph& graph, float deltaT
 			labelDeltaNormalized = VectorUtils::normalize(labelDelta);
 			LineShape line2(labelPos + labelDeltaNormalized * UI::labelRadius, neighborPos - labelDeltaNormalized * UI::nodeRadius);
 			line2.setFillColor(edge.renderInfo.getColor());
+			//line2.setFillColor(edge.isInLevelGraph(graph) ? edge.renderInfo.getHighlightColor() : edge.renderInfo.getRegularColor());
 			edges.push_back(line2);
 
 			ArrowShape arrow2 = ArrowShape(labelPos + labelDelta * UI::arrowDistance, neighborPos, UI::arrowLength, UI::arrowLength / 2.f);

@@ -18,7 +18,9 @@ struct RenderInfo
 	sf::Color getColor() const { return color; }
 	void setColor(sf::Color c) { color = c; }
 
+	sf::Color getRegularColor() const { return regularColor; }
 	void setRegularColor(sf::Color c);
+	sf::Color getHighlightColor() const { return highlightColor; }
 	void setHighlightColor(sf::Color c);
 
 private:

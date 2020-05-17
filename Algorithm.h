@@ -17,6 +17,8 @@ namespace Algorithm
 
 	bool BFS(Graph& graph, std::deque<Edge*>& outPath);
 
+	bool dinicDFS(Graph& graph, std::deque<Edge*>& outPath);
+
 	void traceBack(const std::vector<Edge*>& visitedFrom, size_t target, std::deque<Edge*>& outPath);
 
 	void edmondsKarp(Graph& graph);
@@ -26,6 +28,10 @@ namespace Algorithm
 	void fordFulkerson(Graph& graph);
 
 	void fordFulkersonStep(Graph& graph);
+
+	void dinic(Graph& graph);
+
+	void dinicBlockingFlow(Graph& graph);
 
 	void exhaustPath(std::deque<Edge*>& path);
 

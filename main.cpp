@@ -19,7 +19,7 @@ int main()
 	window.setVerticalSyncEnabled(true);
 	ImGui::SFML::Init(window);
 
-	Graph graph;
+	Graph graph(10, 10, window.getSize().x, window.getSize().y, 150.f);
 
 	std::vector<Visualizer*> visualizers;
 	SinglePathFlowVis singlePathFlowVis; // Ford Fulkerson and Edmonds Karp
@@ -47,16 +47,16 @@ int main()
 
 		static int numNodes = 10;
 		ImGui::InputInt("#nodes", &numNodes);
-		static int totalCapacity = 10;
-		ImGui::InputInt("totalCapacity", &totalCapacity);
+		static int maxCapacity = 10;
+		ImGui::InputInt("totalCapacity", &maxCapacity);
 		static float minDistance = 150.f;
 		ImGui::InputFloat("minDistance", &minDistance);
 
 		// A bit of ugly UI code - okay for now though (AKA I'll never touch this again)
 		if (ImGui::Button("re-generate"))
 		{
-			assert(numNodes >= 0 && totalCapacity >= 0);
-			graph = Graph(numNodes, totalCapacity, window.getSize().x, window.getSize().y, minDistance);
+			assert(numNodes >= 0 && maxCapacity >= 0);
+			graph = Graph(numNodes, maxCapacity, window.getSize().x, window.getSize().y, minDistance);
 
 			for (auto& v : visualizers)
 			{
@@ -69,6 +69,11 @@ int main()
 		{
 			std::deque<Edge*> dummy;
 			Algorithm::BFS(graph, dummy);
+		}
+
+		if (ImGui::Button("dinic test"))
+		{
+			Algorithm::dinic(graph);
 		}
 
 		if (ImGui::CollapsingHeader("Algo"))

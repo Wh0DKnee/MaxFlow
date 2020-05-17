@@ -84,6 +84,50 @@ bool Algorithm::BFS(Graph& graph, std::deque<Edge*>& outPath)
 	return false;
 }
 
+bool Algorithm::dinicDFS(Graph& graph, std::deque<Edge*>& outPath)
+{
+	std::deque<bool> visited(graph.size());
+	std::stack<size_t> stack;
+	std::vector<Edge*> visitedFrom(graph.size(), nullptr);
+	stack.push(graph.getStart());
+
+	while (!stack.empty())
+	{
+		size_t v = stack.top();
+		stack.pop();
+		if (!visited[v])
+		{
+			visited[v] = true;
+			int validEdgeCount = 0;
+			for (auto& edge : graph[v].edges)
+			{
+				if (edge.getRemainingCapacity() <= 0 || !edge.isInLevelGraph(graph))
+				{
+					continue;
+				}
+				if (!visited[edge.targetNode])
+				{
+					visitedFrom[edge.targetNode] = &edge;
+				}
+				if (edge.targetNode == graph.getTarget())
+				{
+					traceBack(visitedFrom, graph.getTarget(), outPath);
+					return true;
+				}
+				stack.push(edge.targetNode);
+				++validEdgeCount;
+			}
+
+			if (validEdgeCount == 0)
+			{
+				graph.setLevel(v, -1); // Remove vertex from graph if we backtrack from it.
+			}
+		}
+	}
+
+	return false;
+}
+
 void Algorithm::traceBack(const std::vector<Edge*>& visitedFrom, size_t target, std::deque<Edge*>& outPath)
 {
 	outPath.clear();
@@ -127,6 +171,25 @@ void Algorithm::fordFulkersonStep(Graph& graph)
 {
 	std::deque<Edge*> path;
 	if(DFS(graph, path))
+	{
+		exhaustPath(path);
+	}
+}
+
+void Algorithm::dinic(Graph& graph)
+{
+	std::deque<Edge*> path;
+	while (BFS(graph, path))
+	{
+		dinicBlockingFlow(graph);
+		graph.resetDinicInfo();
+	}
+}
+
+void Algorithm::dinicBlockingFlow(Graph& graph)
+{
+	std::deque<Edge*> path;
+	while (dinicDFS(graph, path))
 	{
 		exhaustPath(path);
 	}
