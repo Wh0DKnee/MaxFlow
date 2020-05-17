@@ -65,6 +65,12 @@ int main()
 			}
 		}
 
+		if (ImGui::Button("BFS level test"))
+		{
+			std::deque<Edge*> dummy;
+			Algorithm::BFS(graph, dummy);
+		}
+
 		if (ImGui::CollapsingHeader("Algo"))
 		{
 			static std::string currentAlgorithmText = "Choose Algorithm";

@@ -18,6 +18,11 @@ public:
 	void highlightPath(const std::deque<Edge*>& path);
 	void resetRenderInfo();
 
+	void setLevel(size_t index, int l);
+	int getLevel(size_t index) const;
+
+	void resetDinicInfo();
+
 	// Proxy functions for vertices vector:
 
 	// Returns # of vertices in this graph.
@@ -38,6 +43,10 @@ private:
 	size_t start = 0;
 	size_t target = 0;
 	float minDist = 0.f;
+
+	// Dinic stuff
+	std::vector<int> levels;
+	std::deque<bool> isVertexPartOfLevelGraph;
 
 	void selectStartAndTargetNodes();
 

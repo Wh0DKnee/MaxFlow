@@ -51,6 +51,7 @@ bool Algorithm::BFS(Graph& graph, std::deque<Edge*>& outPath)
 	std::vector<Edge*> visitedFrom(graph.size(), nullptr);
 	queue.push(graph.getStart());
 	visited[graph.getStart()] = true;
+	graph.setLevel(graph.getStart(), 0); // for Dinic level graph
 
 	while (!queue.empty())
 	{
@@ -74,6 +75,7 @@ bool Algorithm::BFS(Graph& graph, std::deque<Edge*>& outPath)
 			{
 				visited[edge.targetNode] = true;
 				visitedFrom[edge.targetNode] = &edge;
+				graph.setLevel(edge.targetNode, graph.getLevel(edge.startNode) + 1);
 				queue.push(edge.targetNode);
 			}
 		}
@@ -84,7 +86,6 @@ bool Algorithm::BFS(Graph& graph, std::deque<Edge*>& outPath)
 
 void Algorithm::traceBack(const std::vector<Edge*>& visitedFrom, size_t target, std::deque<Edge*>& outPath)
 {
-	
 	outPath.clear();
 	size_t current = target;
 	while (visitedFrom[current] != nullptr)

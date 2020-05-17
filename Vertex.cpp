@@ -1,4 +1,5 @@
 #include "Vertex.h"
+#include "Graph.h"
 #include <cassert>
 
 void Edge::addResidualFlow(int amount)
@@ -33,6 +34,12 @@ void Edge::setColor(sf::Color c)
 	assert(combined != nullptr);
 	renderInfo.setColor(c);
 	combined->renderInfo.setColor(c);
+}
+
+bool Edge::isInLevelGraph(const Graph& graph) const
+{
+	return (getRemainingCapacity() > 0) 
+		&& ((graph.getLevel(startNode) + 1) == graph.getLevel(targetNode));
 }
 
 void Edge::addFlow(int amount)

@@ -7,6 +7,8 @@
 #include <limits>
 #include "UIConfig.h"
 
+class Graph;
+
 struct RenderInfo
 {
 	void highlight();
@@ -57,6 +59,11 @@ struct Edge
 	void resetHighlight();
 
 	void setColor(sf::Color c);
+
+	// I don't like passing a graph ref in here, but I think the only
+	// alternative is to store a Graph ref or ptr in every Vertex/Edge,
+	// which is a bit of a memory waste really.
+	bool isInLevelGraph(const Graph& graph) const;
 
 private:
 	int flow;

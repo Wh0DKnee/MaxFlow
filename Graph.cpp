@@ -92,6 +92,8 @@ Graph::Graph(int numNodes, int maxCapacity, int windowWidth, int windowHeight, f
 	addCombinedEdges();
 
 	selectStartAndTargetNodes();
+
+	resetDinicInfo();
 }
 
 void Graph::highlightPath(const std::deque<Edge*>& path)
@@ -116,6 +118,22 @@ void Graph::resetRenderInfo()
 			e.resetHighlight();
 		}
 	}
+}
+
+void Graph::setLevel(size_t index, int l)
+{
+	levels[index] = l;
+}
+
+int Graph::getLevel(size_t index) const
+{
+	return levels[index];
+}
+
+void Graph::resetDinicInfo()
+{
+	levels.assign(size(), -1);
+	isVertexPartOfLevelGraph.assign(size(), false);
 }
 
 void Graph::selectStartAndTargetNodes()
