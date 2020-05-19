@@ -1,11 +1,11 @@
 #include "SinglePathFlowVis.h"
-#include "imgui.h"
+#include <cassert>
 #include <string>
 
 void SinglePathFlowVis::reset()
 {
 	Visualizer::reset();
-	state = search;
+	state = SEARCH;
 }
 
 void SinglePathFlowVis::runAlgorithm()
@@ -22,7 +22,7 @@ void SinglePathFlowVis::step()
 
 	switch (state)
 	{
-	case search:
+	case SEARCH:
 		{
 			graph->resetRenderInfo();
 			if (searchAlgo(*graph, path))
@@ -32,13 +32,13 @@ void SinglePathFlowVis::step()
 				minCapacity = Algorithm::getMinResidualCapacity(path, &limitingEdge);
 				assert(limitingEdge != nullptr);
 				limitingEdge->setColor(sf::Color(140, 0, 186));
-				state = minCap;
+				state = MIN_CAP;
 			}
 			break;
 		}
-	case minCap:
+	case MIN_CAP:
 		algoStep(*graph);
-		state = search;
+		state = SEARCH;
 		break;
 	default:
 		break;

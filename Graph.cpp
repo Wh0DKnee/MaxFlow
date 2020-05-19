@@ -87,6 +87,7 @@ Graph::Graph(int numNodes, int maxCapacity, int windowWidth, int windowHeight, f
 		vertices[pair.second].edges.emplace_back(pair.second, pair.first, capacityDis(randEngine));
 	}
 
+	// TODO: Add option to generate graph without backward edges
 	addBackwardEdges();
 
 	addCombinedEdges();
@@ -133,7 +134,6 @@ int Graph::getLevel(size_t index) const
 void Graph::resetDinicInfo()
 {
 	levels.assign(size(), -1);
-	isVertexPartOfLevelGraph.assign(size(), false);
 }
 
 void Graph::selectStartAndTargetNodes()

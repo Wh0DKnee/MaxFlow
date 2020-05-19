@@ -20,8 +20,8 @@ public:
 	void setAlgo(Algorithm::AlgoType a);
 
 private:
-	enum State {search, minCap};
-	State state = search;
+	enum State {SEARCH, MIN_CAP};
+	State state = SEARCH;
 	std::deque<Edge*> path;
 	int minCapacity = 0;
 	SearchAlgo searchAlgo = &Algorithm::DFS;

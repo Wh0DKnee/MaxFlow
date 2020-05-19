@@ -3,6 +3,8 @@
 #include <deque>
 #include "Vertex.h"
 
+//TODO: would be nice to be able to toggle between residual network and original network view.
+
 class Graph
 {
 public:
@@ -46,7 +48,6 @@ private:
 
 	// Dinic stuff
 	std::vector<int> levels;
-	std::deque<bool> isVertexPartOfLevelGraph;
 
 	void selectStartAndTargetNodes();
 

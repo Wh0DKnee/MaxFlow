@@ -56,6 +56,8 @@ struct Edge
 
 	void setCombinedEdge(Edge* c) { combined = c; }
 
+	Edge const* getCombinedEdge() const { return combined; }
+
 	void highlight();
 
 	void resetHighlight();

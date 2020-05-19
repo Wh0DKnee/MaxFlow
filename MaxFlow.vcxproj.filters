@@ -63,6 +63,9 @@
     <ClCompile Include="SinglePathFlowVis.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="DinicVisualizer.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphUtils.h">
@@ -96,6 +99,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="SinglePathFlowVis.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="DinicVisualizer.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

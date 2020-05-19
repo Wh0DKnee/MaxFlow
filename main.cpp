@@ -10,6 +10,7 @@
 #include "Algorithm.h"
 #include "Graph.h"
 #include "SinglePathFlowVis.h"
+#include "DinicVisualizer.h"
 
 int main()
 {
@@ -23,7 +24,12 @@ int main()
 
 	std::vector<Visualizer*> visualizers;
 	SinglePathFlowVis singlePathFlowVis; // Ford Fulkerson and Edmonds Karp
+	singlePathFlowVis.setGraph(graph);
+	DinicVisualizer dinicVis;
+	dinicVis.setGraph(graph);
+
 	visualizers.push_back(&singlePathFlowVis);
+	visualizers.push_back(&dinicVis);
 	Visualizer* currentVisualizer = &singlePathFlowVis; // default
 
 	window.resetGLStates();
@@ -98,8 +104,11 @@ int main()
 			}
 			ImGui::SameLine();
 
-			if (ImGui::Button("Dinic TODO"))
+			if (ImGui::Button("Dinic"))
 			{
+				dinicVis.reset();
+				currentVisualizer = &dinicVis;
+				currentAlgorithmText = "Dinic";
 			}
 
 			ImGui::Text(currentAlgorithmText.c_str());

@@ -31,6 +31,8 @@ namespace Algorithm
 
 	void dinic(Graph& graph);
 
+	void dinicStep(Graph& graph);
+
 	void dinicBlockingFlow(Graph& graph);
 
 	void exhaustPath(std::deque<Edge*>& path);

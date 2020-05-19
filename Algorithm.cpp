@@ -186,6 +186,15 @@ void Algorithm::dinic(Graph& graph)
 	}
 }
 
+void Algorithm::dinicStep(Graph& graph)
+{
+	std::deque<Edge*> path;
+	if (BFS(graph, path))
+	{
+		dinicBlockingFlow(graph);
+	}
+}
+
 void Algorithm::dinicBlockingFlow(Graph& graph)
 {
 	std::deque<Edge*> path;
