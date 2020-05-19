@@ -265,7 +265,9 @@ void Algorithm::push(Graph& graph, Edge& edge, int excess)
 {
 	int amountToPush = std::min(excess, edge.getRemainingCapacity());
 	edge.addResidualFlow(amountToPush);
-	if (graph[edge.targetNode].getExcess() == 0 && edge.targetNode != graph.getStart())
+	if (graph[edge.targetNode].getExcess() == 0 
+		&& edge.targetNode != graph.getStart() // don't wanna push source to active nodes
+		&& edge.targetNode != graph.getTarget()) // the source also not I guess? (worked without this check as well, investigate why)
 	{
 		graph.verticesWithExcess.push(edge.targetNode);
 	}
