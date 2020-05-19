@@ -38,5 +38,12 @@ namespace Algorithm
 	void exhaustPath(std::deque<Edge*>& path);
 
 	int getMinResidualCapacity(const std::deque<Edge*>& path, Edge** outLimitingEdge = nullptr);
+
+	void pushRelabel(Graph& graph);
+
+	//TODO: refactor push and pushRelabelInit, as pushRelabelInit is really just a bunch of pushes.
+	void push(Graph& graph, Edge& edge, int excess);
+
+	void pushRelabelInit(Graph& graph);
 };
 

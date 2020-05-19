@@ -82,6 +82,11 @@ int main()
 			Algorithm::dinic(graph);
 		}
 
+		if (ImGui::Button("push relabel test"))
+		{
+			Algorithm::pushRelabel(graph);
+		}
+
 		if (ImGui::CollapsingHeader("Algo"))
 		{
 			static std::string currentAlgorithmText = "Choose Algorithm";

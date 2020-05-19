@@ -1,4 +1,5 @@
 #include "Algorithm.h"
+#include <algorithm>
 #include <stack>
 #include <queue>
 #include <limits>
@@ -182,7 +183,7 @@ void Algorithm::dinic(Graph& graph)
 	while (BFS(graph, path))
 	{
 		dinicBlockingFlow(graph);
-		graph.resetDinicInfo();
+		graph.resetDinicLevels();
 	}
 }
 
@@ -228,4 +229,60 @@ int Algorithm::getMinResidualCapacity(const std::deque<Edge*>& path, Edge** outL
 		}
 	}
 	return minResidualCap;
+}
+
+void Algorithm::pushRelabel(Graph& graph)
+{
+	pushRelabelInit(graph);
+	while (!graph.verticesWithExcess.empty())
+	{
+		auto front = graph.verticesWithExcess.front();
+		bool foundValidEdge = false;
+
+		for (auto& edge : graph[front].edges)
+		{
+			if ((edge.getRemainingCapacity() > 0)
+				&& (graph.getHeight(edge.startNode) == (graph.getHeight(edge.targetNode) + 1)))
+			{
+				foundValidEdge = true;
+				push(graph, edge, graph[front].getExcess());
+				if (graph[front].getExcess() == 0)	// If all excess got pushed...
+				{
+					graph.verticesWithExcess.pop();	// ...pop it off the queue...
+					break;							// and stop trying to push excess.
+				}
+			}
+		}
+
+		if (!foundValidEdge)
+		{
+			graph.incrementHeight(front);
+		}
+	}
+}
+
+void Algorithm::push(Graph& graph, Edge& edge, int excess)
+{
+	int amountToPush = std::min(excess, edge.getRemainingCapacity());
+	edge.addResidualFlow(amountToPush);
+	if (graph[edge.targetNode].getExcess() == 0 && edge.targetNode != graph.getStart())
+	{
+		graph.verticesWithExcess.push(edge.targetNode);
+	}
+	graph[edge.startNode].addExcess(-amountToPush);
+	graph[edge.targetNode].addExcess(amountToPush);
+}
+
+void Algorithm::pushRelabelInit(Graph& graph)
+{
+	for (auto& e : graph[graph.getStart()].edges)
+	{
+
+		e.addResidualFlow(e.getRemainingCapacity());
+		if (graph[e.targetNode].getExcess() == 0)
+		{
+			graph.verticesWithExcess.push(e.targetNode);
+		}
+		graph[e.targetNode].addExcess(e.getFlow());
+	}
 }

@@ -51,8 +51,8 @@ void Renderer::render(sf::RenderWindow& window, const Graph& graph, float deltaT
 		{
 			sf::Text nodeText;
 			nodeText.setFont(font);
-			//nodeText.setString(std::to_string(index));
-			nodeText.setString(std::to_string(graph.getLevel(index)));
+			nodeText.setString(std::to_string(index));
+			//nodeText.setString(std::to_string(graph.getLevel(index)));
 			nodeText.setCharacterSize(static_cast<unsigned int>(UI::nodeRadius * 2.f));
 			nodeText.setFillColor(sf::Color::White);
 			sf::FloatRect textRect = nodeText.getLocalBounds();

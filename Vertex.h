@@ -110,6 +110,13 @@ struct Vertex
 
 	// combined edges for rendering only (don't wanna draw four edges between each vertex pair)
 	std::list<Edge> renderedEdges;
+
+	void setExcess(int e) { excess = e; }
+	void addExcess(int e) { excess += e; }
+	int getExcess() const { return excess; }
+
+private:
+	int excess = 0;
 };
 
 

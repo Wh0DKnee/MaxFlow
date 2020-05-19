@@ -17,7 +17,7 @@ void DinicVisualizer::step()
 	case DinicVisualizer::LEVEL_GRAPH:
 		{
 			graph->resetRenderInfo();
-			graph->resetDinicInfo();
+			graph->resetDinicLevels();
 			std::deque<Edge*> path;
 		
 			if (Algorithm::BFS(*graph, path))

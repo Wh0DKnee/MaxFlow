@@ -94,7 +94,9 @@ Graph::Graph(int numNodes, int maxCapacity, int windowWidth, int windowHeight, f
 
 	selectStartAndTargetNodes();
 
-	resetDinicInfo();
+	initializeHeights();
+
+	resetDinicLevels();
 }
 
 void Graph::highlightPath(const std::deque<Edge*>& path)
@@ -131,9 +133,24 @@ int Graph::getLevel(size_t index) const
 	return levels[index];
 }
 
-void Graph::resetDinicInfo()
+void Graph::resetDinicLevels()
 {
 	levels.assign(size(), -1);
+}
+
+void Graph::setHeight(size_t index, int h)
+{
+	heights[index] = h;
+}
+
+void Graph::incrementHeight(size_t index)
+{
+	++(heights[index]);
+}
+
+int Graph::getHeight(size_t index) const
+{
+	return heights[index];
 }
 
 void Graph::selectStartAndTargetNodes()
@@ -239,6 +256,15 @@ void Graph::addCombinedEdges()
 			}
 		}
 	}
+}
+
+void Graph::initializeHeights()
+{
+	heights.assign(size(), 0);		// all nodes get height zero...
+	heights[getStart()] = size();	// ...except for source, which is set to |V|
+
+	// Alternatively, we could do a reverse BFS from the source to compute exact height
+	// labels, which is preferable in practice, but doesn't change the asymptotic complexity.
 }
 
 bool Graph::hasMinDistance(const sf::Vector2f& p)

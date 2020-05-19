@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <deque>
+#include <queue>
 #include "Vertex.h"
 
 //TODO: would be nice to be able to toggle between residual network and original network view.
@@ -23,10 +24,21 @@ public:
 	void setLevel(size_t index, int l);
 	int getLevel(size_t index) const;
 
-	void resetDinicInfo();
+	void resetDinicLevels();
+
+	void setHeight(size_t index, int h);
+	void incrementHeight(size_t index);
+	int getHeight(size_t index) const;
+
+	// TODO: this probably shouldn't be public - befriend all push relabel functions?
+	// But then they would have access to all private members...
+
+	// Only stores which vertices have excess, the actual excess
+	// value is stored on the vertex itself. Use like: graph[verticesWithExcess.front()].getExcess()
+	std::queue<size_t> verticesWithExcess;
 
 	// Proxy functions for vertices vector:
-
+#pragma region proxy_functions
 	// Returns # of vertices in this graph.
 	size_t size() const { return vertices.size(); }
 
@@ -38,7 +50,7 @@ public:
 	std::vector<Vertex>::const_iterator begin() const { return vertices.begin(); }
 	std::vector<Vertex>::iterator end() { return vertices.end(); }
 	std::vector<Vertex>::const_iterator end() const { return vertices.end(); }
-
+#pragma endregion proxy_functions
 
 private:
 	std::vector<Vertex> vertices;
@@ -46,14 +58,20 @@ private:
 	size_t target = 0;
 	float minDist = 0.f;
 
-	// Dinic stuff
+	// for Dinic
 	std::vector<int> levels;
+
+	// for push relabel
+	std::vector<int> heights;
 
 	void selectStartAndTargetNodes();
 
 	void addBackwardEdges();
 
 	void addCombinedEdges();
+
+	// for push relabel
+	void initializeHeights();
 
 	bool hasMinDistance(const sf::Vector2f& p);
 };
