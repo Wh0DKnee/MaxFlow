@@ -138,21 +138,6 @@ void Graph::resetDinicLevels()
 	levels.assign(size(), -1);
 }
 
-void Graph::setHeight(size_t index, int h)
-{
-	heights[index] = h;
-}
-
-void Graph::incrementHeight(size_t index)
-{
-	++(heights[index]);
-}
-
-int Graph::getHeight(size_t index) const
-{
-	return heights[index];
-}
-
 void Graph::selectStartAndTargetNodes()
 {
 	std::random_device rd;
@@ -260,8 +245,9 @@ void Graph::addCombinedEdges()
 
 void Graph::initializeHeights()
 {
-	heights.assign(size(), 0);		// all nodes get height zero...
-	heights[getStart()] = size();	// ...except for source, which is set to |V|
+	// all nodes are initialized with height zero by default
+	// but the source height is set to |V|
+	vertices[getStart()].setHeight(size());
 
 	// Alternatively, we could do a reverse BFS from the source to compute exact height
 	// labels, which is preferable in practice, but doesn't change the asymptotic complexity.

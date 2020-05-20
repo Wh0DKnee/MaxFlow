@@ -20,7 +20,7 @@ public:
 	void setAutoStepDelay(float d) { autoStepDelay = d; }
 
 protected:
-	Graph* graph;
+	Graph* graph = nullptr;
 
 private:
 	bool doAutoStep = false;

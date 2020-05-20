@@ -26,10 +26,6 @@ public:
 
 	void resetDinicLevels();
 
-	void setHeight(size_t index, int h);
-	void incrementHeight(size_t index);
-	int getHeight(size_t index) const;
-
 	// TODO: this probably shouldn't be public - befriend all push relabel functions?
 	// But then they would have access to all private members...
 
@@ -61,10 +57,9 @@ private:
 	// for Dinic - we store this here instead of on the vertices
 	// because resetting can be done in constant time this way.
 	// Otherwise we'd have to iterate the vertices and hence linear time.
+	// Heights for push relabel are stored on vertices though, as they
+	// don't have to be reset and it makes the code cleaner.
 	std::vector<int> levels;
-
-	// for push relabel
-	std::vector<int> heights;
 
 	void selectStartAndTargetNodes();
 

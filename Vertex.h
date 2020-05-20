@@ -115,8 +115,14 @@ struct Vertex
 	void addExcess(int e) { excess += e; }
 	int getExcess() const { return excess; }
 
+	void setHeight(int h) { height = h; }
+	void incrementHeight() { ++height; }
+	int getHeight() const { return height; }
+
 private:
 	int excess = 0;
+
+	int height = 0;
 };
 
 

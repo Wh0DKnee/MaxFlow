@@ -242,7 +242,7 @@ void Algorithm::pushRelabel(Graph& graph)
 		for (auto& edge : graph[front].edges)
 		{
 			if ((edge.getRemainingCapacity() > 0)
-				&& (graph.getHeight(edge.startNode) == (graph.getHeight(edge.targetNode) + 1)))
+				&& (graph[edge.startNode].getHeight() == (graph[edge.targetNode].getHeight() + 1)))
 			{
 				foundValidEdge = true;
 				push(graph, edge, graph[front].getExcess());
@@ -256,7 +256,7 @@ void Algorithm::pushRelabel(Graph& graph)
 
 		if (!foundValidEdge)
 		{
-			graph.incrementHeight(front);
+			graph[front].incrementHeight();
 		}
 	}
 }
@@ -279,12 +279,17 @@ void Algorithm::pushRelabelInit(Graph& graph)
 {
 	for (auto& e : graph[graph.getStart()].edges)
 	{
-
-		e.addResidualFlow(e.getRemainingCapacity());
-		if (graph[e.targetNode].getExcess() == 0)
-		{
-			graph.verticesWithExcess.push(e.targetNode);
+		int amountToPush = e.getRemainingCapacity();
+		if (amountToPush == 0) 
+		{ 
+			continue; 
 		}
-		graph[e.targetNode].addExcess(e.getFlow());
+
+		e.addResidualFlow(amountToPush);
+		if (graph[e.targetNode].getExcess() == 0)		// first time we add excess? 
+		{
+			graph.verticesWithExcess.push(e.targetNode);// then push it onto queue.
+		}
+		graph[e.targetNode].addExcess(amountToPush);
 	}
 }
