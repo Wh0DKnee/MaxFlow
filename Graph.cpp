@@ -87,7 +87,7 @@ Graph::Graph(int numNodes, int maxCapacity, int windowWidth, int windowHeight, f
 		vertices[pair.second].edges.emplace_back(pair.second, pair.first, capacityDis(randEngine));
 	}
 
-	// TODO: Add option to generate graph without backward edges
+	// TODO: Add option to generate graph without backward edges in original graph.
 	addBackwardEdges();
 
 	addCombinedEdges();

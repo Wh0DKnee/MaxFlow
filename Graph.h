@@ -58,7 +58,9 @@ private:
 	size_t target = 0;
 	float minDist = 0.f;
 
-	// for Dinic
+	// for Dinic - we store this here instead of on the vertices
+	// because resetting can be done in constant time this way.
+	// Otherwise we'd have to iterate the vertices and hence linear time.
 	std::vector<int> levels;
 
 	// for push relabel
