@@ -66,6 +66,12 @@
     <ClCompile Include="DinicVisualizer.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="RenderInfo.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="PushRelabelVis.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphUtils.h">
@@ -102,6 +108,12 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="DinicVisualizer.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderInfo.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="PushRelabelVis.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

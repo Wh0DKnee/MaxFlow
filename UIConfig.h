@@ -3,7 +3,7 @@
 
 namespace UIConfig
 {
-	static float nodeRadius = 10.f;
+	static float nodeRadius = 5.5f;
 	static float labelDistance = 0.5f;
 	static float labelSpacing = 9.5f;
 	static float labelRadius = 6.8f;

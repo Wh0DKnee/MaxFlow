@@ -119,7 +119,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Program Files\SFML\SFML-2.5.1\include;C:\Program Files\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -133,6 +133,8 @@
     <ClCompile Include="Algorithm.cpp" />
     <ClCompile Include="ArrowShape.cpp" />
     <ClCompile Include="DinicVisualizer.cpp" />
+    <ClCompile Include="PushRelabelVis.cpp" />
+    <ClCompile Include="RenderInfo.cpp" />
     <ClCompile Include="SinglePathFlowVis.cpp" />
     <ClCompile Include="Graph.cpp" />
     <ClCompile Include="LineShape.cpp" />
@@ -152,6 +154,8 @@
     <ClInclude Include="Algorithm.h" />
     <ClInclude Include="ArrowShape.h" />
     <ClInclude Include="DinicVisualizer.h" />
+    <ClInclude Include="PushRelabelVis.h" />
+    <ClInclude Include="RenderInfo.h" />
     <ClInclude Include="SinglePathFlowVis.h" />
     <ClInclude Include="Graph.h" />
     <ClInclude Include="LineShape.h" />

@@ -5,31 +5,10 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <limits>
+#include "RenderInfo.h"
 #include "UIConfig.h"
 
 class Graph;
-
-struct RenderInfo
-{
-	void highlight();
-
-	void resetHighlight();
-
-	sf::Color getColor() const { return color; }
-	void setColor(sf::Color c) { color = c; }
-
-	sf::Color getRegularColor() const { return regularColor; }
-	void setRegularColor(sf::Color c);
-	sf::Color getHighlightColor() const { return highlightColor; }
-	void setHighlightColor(sf::Color c);
-
-private:
-
-	bool isHighlighted = false; // TODO: need this?
-	sf::Color regularColor = sf::Color::Black;
-	sf::Color highlightColor = sf::Color::Blue;
-	sf::Color color = regularColor;
-};
 
 struct Edge
 {
@@ -101,7 +80,7 @@ struct Vertex
 	// payload
 	sf::Vector2f pos;
 	
-	RenderInfo renderInfo;
+	VertexRenderInfo renderInfo;
 
 	// add additional payload here
 

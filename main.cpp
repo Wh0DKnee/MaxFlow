@@ -11,6 +11,7 @@
 #include "Graph.h"
 #include "SinglePathFlowVis.h"
 #include "DinicVisualizer.h"
+#include "PushRelabelVis.h"
 
 int main()
 {
@@ -27,9 +28,12 @@ int main()
 	singlePathFlowVis.setGraph(graph);
 	DinicVisualizer dinicVis;
 	dinicVis.setGraph(graph);
+	PushRelabelVis pushRelabelVis;
+	pushRelabelVis.setGraph(graph);
 
 	visualizers.push_back(&singlePathFlowVis);
 	visualizers.push_back(&dinicVis);
+	visualizers.push_back(&pushRelabelVis);
 	Visualizer* currentVisualizer = &singlePathFlowVis; // default
 
 	window.resetGLStates();
@@ -71,17 +75,6 @@ int main()
 			}
 		}
 
-		if (ImGui::Button("BFS level test"))
-		{
-			std::deque<Edge*> dummy;
-			Algorithm::BFS(graph, dummy);
-		}
-
-		if (ImGui::Button("dinic test"))
-		{
-			Algorithm::dinic(graph);
-		}
-
 		if (ImGui::Button("push relabel test"))
 		{
 			Algorithm::pushRelabel(graph);
@@ -114,6 +107,14 @@ int main()
 				dinicVis.reset();
 				currentVisualizer = &dinicVis;
 				currentAlgorithmText = "Dinic";
+			}
+			ImGui::SameLine();
+
+			if (ImGui::Button("Push Relabel"))
+			{
+				pushRelabelVis.reset();
+				currentVisualizer = &pushRelabelVis;
+				currentAlgorithmText = "Push Relabel";
 			}
 
 			ImGui::Text(currentAlgorithmText.c_str());

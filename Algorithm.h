@@ -41,6 +41,8 @@ namespace Algorithm
 
 	void pushRelabel(Graph& graph);
 
+	void pushRelabelStep(Graph& graph);
+
 	//TODO: refactor push and pushRelabelInit, as pushRelabelInit is really just a bunch of pushes.
 	void push(Graph& graph, Edge& edge, int excess);
 

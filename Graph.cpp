@@ -29,7 +29,7 @@ Graph::Graph(int numNodes, int maxCapacity, int windowWidth, int windowHeight, f
 
 		if (hasMinDistance(pos) || tries > maxTries)
 		{
-			vertices.push_back(Vertex(pos));
+			vertices.emplace_back(pos);
 			++i;
 		}
 		else
@@ -115,7 +115,7 @@ void Graph::resetRenderInfo()
 {
 	for (auto& v : vertices)
 	{
-		v.renderInfo.resetHighlight();
+		v.renderInfo.reset();
 		for (auto& e : v.edges)
 		{
 			e.resetHighlight();
@@ -247,7 +247,7 @@ void Graph::initializeHeights()
 {
 	// all nodes are initialized with height zero by default
 	// but the source height is set to |V|
-	vertices[getStart()].setHeight(size());
+	vertices[getStart()].setHeight((int)size());
 
 	// Alternatively, we could do a reverse BFS from the source to compute exact height
 	// labels, which is preferable in practice, but doesn't change the asymptotic complexity.

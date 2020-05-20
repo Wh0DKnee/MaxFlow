@@ -36,10 +36,10 @@ void Renderer::render(sf::RenderWindow& window, const Graph& graph, float deltaT
 
 	for (const auto& vert : graph)
 	{
-		sf::CircleShape nodeShape(UI::nodeRadius);
+		sf::CircleShape nodeShape(vert.renderInfo.radius);
 		nodeShape.setFillColor(vert.renderInfo.getColor());
 		nodeShape.setPosition(vert.pos.x, vert.pos.y);
-		nodeShape.setOrigin(UI::nodeRadius, UI::nodeRadius);
+		nodeShape.setOrigin(vert.renderInfo.radius, vert.renderInfo.radius);
 		window.draw(nodeShape);
 
 	}
@@ -51,9 +51,10 @@ void Renderer::render(sf::RenderWindow& window, const Graph& graph, float deltaT
 		{
 			sf::Text nodeText;
 			nodeText.setFont(font);
-			nodeText.setString(std::to_string(index));
+			//nodeText.setString(std::to_string(index));
 			//nodeText.setString(std::to_string(graph.getLevel(index)));
-			nodeText.setCharacterSize(static_cast<unsigned int>(UI::nodeRadius * 2.f));
+			nodeText.setString(vert.renderInfo.getLabel(vert));
+			nodeText.setCharacterSize(static_cast<unsigned int>(vert.renderInfo.radius * 2.f));
 			nodeText.setFillColor(sf::Color::White);
 			sf::FloatRect textRect = nodeText.getLocalBounds();
 			nodeText.setOrigin(textRect.left + textRect.width / 2.f,
@@ -101,7 +102,7 @@ void Renderer::render(sf::RenderWindow& window, const Graph& graph, float deltaT
 			
 			sf::Vector2f labelDelta = labelPos - vert.pos;
 			sf::Vector2f labelDeltaNormalized = VectorUtils::normalize(labelDelta);
-			LineShape line1(vert.pos + labelDeltaNormalized * UI::nodeRadius, labelPos - labelDeltaNormalized * UI::labelRadius);
+			LineShape line1(vert.pos + labelDeltaNormalized * vert.renderInfo.radius, labelPos - labelDeltaNormalized * UI::labelRadius);
 			line1.setFillColor(edge.renderInfo.getColor());
 			//line1.setFillColor(edge.isInLevelGraph(graph) ? edge.renderInfo.getHighlightColor() : edge.renderInfo.getRegularColor());
 			edges.push_back(line1);
@@ -112,7 +113,7 @@ void Renderer::render(sf::RenderWindow& window, const Graph& graph, float deltaT
 
 			labelDelta = neighborPos - labelPos;
 			labelDeltaNormalized = VectorUtils::normalize(labelDelta);
-			LineShape line2(labelPos + labelDeltaNormalized * UI::labelRadius, neighborPos - labelDeltaNormalized * UI::nodeRadius);
+			LineShape line2(labelPos + labelDeltaNormalized * UI::labelRadius, neighborPos - labelDeltaNormalized * vert.renderInfo.radius);
 			line2.setFillColor(edge.renderInfo.getColor());
 			//line2.setFillColor(edge.isInLevelGraph(graph) ? edge.renderInfo.getHighlightColor() : edge.renderInfo.getRegularColor());
 			edges.push_back(line2);

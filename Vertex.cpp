@@ -49,33 +49,3 @@ void Edge::addFlow(int amount)
 	flow += amount;
 	combined->flow += amount;
 }
-
-void RenderInfo::highlight()
-{
-	isHighlighted = true;
-	color = highlightColor;
-}
-
-void RenderInfo::resetHighlight()
-{
-	isHighlighted = false;
-	color = regularColor;
-}
-
-void RenderInfo::setRegularColor(sf::Color c)
-{
-	regularColor = c;
-	if (!isHighlighted)
-	{
-		color = c;
-	}
-}
-
-void RenderInfo::setHighlightColor(sf::Color c)
-{
-	highlightColor = c;
-	if (isHighlighted)
-	{
-		color = c;
-	}
-}
