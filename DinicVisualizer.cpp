@@ -20,7 +20,7 @@ void DinicVisualizer::step()
 			graph->resetDinicLevels();
 			std::deque<Edge*> path;
 		
-			if (Algorithm::BFS(*graph, path))
+			if (Algorithm::BFS(*graph, path).pathFound)
 			{
 				size_t index = 0;
 				for (auto& v : *graph)

@@ -159,7 +159,7 @@ void Graph::selectStartAndTargetNodes()
 		{
 			target = i;
 			std::deque<Edge*> path;
-			if (Algorithm::DFS(*this, path)) // any path from start to target?
+			if (Algorithm::DFS(*this, path).pathFound) // any path from start to target?
 			{
 				vertices[start].renderInfo.setRegularColor(UIConfig::startColor);
 				vertices[start].renderInfo.setHighlightColor(UIConfig::startColor);

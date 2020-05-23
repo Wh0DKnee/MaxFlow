@@ -5,7 +5,7 @@
 #include <limits>
 #include <cassert>
 
-bool Algorithm::DFS(Graph& graph, std::deque<Edge*>& outPath)
+GraphSearchResult Algorithm::DFS(Graph& graph, std::deque<Edge*>& outPath)
 {
 	std::deque<bool> visited(graph.size());
 	std::stack<size_t> stack;
@@ -35,17 +35,17 @@ bool Algorithm::DFS(Graph& graph, std::deque<Edge*>& outPath)
 				if (edge.targetNode == graph.getTarget())
 				{
 					traceBack(visitedFrom, graph.getTarget(), outPath);
-					return true;
+					return GraphSearchResult(true, visited);
 				}
 				stack.push(edge.targetNode);
 			}
 		}
 	}
 	
-	return false;
+	return GraphSearchResult(false, visited);
 }
 
-bool Algorithm::BFS(Graph& graph, std::deque<Edge*>& outPath)
+GraphSearchResult Algorithm::BFS(Graph& graph, std::deque<Edge*>& outPath)
 {
 	std::deque<bool> visited(graph.size());
 	std::queue<size_t> queue;
@@ -62,7 +62,7 @@ bool Algorithm::BFS(Graph& graph, std::deque<Edge*>& outPath)
 		if (v == graph.getTarget())
 		{
 			traceBack(visitedFrom, graph.getTarget(), outPath);
-			return true;
+			return GraphSearchResult(true, visited);
 		}
 
 		for (auto& edge : graph[v].edges)
@@ -82,7 +82,7 @@ bool Algorithm::BFS(Graph& graph, std::deque<Edge*>& outPath)
 		}
 	}
 
-	return false;
+	return GraphSearchResult(false, visited);
 }
 
 bool Algorithm::dinicDFS(Graph& graph, std::deque<Edge*>& outPath)
@@ -144,7 +144,7 @@ void Algorithm::traceBack(const std::vector<Edge*>& visitedFrom, size_t target, 
 void Algorithm::edmondsKarp(Graph& graph)
 {
 	std::deque<Edge*> path;
-	while (BFS(graph, path))
+	while (BFS(graph, path).pathFound)
 	{
 		exhaustPath(path);
 	}
@@ -153,7 +153,7 @@ void Algorithm::edmondsKarp(Graph& graph)
 void Algorithm::edmondsKarpStep(Graph& graph)
 {
 	std::deque<Edge*> path;
-	if (BFS(graph, path))
+	if (BFS(graph, path).pathFound)
 	{
 		exhaustPath(path);
 	}
@@ -162,7 +162,7 @@ void Algorithm::edmondsKarpStep(Graph& graph)
 void Algorithm::fordFulkerson(Graph& graph)
 {
 	std::deque<Edge*> path;
-	while (DFS(graph, path))
+	while (DFS(graph, path).pathFound)
 	{
 		exhaustPath(path);
 	}
@@ -171,7 +171,7 @@ void Algorithm::fordFulkerson(Graph& graph)
 void Algorithm::fordFulkersonStep(Graph& graph)
 {
 	std::deque<Edge*> path;
-	if(DFS(graph, path))
+	if(DFS(graph, path).pathFound)
 	{
 		exhaustPath(path);
 	}
@@ -180,7 +180,7 @@ void Algorithm::fordFulkersonStep(Graph& graph)
 void Algorithm::dinic(Graph& graph)
 {
 	std::deque<Edge*> path;
-	while (BFS(graph, path))
+	while (BFS(graph, path).pathFound)
 	{
 		dinicBlockingFlow(graph);
 		graph.resetDinicLevels();
@@ -190,7 +190,7 @@ void Algorithm::dinic(Graph& graph)
 void Algorithm::dinicStep(Graph& graph)
 {
 	std::deque<Edge*> path;
-	if (BFS(graph, path))
+	if (BFS(graph, path).pathFound)
 	{
 		dinicBlockingFlow(graph);
 	}

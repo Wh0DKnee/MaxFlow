@@ -5,7 +5,7 @@
 
 struct Edge;
 
-typedef bool(*SearchAlgo)(Graph& graph, std::deque<Edge*>& outPath);
+typedef GraphSearchResult (*SearchAlgo)(Graph& graph, std::deque<Edge*>& outPath);
 typedef void(*Algo)(Graph& graph);
 
 class SinglePathFlowVis : public Visualizer

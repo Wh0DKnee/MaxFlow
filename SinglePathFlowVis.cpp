@@ -25,7 +25,7 @@ void SinglePathFlowVis::step()
 	case SEARCH:
 		{
 			graph->resetRenderInfo();
-			if (searchAlgo(*graph, path))
+			if (searchAlgo(*graph, path).pathFound)
 			{
 				graph->highlightPath(path);
 				Edge* limitingEdge = nullptr;

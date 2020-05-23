@@ -4,7 +4,15 @@
 #include "Vertex.h"
 #include "Graph.h"
 
-typedef bool (*SearchAlgo) (Graph& graph, std::deque<Edge*>& outPath);
+struct GraphSearchResult
+{
+	GraphSearchResult(bool pF, std::deque<bool> v) : pathFound(pF), visited(v) {}
+
+	bool pathFound = false;
+	std::deque<bool> visited;
+};
+
+typedef GraphSearchResult(*SearchAlgo) (Graph& graph, std::deque<Edge*>& outPath);
 
 namespace Algorithm
 {
@@ -13,9 +21,9 @@ namespace Algorithm
 	// TODO: figure out how to make graph a const ref,
 	// the problem is that we need to output a vector
 	// of non-const Edge ptrs so that FF can modify them.
-	bool DFS(Graph& graph, std::deque<Edge*>& outPath);
+	GraphSearchResult DFS(Graph& graph, std::deque<Edge*>& outPath);
 
-	bool BFS(Graph& graph, std::deque<Edge*>& outPath);
+	GraphSearchResult BFS(Graph& graph, std::deque<Edge*>& outPath);
 
 	bool dinicDFS(Graph& graph, std::deque<Edge*>& outPath);
 
