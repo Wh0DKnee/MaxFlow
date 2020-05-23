@@ -236,7 +236,7 @@ void Algorithm::pushRelabel(Graph& graph)
 	pushRelabelInit(graph);
 	while (!graph.verticesWithExcess.empty())
 	{
-		pushRelabelStep(graph); // will check the empty condition again, but it's constant time.
+		pushRelabelStep(graph); // will check the empty condition again, but it's O(1).
 	}
 }
 
