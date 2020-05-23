@@ -13,7 +13,9 @@ public:
 	Graph() = default;
 
 	// Randomly generates graph based on parameters.
-	Graph(int numNodes, int maxCapacity, int windowWidth, int windowHeight, float minDist = 0.f);
+	Graph(int numNodes, int maxCap, int windowWidth, int windowHeight, float minDist = 0.f);
+
+	int maxCapacity;
 
 	size_t getStart() const { return start; }
 	size_t getTarget() const { return target; }

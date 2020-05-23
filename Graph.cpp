@@ -5,7 +5,7 @@
 #include "Algorithm.h"
 #include "UIConfig.h"
 
-Graph::Graph(int numNodes, int maxCapacity, int windowWidth, int windowHeight, float minDist) : minDist(minDist)
+Graph::Graph(int numNodes, int maxCap, int windowWidth, int windowHeight, float minDist) : minDist(minDist), maxCapacity(maxCap)
 {
 	static int margin = 20;
 	vertices.reserve(numNodes);
@@ -13,7 +13,7 @@ Graph::Graph(int numNodes, int maxCapacity, int windowWidth, int windowHeight, f
 	std::default_random_engine randEngine;
 	std::uniform_real_distribution<float> xDis(static_cast<float>(0 + margin), static_cast<float>(windowWidth - margin));
 	std::uniform_real_distribution<float> yDis(static_cast<float>(0 + margin), static_cast<float>(windowHeight - margin));
-	std::uniform_int_distribution<> capacityDis(1, maxCapacity);
+	std::uniform_int_distribution<> capacityDis(1, maxCap);
 	randEngine.seed(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
 
 	// We re-generate nodes that are too close (for visualization purposes) until we've
@@ -83,8 +83,8 @@ Graph::Graph(int numNodes, int maxCapacity, int windowWidth, int windowHeight, f
 		}
 
 		// add two edges, one in each direction
-		vertices[pair.first].edges.emplace_back(pair.first, pair.second, capacityDis(randEngine));
-		vertices[pair.second].edges.emplace_back(pair.second, pair.first, capacityDis(randEngine));
+		vertices[pair.first].edges.emplace_back(pair.first, pair.second, capacityDis(randEngine), 0, true);
+		vertices[pair.second].edges.emplace_back(pair.second, pair.first, capacityDis(randEngine), 0, true);
 	}
 
 	// TODO: Add option to generate graph without backward edges in original graph.

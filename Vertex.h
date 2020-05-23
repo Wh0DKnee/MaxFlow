@@ -52,6 +52,9 @@ struct Edge
 
 	bool isOriginal = false;
 
+	// Visualized flow, only meaningful for combined edges.
+	int renderedFlow = 0;
+
 	RenderInfo renderInfo;
 
 	int getRemainingCapacity() const { return capacity - flow; }

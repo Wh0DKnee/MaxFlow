@@ -9,10 +9,9 @@ void Edge::addResidualFlow(int amount)
 	assert(flow + amount <= capacity);
 	assert(backward->getFlow() >= amount);
 
-	flow += amount;
-	combined->flow += amount;
+	addFlow(amount);
 
-	backward->addFlow(-amount); // TODO: document this.
+	backward->addFlow(-amount); 
 }
 
 void Edge::highlight()
@@ -45,6 +44,11 @@ bool Edge::isInLevelGraph(const Graph& graph) const
 void Edge::addFlow(int amount)
 {
 	assert(combined != nullptr);
+
+	if (isOriginal)
+	{
+		combined->renderedFlow += amount;
+	}
 
 	flow += amount;
 	combined->flow += amount;
