@@ -8,17 +8,49 @@
 #include "RenderInfo.h"
 #include "UIConfig.h"
 
+/*
+	The data structure is a bit complicated, so here is how it works:
+
+	Each connected node pair has 6 edges connecting them, three in each direction.
+	The original graph has one edge in each direction, hence the residual graph will have
+	two in each - that makes four. Since we can't render four edges between each node pair
+	(unreadable), we combine the edges in the residual graph for visualization purposes.
+	We still need to keep the actual residual graph for the algorithms though.
+
+	So, each edge in the residual graph has a pointer to its combined edge that it's a part of,
+	so that it can update the data in the combined edge whenever it changes.
+
+
+	The whole point of the residual graph is that we don't need to differ between forward and
+	backward edges, which simplifies the algorithms. However, we still tag each edge whether it
+	was in the residual graph, because that's the only way to visualize flow reasonably (or I 
+	missed a better data structure for the edges). Backward edges are represented with the same
+	data structure as forward edges, with a capacity, a flow, and a resulting remaining capacity
+	of (capacity - flow). So, if we initialize forward edges with zero flow, backward edges need
+	to be initialize with full flow, so that the initial remaining capacity results in zero.
+	Therefore, if we were to just visualize the value of the flow member, backward edges would 
+	have a maximum value at the start, which is misleading. In essence, backward edges simply
+	represent how much flow we can take off of the forward edge. Flow on a backward edge is an
+	artificial concept.
+
+	Long story short: We tag edges with an isOriginal flag, so that we only visualize flow on 
+	forward edges.
+*/
+
 class Graph;
 
 struct Edge
 {
-	Edge(size_t startInd, size_t targetInd, int c, int f = 0) : startNode(startInd), targetNode(targetInd), capacity(c), flow(f) {}
+	Edge(size_t startInd, size_t targetInd, int c, int f = 0, bool isOrig = false) 
+		: startNode(startInd), targetNode(targetInd), capacity(c), flow(f), isOriginal(isOrig) {}
 	
 	// TODO: Rethink why we store these as indexes and not as references/pointers. Maybe there was a reason for it but I forgot.
 	// Probably because pointers would point into a vector and if that changes the pointers would be invalidated. Could use a std::list
 	// instead to avoid reallocation, but would lose performance.
 	size_t startNode;
 	size_t targetNode;
+
+	bool isOriginal = false;
 
 	RenderInfo renderInfo;
 
