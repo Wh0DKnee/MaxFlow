@@ -264,7 +264,7 @@ void Algorithm::pushRelabelStep(Graph& graph)
 
 		if (!foundValidEdge)
 		{
-			graph[front].incrementHeight();
+			graph[front].incrementHeight(); // relabel
 		}
 	}
 }
