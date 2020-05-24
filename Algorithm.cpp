@@ -10,7 +10,7 @@ GraphSearchResult Algorithm::DFS(Graph& graph, std::deque<Edge*>& outPath)
 	std::deque<bool> visited(graph.size());
 	std::stack<size_t> stack;
 	std::vector<Edge*> visitedFrom(graph.size(), nullptr);
-	stack.push(graph.getStart());
+	stack.push(graph.getSource());
 
 	while (!stack.empty())
 	{
@@ -32,9 +32,9 @@ GraphSearchResult Algorithm::DFS(Graph& graph, std::deque<Edge*>& outPath)
 					// See: https://stackoverflow.com/questions/25990706/breadth-first-search-the-timing-of-checking-visitation-status
 					visitedFrom[edge.targetNode] = &edge;
 				}
-				if (edge.targetNode == graph.getTarget())
+				if (edge.targetNode == graph.getSink())
 				{
-					traceBack(visitedFrom, graph.getTarget(), outPath);
+					traceBack(visitedFrom, graph.getSink(), outPath);
 					return GraphSearchResult(true, visited);
 				}
 				stack.push(edge.targetNode);
@@ -50,18 +50,18 @@ GraphSearchResult Algorithm::BFS(Graph& graph, std::deque<Edge*>& outPath)
 	std::deque<bool> visited(graph.size());
 	std::queue<size_t> queue;
 	std::vector<Edge*> visitedFrom(graph.size(), nullptr);
-	queue.push(graph.getStart());
-	visited[graph.getStart()] = true;
-	graph.setLevel(graph.getStart(), 0); // for Dinic level graph
+	queue.push(graph.getSource());
+	visited[graph.getSource()] = true;
+	graph.setLevel(graph.getSource(), 0); // for Dinic level graph
 
 	while (!queue.empty())
 	{
 		size_t v = queue.front();
 		queue.pop();
 
-		if (v == graph.getTarget())
+		if (v == graph.getSink())
 		{
-			traceBack(visitedFrom, graph.getTarget(), outPath);
+			traceBack(visitedFrom, graph.getSink(), outPath);
 			return GraphSearchResult(true, visited);
 		}
 
@@ -90,7 +90,7 @@ bool Algorithm::dinicDFS(Graph& graph, std::deque<Edge*>& outPath)
 	std::deque<bool> visited(graph.size());
 	std::stack<size_t> stack;
 	std::vector<Edge*> visitedFrom(graph.size(), nullptr);
-	stack.push(graph.getStart());
+	stack.push(graph.getSource());
 
 	while (!stack.empty())
 	{
@@ -110,9 +110,9 @@ bool Algorithm::dinicDFS(Graph& graph, std::deque<Edge*>& outPath)
 				{
 					visitedFrom[edge.targetNode] = &edge;
 				}
-				if (edge.targetNode == graph.getTarget())
+				if (edge.targetNode == graph.getSink())
 				{
-					traceBack(visitedFrom, graph.getTarget(), outPath);
+					traceBack(visitedFrom, graph.getSink(), outPath);
 					return true;
 				}
 				stack.push(edge.targetNode);
@@ -274,8 +274,8 @@ void Algorithm::push(Graph& graph, Edge& edge, int excess)
 	int amountToPush = std::min(excess, edge.getResidualCapacity());
 	edge.addResidualFlow(amountToPush);
 	if (graph[edge.targetNode].getExcess() == 0 
-		&& edge.targetNode != graph.getStart()		// don't wanna push source to active nodes
-		&& edge.targetNode != graph.getTarget())	// also not the target
+		&& edge.targetNode != graph.getSource()		// don't wanna push source to active nodes
+		&& edge.targetNode != graph.getSink())	// also not the target
 	{
 		graph.verticesWithExcess.push(edge.targetNode);
 	}
@@ -285,7 +285,7 @@ void Algorithm::push(Graph& graph, Edge& edge, int excess)
 
 void Algorithm::pushRelabelInit(Graph& graph)
 {
-	for (auto& e : graph[graph.getStart()].edges)
+	for (auto& e : graph[graph.getSource()].edges)
 	{
 		int amountToPush = e.getResidualCapacity();
 		if (amountToPush == 0) 

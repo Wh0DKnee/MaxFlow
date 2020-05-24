@@ -17,8 +17,8 @@ public:
 
 	int maxCapacity;
 
-	size_t getStart() const { return start; }
-	size_t getTarget() const { return target; }
+	size_t getSource() const { return source; }
+	size_t getSink() const { return sink; }
 
 	void highlightPath(const std::deque<Edge*>& path);
 	void resetRenderInfo();
@@ -52,8 +52,8 @@ public:
 
 private:
 	std::vector<Vertex> vertices;
-	size_t start = 0;
-	size_t target = 0;
+	size_t source = 0;
+	size_t sink = 0;
 	float minDist = 0.f;
 
 	// for Dinic - we store this here instead of on the vertices
@@ -63,7 +63,7 @@ private:
 	// don't have to be reset and it makes the code cleaner.
 	std::vector<int> levels;
 
-	void selectStartAndTargetNodes();
+	void selectSourceAndSinkNodes();
 
 	void addBackwardEdges();
 

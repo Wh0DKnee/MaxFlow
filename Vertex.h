@@ -4,7 +4,6 @@
 #include <cmath>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Color.hpp>
-#include <limits>
 #include "RenderInfo.h"
 #include "UIConfig.h"
 
@@ -58,15 +57,18 @@ struct Edge
 	RenderInfo renderInfo;
 
 	int getResidualCapacity() const { return residualCap; }
+	void addCapacity(int c);
 
 	// Adds flow to edge
 	void addResidualFlow(int amount);
 
 	void setBackwardEdge(Edge* b) { backward = b; }
 
+	Edge* const getBackwardEdge() const { return backward; }
+
 	void setCombinedEdge(Edge* c) { combined = c; }
 
-	Edge const* getCombinedEdge() const { return combined; }
+	Edge const* const getCombinedEdge() const { return combined; }
 
 	void highlight();
 

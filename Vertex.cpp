@@ -3,6 +3,15 @@
 #include <cassert>
 
 
+void Edge::addCapacity(int c)
+{
+	residualCap += c;
+	if (combined != nullptr)
+	{
+		combined->residualCap += c;
+	}
+}
+
 void Edge::addResidualFlow(int amount)
 {
 	assert(backward != nullptr);

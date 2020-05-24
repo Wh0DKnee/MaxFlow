@@ -2,6 +2,7 @@
 #include "GraphUtils.h"
 #include <chrono>
 #include <cassert>
+#include <limits>
 #include "Algorithm.h"
 #include "UIConfig.h"
 
@@ -19,6 +20,7 @@ Graph::Graph(int numNodes, int maxCap, int windowWidth, int windowHeight, float 
 	// We re-generate nodes that are too close (for visualization purposes) until we've
 	// reached the maximum # of re-generation tries (so that we don't run into an
 	// infinite loop for some inputs)
+	// TODO: Use a more sophisticated approach, for example https://en.wikipedia.org/wiki/Lloyd's_algorithm
 	int tries = 0;
 	static int maxTries = 10000;
 	for (int i = 0; i < numNodes; )
@@ -92,13 +94,14 @@ Graph::Graph(int numNodes, int maxCap, int windowWidth, int windowHeight, float 
 
 	addCombinedEdges();
 
-	selectStartAndTargetNodes();
+	resetDinicLevels();
+
+	selectSourceAndSinkNodes();
 
 	increaseStartAndTargetIncidentCapacities();
 
 	initializeHeights();
 
-	resetDinicLevels();
 }
 
 void Graph::highlightPath(const std::deque<Edge*>& path)
@@ -140,37 +143,35 @@ void Graph::resetDinicLevels()
 	levels.assign(size(), -1);
 }
 
-void Graph::selectStartAndTargetNodes()
+void Graph::selectSourceAndSinkNodes()
 {
-	std::random_device rd;
-	auto rng = std::default_random_engine(rd());
-	
-	std::vector<size_t> nodes;
-	nodes.reserve(size());
-	for (size_t i = 1; i < size(); ++i)
-	{
-		nodes.push_back(i);
-	}
+	source = 0;
+	sink = std::numeric_limits<size_t>::max(); // intentionally setting this to an invalid value here
 
-	std::shuffle(nodes.begin(), nodes.end(), rng);
+	// BFS sets the levels for dinic, we abuse this here to find the
+	// node with max distance from the source node.
+	std::deque<Edge*> path;
+	auto searchResult = Algorithm::BFS(*this, path); 
 
-	for (const auto& i : nodes)
+	int maxLevel = -1;
+	size_t maxLevelIndex = 0;
+	size_t index = 0;
+	for (const auto& l : levels)
 	{
-		if (std::find_if(vertices[i].edges.begin(), vertices[i].edges.end(), [](const Edge& n) { return n.targetNode == 0; })
-			== vertices[i].edges.end()) // if not adjacent
+		if (l > maxLevel)
 		{
-			target = i;
-			std::deque<Edge*> path;
-			if (Algorithm::DFS(*this, path).pathFound) // any path from start to target?
-			{
-				vertices[start].renderInfo.setRegularColor(UIConfig::startColor);
-				vertices[start].renderInfo.setHighlightColor(UIConfig::startColor);
-				vertices[target].renderInfo.setRegularColor(UIConfig::targetColor);
-				vertices[target].renderInfo.setHighlightColor(UIConfig::targetColor);
-				break;
-			}
+			maxLevel = l;
+			maxLevelIndex = index;
 		}
+		++index;
 	}
+	
+	sink = maxLevelIndex;
+
+	vertices[source].renderInfo.setRegularColor(UIConfig::startColor);
+	vertices[source].renderInfo.setHighlightColor(UIConfig::startColor);
+	vertices[sink].renderInfo.setRegularColor(UIConfig::targetColor);
+	vertices[sink].renderInfo.setHighlightColor(UIConfig::targetColor);
 }
 
 void Graph::addBackwardEdges()
@@ -246,14 +247,29 @@ void Graph::addCombinedEdges()
 
 void Graph::increaseStartAndTargetIncidentCapacities()
 {
-	//TODO
+	for (auto& e : vertices[getSource()].edges)
+	{
+		if (e.isOriginal)
+		{
+			e.addCapacity(5*maxCapacity);
+		}
+	}
+
+	for (auto& e : vertices[getSink()].edges)
+	{
+		if (!e.isOriginal)
+		{
+			assert(e.getBackwardEdge() != nullptr);
+			e.getBackwardEdge()->addCapacity(5*maxCapacity);
+		}
+	}
 }
 
 void Graph::initializeHeights()
 {
 	// all nodes are initialized with height zero by default
 	// but the source height is set to |V|
-	vertices[getStart()].setHeight((int)size());
+	vertices[getSource()].setHeight((int)size());
 
 	// Alternatively, we could do a reverse BFS from the source to compute exact height
 	// labels, which is preferable in practice, but doesn't change the asymptotic complexity.
