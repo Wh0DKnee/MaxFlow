@@ -28,26 +28,9 @@ void PushRelabelVis::step()
 	else
 	{
 		Algorithm::pushRelabelStep(*graph);
-		std::deque<Edge*> path;
-		auto searchResult = Algorithm::BFS(*graph, path);
-
-		size_t index = 0;
-		for (auto& v : *graph)
-		{
-			auto color = v.renderInfo.getColor();
-			if (searchResult.visited[index])
-			{
-				color.a = 255;
-			}
-			else
-			{
-				color.a = 170;
-			}
-			v.renderInfo.setColor(color);
-			++index;
-		}
-
 	}
+
+	saturatedCutVis();
 }
 
 void PushRelabelVis::runAlgorithm()
@@ -55,5 +38,30 @@ void PushRelabelVis::runAlgorithm()
 	if (graph != nullptr)
 	{
 		Algorithm::pushRelabel(*graph);
+		saturatedCutVis();
+	}
+}
+
+void PushRelabelVis::saturatedCutVis()
+{
+	assert(graph != nullptr);
+
+	std::deque<Edge*> path;
+	auto searchResult = Algorithm::BFS(*graph, path);
+
+	size_t index = 0;
+	for (auto& v : *graph)
+	{
+		auto color = v.renderInfo.getColor();
+		if (searchResult.visited[index])
+		{
+			color.a = 255;
+		}
+		else
+		{
+			color.a = 120;
+		}
+		v.renderInfo.setColor(color);
+		++index;
 	}
 }

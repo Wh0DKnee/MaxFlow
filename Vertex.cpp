@@ -2,6 +2,7 @@
 #include "Graph.h"
 #include <cassert>
 
+
 void Edge::addResidualFlow(int amount)
 {
 	assert(backward != nullptr);

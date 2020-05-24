@@ -69,6 +69,10 @@ private:
 
 	void addCombinedEdges();
 
+	// we don't want edges incident to the source or sink to be part of 
+	// the min cut, so we increase their capacities.
+	void increaseStartAndTargetIncidentCapacities();
+
 	// for push relabel
 	void initializeHeights();
 

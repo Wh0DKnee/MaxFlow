@@ -94,6 +94,8 @@ Graph::Graph(int numNodes, int maxCap, int windowWidth, int windowHeight, float 
 
 	selectStartAndTargetNodes();
 
+	increaseStartAndTargetIncidentCapacities();
+
 	initializeHeights();
 
 	resetDinicLevels();
@@ -241,6 +243,11 @@ void Graph::addCombinedEdges()
 			}
 		}
 	}
+}
+
+void Graph::increaseStartAndTargetIncidentCapacities()
+{
+	//TODO
 }
 
 void Graph::initializeHeights()

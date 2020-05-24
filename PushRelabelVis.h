@@ -13,5 +13,7 @@ public:
 
 private:
 	bool isFirstStep = true;
+
+	void saturatedCutVis();
 };
 
