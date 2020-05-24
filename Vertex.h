@@ -41,8 +41,8 @@ class Graph;
 
 struct Edge
 {
-	Edge(size_t startInd, size_t targetInd, int c, int f = 0, bool isOrig = false) 
-		: startNode(startInd), targetNode(targetInd), capacity(c), flow(f), isOriginal(isOrig) {}
+	Edge(size_t startInd, size_t targetInd, int c, bool isOrig = false) 
+		: startNode(startInd), targetNode(targetInd), residualCap(c), isOriginal(isOrig) {}
 	
 	// TODO: Rethink why we store these as indexes and not as references/pointers. Maybe there was a reason for it but I forgot.
 	// Probably because pointers would point into a vector and if that changes the pointers would be invalidated. Could use a std::list
@@ -57,11 +57,7 @@ struct Edge
 
 	RenderInfo renderInfo;
 
-	int getRemainingCapacity() const { return capacity - flow; }
-	void setCapacity(int c) { capacity = c; }
-	int getCapacity() const { return capacity; }
-
-	int getFlow() const { return flow; }
+	int getResidualCapacity() const { return residualCap; }
 
 	// Adds flow to edge
 	void addResidualFlow(int amount);
@@ -84,8 +80,7 @@ struct Edge
 	bool isInLevelGraph(const Graph& graph) const;
 
 private:
-	int flow;
-	int capacity;
+	int residualCap;
 
 	/*Pointer to the edge in reverse direction.
 	  This is safe, because once a graph is created, it is static.

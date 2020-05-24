@@ -91,7 +91,7 @@ void Renderer::render(sf::RenderWindow& window, const Graph& graph, float deltaT
 			sf::Text labelText;
 			labelText.setFont(font);
 			labelText.setStyle(sf::Text::Bold);
-			labelText.setString(std::to_string(edge.getRemainingCapacity()));
+			labelText.setString(std::to_string(edge.getResidualCapacity()));
 			labelText.setCharacterSize(UI::fontSize);
 			labelText.setFillColor(sf::Color::Black);
 			sf::FloatRect textRect = labelText.getLocalBounds();

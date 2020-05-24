@@ -7,11 +7,9 @@ void Edge::addResidualFlow(int amount)
 {
 	assert(backward != nullptr);
 	assert(combined != nullptr);
-	assert(flow + amount <= capacity);
-	assert(backward->getFlow() >= amount);
+	assert(amount <= residualCap);
 
 	addFlow(amount);
-
 	backward->addFlow(-amount); 
 }
 
@@ -38,7 +36,7 @@ void Edge::setColor(sf::Color c)
 
 bool Edge::isInLevelGraph(const Graph& graph) const
 {
-	return (getRemainingCapacity() > 0) 
+	return (getResidualCapacity() > 0) 
 		&& ((graph.getLevel(startNode) + 1) == graph.getLevel(targetNode));
 }
 
@@ -51,6 +49,6 @@ void Edge::addFlow(int amount)
 		combined->renderedFlow += amount;
 	}
 
-	flow += amount;
-	combined->flow += amount;
+	residualCap -= amount;
+	combined->residualCap -= amount;
 }

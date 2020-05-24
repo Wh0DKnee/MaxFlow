@@ -21,7 +21,7 @@ GraphSearchResult Algorithm::DFS(Graph& graph, std::deque<Edge*>& outPath)
 			visited[v] = true;
 			for (auto& edge : graph[v].edges)
 			{
-				if (edge.getRemainingCapacity() <= 0)
+				if (edge.getResidualCapacity() <= 0)
 				{
 					continue;
 				}
@@ -67,7 +67,7 @@ GraphSearchResult Algorithm::BFS(Graph& graph, std::deque<Edge*>& outPath)
 
 		for (auto& edge : graph[v].edges)
 		{
-			if (edge.getRemainingCapacity() <= 0)
+			if (edge.getResidualCapacity() <= 0)
 			{
 				continue;
 			}
@@ -102,7 +102,7 @@ bool Algorithm::dinicDFS(Graph& graph, std::deque<Edge*>& outPath)
 			int validEdgeCount = 0;
 			for (auto& edge : graph[v].edges)
 			{
-				if (edge.getRemainingCapacity() <= 0 || !edge.isInLevelGraph(graph))
+				if (edge.getResidualCapacity() <= 0 || !edge.isInLevelGraph(graph))
 				{
 					continue;
 				}
@@ -219,9 +219,9 @@ int Algorithm::getMinResidualCapacity(const std::deque<Edge*>& path, Edge** outL
 	int minResidualCap = std::numeric_limits<int>::max();
 	for (const auto& edge : path)
 	{
-		if (edge->getRemainingCapacity() < minResidualCap)
+		if (edge->getResidualCapacity() < minResidualCap)
 		{
-			minResidualCap = edge->getRemainingCapacity();
+			minResidualCap = edge->getResidualCapacity();
 			if (outLimitingEdge != nullptr)
 			{
 				*outLimitingEdge = edge;
@@ -249,7 +249,7 @@ void Algorithm::pushRelabelStep(Graph& graph)
 
 		for (auto& edge : graph[front].edges)
 		{
-			if ((edge.getRemainingCapacity() > 0)
+			if ((edge.getResidualCapacity() > 0)
 				&& (graph[edge.startNode].getHeight() == (graph[edge.targetNode].getHeight() + 1)))
 			{
 				foundValidEdge = true;
@@ -271,7 +271,7 @@ void Algorithm::pushRelabelStep(Graph& graph)
 
 void Algorithm::push(Graph& graph, Edge& edge, int excess)
 {
-	int amountToPush = std::min(excess, edge.getRemainingCapacity());
+	int amountToPush = std::min(excess, edge.getResidualCapacity());
 	edge.addResidualFlow(amountToPush);
 	if (graph[edge.targetNode].getExcess() == 0 
 		&& edge.targetNode != graph.getStart()		// don't wanna push source to active nodes
@@ -287,7 +287,7 @@ void Algorithm::pushRelabelInit(Graph& graph)
 {
 	for (auto& e : graph[graph.getStart()].edges)
 	{
-		int amountToPush = e.getRemainingCapacity();
+		int amountToPush = e.getResidualCapacity();
 		if (amountToPush == 0) 
 		{ 
 			continue; 

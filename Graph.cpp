@@ -83,8 +83,8 @@ Graph::Graph(int numNodes, int maxCap, int windowWidth, int windowHeight, float 
 		}
 
 		// add two edges, one in each direction
-		vertices[pair.first].edges.emplace_back(pair.first, pair.second, capacityDis(randEngine), 0, true);
-		vertices[pair.second].edges.emplace_back(pair.second, pair.first, capacityDis(randEngine), 0, true);
+		vertices[pair.first].edges.emplace_back(pair.first, pair.second, capacityDis(randEngine), true);
+		vertices[pair.second].edges.emplace_back(pair.second, pair.first, capacityDis(randEngine), true);
 	}
 
 	// TODO: Add option to generate graph without backward edges in original graph.
@@ -207,8 +207,8 @@ void Graph::addBackwardEdges()
 			auto& curEdge = vert.edges[i];
 			auto& targetVertEdges = vertices[curEdge.targetNode].edges;
 
-			// Forward edge starts with 0 flow, so backward edge has full flow initially -> no remaining capacity.
-			Edge e(curEdge.targetNode, curEdge.startNode, curEdge.getCapacity(), curEdge.getCapacity());
+			// backward edge starts with residual capacity of 0.
+			Edge e(curEdge.targetNode, curEdge.startNode, 0);
 			targetVertEdges.push_back(e);
 			curEdge.setBackwardEdge(&targetVertEdges[targetVertEdges.size() - 1]);
 			targetVertEdges[targetVertEdges.size() - 1].setBackwardEdge(&curEdge);
@@ -233,8 +233,7 @@ void Graph::addCombinedEdges()
 				{
 					Edge e(	v.edges[i].startNode,
 							v.edges[i].targetNode,
-							v.edges[i].getCapacity() + v.edges[j].getCapacity(),
-							v.edges[i].getFlow() + v.edges[j].getFlow());
+							v.edges[i].getResidualCapacity() + v.edges[j].getResidualCapacity());
 
 					v.renderedEdges.push_back(e);
 					v.edges[i].setCombinedEdge(&v.renderedEdges.back());
