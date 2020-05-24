@@ -6,7 +6,14 @@
 #include "Algorithm.h"
 #include "UIConfig.h"
 
-Graph::Graph(int numNodes, int maxCap, int windowWidth, int windowHeight, float minDist) : minDist(minDist), maxCapacity(maxCap)
+Graph::Graph(int numNodes_, int maxCap, int windowWidth_, int windowHeight_, float minDist) 
+	: minDist(minDist), maxCapacity(maxCap), numNodes(numNodes_), windowWidth(windowWidth_), windowHeight(windowHeight_)
+{
+	seed = static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count());
+	Init();
+}
+
+void Graph::Init()
 {
 	static int margin = 20;
 	vertices.reserve(numNodes);
@@ -14,8 +21,8 @@ Graph::Graph(int numNodes, int maxCap, int windowWidth, int windowHeight, float 
 	std::default_random_engine randEngine;
 	std::uniform_real_distribution<float> xDis(static_cast<float>(0 + margin), static_cast<float>(windowWidth - margin));
 	std::uniform_real_distribution<float> yDis(static_cast<float>(0 + margin), static_cast<float>(windowHeight - margin));
-	std::uniform_int_distribution<> capacityDis(1, maxCap);
-	randEngine.seed(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
+	std::uniform_int_distribution<> capacityDis(1, maxCapacity);
+	randEngine.seed(seed);
 
 	// We re-generate nodes that are too close (for visualization purposes) until we've
 	// reached the maximum # of re-generation tries (so that we don't run into an
@@ -101,7 +108,13 @@ Graph::Graph(int numNodes, int maxCap, int windowWidth, int windowHeight, float 
 	increaseStartAndTargetIncidentCapacities();
 
 	initializeHeights();
+}
 
+void Graph::reset()
+{
+	vertices.clear();
+	levels.clear();
+	Init();
 }
 
 void Graph::highlightPath(const std::deque<Edge*>& path)

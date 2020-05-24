@@ -12,10 +12,12 @@ public:
 
 	Graph() = default;
 
-	// Randomly generates graph based on parameters.
-	Graph(int numNodes, int maxCap, int windowWidth, int windowHeight, float minDist = 0.f);
+	// Randomly generates graph based on parameters. TODO: change this ugly naming convention.
+	Graph(int numNodes_, int maxCap, int windowWidth_, int windowHeight_, float minDist = 0.f);
 
-	int maxCapacity;
+	void Init();
+
+	void reset();
 
 	size_t getSource() const { return source; }
 	size_t getSink() const { return sink; }
@@ -54,7 +56,13 @@ private:
 	std::vector<Vertex> vertices;
 	size_t source = 0;
 	size_t sink = 0;
+
 	float minDist = 0.f;
+	int maxCapacity;
+	int numNodes; 
+	int windowWidth;
+	int windowHeight;
+	unsigned int seed = 0;
 
 	// for Dinic - we store this here instead of on the vertices
 	// because resetting can be done in constant time this way.

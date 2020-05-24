@@ -74,6 +74,10 @@ int main()
 				v->reset();
 			}
 		}
+		if (ImGui::Button("reset"))
+		{
+			graph.reset();
+		}
 
 		if (ImGui::CollapsingHeader("Algo"))
 		{
