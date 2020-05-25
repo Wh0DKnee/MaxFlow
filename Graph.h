@@ -2,6 +2,7 @@
 #include <vector>
 #include <deque>
 #include <queue>
+#include <limits>
 #include "Vertex.h"
 
 //TODO: would be nice to be able to toggle between residual network and original network view.
@@ -12,8 +13,8 @@ public:
 
 	Graph() = default;
 
-	// Randomly generates graph based on parameters. TODO: change this ugly naming convention.
-	Graph(int numNodes_, int maxCap, int windowWidth_, int windowHeight_, float minDist = 0.f);
+	// Randomly generates graph based on parameters.
+	Graph(int numNodes, int maxCap, int windowWidth, int windowHeight, float minDist = 0.f, unsigned int seed = std::numeric_limits<unsigned int>::max());
 
 	void Init();
 
@@ -21,6 +22,8 @@ public:
 
 	size_t getSource() const { return source; }
 	size_t getSink() const { return sink; }
+
+	int getFlow() const;
 
 	void highlightPath(const std::deque<Edge*>& path);
 	void resetRenderInfo();

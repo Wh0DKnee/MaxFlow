@@ -6,10 +6,14 @@
 #include "Algorithm.h"
 #include "UIConfig.h"
 
-Graph::Graph(int numNodes_, int maxCap, int windowWidth_, int windowHeight_, float minDist) 
-	: minDist(minDist), maxCapacity(maxCap), numNodes(numNodes_), windowWidth(windowWidth_), windowHeight(windowHeight_)
+Graph::Graph(int numNodes, int maxCap, int windowWidth, int windowHeight, float minDist, unsigned int seed /*= std::numeric_limits<unsigned int>::max()*/) 
+	: minDist(minDist), maxCapacity(maxCap), numNodes(numNodes), windowWidth(windowWidth), windowHeight(windowHeight), seed(seed)
 {
-	seed = static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count());
+	if (seed == std::numeric_limits<unsigned int>::max())
+	{
+		this->seed = static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count());
+	}
+
 	Init();
 }
 
@@ -115,6 +119,11 @@ void Graph::reset()
 	vertices.clear();
 	levels.clear();
 	Init();
+}
+
+int Graph::getFlow() const
+{
+	return vertices[getSource()].getOutGoingFlow() - vertices[getSource()].getIncomingFlow();
 }
 
 void Graph::highlightPath(const std::deque<Edge*>& path)

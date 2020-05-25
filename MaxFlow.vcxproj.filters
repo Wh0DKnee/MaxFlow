@@ -72,6 +72,9 @@
     <ClCompile Include="PushRelabelVis.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="TestEnvironment.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphUtils.h">
@@ -114,6 +117,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="PushRelabelVis.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="TestEnvironment.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

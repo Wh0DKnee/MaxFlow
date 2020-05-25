@@ -59,6 +59,8 @@ struct Edge
 	int getResidualCapacity() const { return residualCap; }
 	void addCapacity(int c);
 
+	int getFlow() const;
+
 	// Adds flow to edge
 	void addResidualFlow(int amount);
 
@@ -129,6 +131,9 @@ struct Vertex
 	void setHeight(int h) { height = h; }
 	void incrementHeight() { ++height; }
 	int getHeight() const { return height; }
+
+	int getOutGoingFlow() const;
+	int getIncomingFlow() const;
 
 private:
 	int excess = 0;

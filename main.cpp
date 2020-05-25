@@ -12,9 +12,13 @@
 #include "SinglePathFlowVis.h"
 #include "DinicVisualizer.h"
 #include "PushRelabelVis.h"
+#include "TestEnvironment.h"
 
 int main()
 {
+	TestEnvironment te = TestEnvironment(1000, 200, 100);
+	te.runTest();
+
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 8;
 	sf::RenderWindow window(sf::VideoMode(1600, 900), "MaxFlow", sf::Style::Default, settings);

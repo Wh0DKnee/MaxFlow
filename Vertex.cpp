@@ -12,6 +12,17 @@ void Edge::addCapacity(int c)
 	}
 }
 
+int Edge::getFlow() const
+{
+	if (!isOriginal)
+	{
+		return 0; // backward edges don't really have a concept of flow.
+	}
+
+	assert(backward != nullptr);
+	return backward->getResidualCapacity(); // flow on an edge is equal to residualCapacity on its backward edge.
+}
+
 void Edge::addResidualFlow(int amount)
 {
 	assert(backward != nullptr);
@@ -60,4 +71,32 @@ void Edge::addFlow(int amount)
 
 	residualCap -= amount;
 	combined->residualCap -= amount;
+}
+
+int Vertex::getOutGoingFlow() const
+{
+	int flow = 0;
+	for (const auto& e : edges)
+	{
+		if (e.isOriginal)
+		{
+			flow += e.getFlow();
+		}
+	}
+	return flow;
+}
+
+int Vertex::getIncomingFlow() const
+{
+	int flow = 0;
+	for (const auto& e : edges)
+	{
+		if(!e.isOriginal)
+		{
+			// Residual capacity on outgoing backward edges is equal
+			// to flow on incoming original edges.
+			flow += e.getResidualCapacity();
+		}
+	}
+	return flow;
 }

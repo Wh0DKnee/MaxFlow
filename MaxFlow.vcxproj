@@ -146,6 +146,7 @@
     <ClCompile Include="imgui_draw.cpp" />
     <ClCompile Include="imgui_widgets.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="TestEnvironment.cpp" />
     <ClCompile Include="VectorUtils.cpp" />
     <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="Visualizer.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="LineShape.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="GraphUtils.h" />
+    <ClInclude Include="TestEnvironment.h" />
     <ClInclude Include="UIConfig.h" />
     <ClInclude Include="VectorUtils.h" />
     <ClInclude Include="Vertex.h" />
