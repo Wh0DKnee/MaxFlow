@@ -16,9 +16,6 @@
 
 int main()
 {
-	TestEnvironment te = TestEnvironment(1000, 200, 100);
-	te.runTest();
-
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 8;
 	sf::RenderWindow window(sf::VideoMode(1600, 900), "MaxFlow", sf::Style::Default, settings);
@@ -151,6 +148,22 @@ int main()
 		if (currentVisualizer != nullptr)
 		{
 			currentVisualizer->update(deltaTime.asSeconds());
+		}
+
+		if (ImGui::CollapsingHeader("Testing"))
+		{
+			static int numInstances = 10;
+			ImGui::InputInt("test instances", &numInstances);
+			static int numNodes = 30;
+			ImGui::InputInt("test nodes", &numNodes);
+			static int maxCapacity = 10;
+			ImGui::InputInt("test capacity", &maxCapacity);
+
+			if (ImGui::Button("Run Test"))
+			{
+				TestEnvironment te = TestEnvironment(numInstances, numNodes, maxCapacity);
+				te.runTest();
+			}
 		}
 
 		window.clear(sf::Color(209, 209, 209, 255));

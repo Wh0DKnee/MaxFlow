@@ -13,6 +13,8 @@ void TestEnvironment::runTest() const
 
 	for (int i = 0; i < numInstances; ++i)
 	{
+		std::cout << "Testing progess: instance " + std::to_string(i + 1) + "/" + std::to_string(numInstances) << std::endl;
+
 		unsigned int seed = static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count());
 		Graph ffGraph = Graph(numNodes, maxCapacity, 1000, 1000, 0.f, seed);
 		Graph ekGraph = Graph(numNodes, maxCapacity, 1000, 1000, 0.f, seed);
@@ -28,13 +30,18 @@ void TestEnvironment::runTest() const
 		assert(ffGraph.getFlow() == ekGraph.getFlow());
 		assert(ekGraph.getFlow() == dinicGraph.getFlow());
 		assert(dinicGraph.getFlow() == prGraph.getFlow());
+		
+		std::cout << "Max flow equal for all algorithms." << std::endl;
 
 		testConservationOfFlow(ffGraph);
 		testConservationOfFlow(ekGraph);
 		testConservationOfFlow(dinicGraph);
 		testConservationOfFlow(prGraph);
+
+		std::cout << "Conservation of flow and capacity contraints fulfilled for all algorithms. \n\n";
 	}
 
+	std::cout << "All tests passed. \n\n";
 }
 
 void TestEnvironment::testConservationOfFlow(const Graph& graph) const
