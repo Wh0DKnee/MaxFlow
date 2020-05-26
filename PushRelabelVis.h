@@ -1,5 +1,7 @@
 #pragma once
 #include "Visualizer.h"
+#include <SFML/Graphics/Color.hpp>
+
 class PushRelabelVis : public Visualizer
 {
 public:
@@ -15,5 +17,11 @@ private:
 	bool isFirstStep = true;
 
 	void saturatedCutVis();
+
+	size_t active = 0;
+	size_t previousActive = 0;
+	sf::Color activeColor = sf::Color(255, 136, 0);
 };
+
+bool colorEqualIngoreAlpha(const sf::Color& lhs, const sf::Color& rhs);
 

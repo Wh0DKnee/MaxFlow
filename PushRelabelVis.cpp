@@ -27,7 +27,28 @@ void PushRelabelVis::step()
 	}
 	else
 	{
-		Algorithm::pushRelabelStep(*graph);
+		if (graph->verticesWithExcess.empty())
+		{
+			if (colorEqualIngoreAlpha((*graph)[previousActive].renderInfo.getColor(), activeColor))
+			{
+				(*graph)[previousActive].renderInfo.setColor((*graph)[previousActive].renderInfo.getRegularColor());
+			}
+		}
+
+		active = graph->verticesWithExcess.front();
+		if (active != previousActive)
+		{
+			if (colorEqualIngoreAlpha((*graph)[previousActive].renderInfo.getColor(), activeColor))
+			{
+				(*graph)[previousActive].renderInfo.setColor((*graph)[previousActive].renderInfo.getRegularColor());
+			}
+			(*graph)[active].renderInfo.setColor(activeColor);
+		}
+		else
+		{
+			Algorithm::pushRelabelStep(*graph);
+		}
+		previousActive = active;
 	}
 
 	saturatedCutVis();
@@ -64,4 +85,9 @@ void PushRelabelVis::saturatedCutVis()
 		v.renderInfo.setColor(color);
 		++index;
 	}
+}
+
+bool colorEqualIngoreAlpha(const sf::Color& lhs, const sf::Color& rhs)
+{
+	return lhs.r == rhs.r && lhs.g == rhs.g && lhs.b == rhs.b;
 }

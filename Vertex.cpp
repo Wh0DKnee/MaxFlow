@@ -27,7 +27,7 @@ void Edge::addResidualFlow(int amount)
 {
 	assert(backward != nullptr);
 	assert(combined != nullptr);
-	assert(amount <= residualCap);
+	assert(amount <= residualCap); // because of this assert, capacity constraints can never be violated.
 
 	addFlow(amount);
 	backward->addFlow(-amount); 
