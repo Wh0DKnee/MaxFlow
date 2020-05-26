@@ -158,10 +158,12 @@ int main()
 			ImGui::InputInt("test nodes", &numNodes);
 			static int maxCapacity = 10;
 			ImGui::InputInt("test capacity", &maxCapacity);
+			static bool logToFile = false;
+			ImGui::Checkbox("Log To File", &logToFile);
 
 			if (ImGui::Button("Run Test"))
 			{
-				TestEnvironment te = TestEnvironment(numInstances, numNodes, maxCapacity);
+				TestEnvironment te = TestEnvironment(numInstances, numNodes, maxCapacity, logToFile);
 				te.runTest();
 			}
 		}
