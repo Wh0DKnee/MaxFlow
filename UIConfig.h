@@ -9,6 +9,7 @@ namespace UIConfig
 	static float labelRadius = 6.8f;
 	static float arrowDistance = 0.5f;
 	static float arrowLength = 10.f;
+	static float maxAdditionalArrowLength = 15.f;
 	static float arrowSpeed = 0.0f;
 	static const char* fonts[] = { "arial", "times", "segoeui", "calibri" };
 	static const char* font = "segoeui";

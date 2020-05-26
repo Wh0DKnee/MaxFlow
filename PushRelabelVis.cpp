@@ -27,9 +27,10 @@ void PushRelabelVis::step()
 	}
 	else
 	{
+		// This is hideous code.
 		if (graph->verticesWithExcess.empty())
 		{
-			if (colorEqualIngoreAlpha((*graph)[previousActive].renderInfo.getColor(), activeColor))
+			if (colorEqualIgnoreAlpha((*graph)[previousActive].renderInfo.getColor(), activeColor))
 			{
 				(*graph)[previousActive].renderInfo.setColor((*graph)[previousActive].renderInfo.getRegularColor());
 			}
@@ -38,7 +39,7 @@ void PushRelabelVis::step()
 		active = graph->verticesWithExcess.front();
 		if (active != previousActive)
 		{
-			if (colorEqualIngoreAlpha((*graph)[previousActive].renderInfo.getColor(), activeColor))
+			if (colorEqualIgnoreAlpha((*graph)[previousActive].renderInfo.getColor(), activeColor))
 			{
 				(*graph)[previousActive].renderInfo.setColor((*graph)[previousActive].renderInfo.getRegularColor());
 			}
@@ -87,7 +88,7 @@ void PushRelabelVis::saturatedCutVis()
 	}
 }
 
-bool colorEqualIngoreAlpha(const sf::Color& lhs, const sf::Color& rhs)
+bool colorEqualIgnoreAlpha(const sf::Color& lhs, const sf::Color& rhs)
 {
 	return lhs.r == rhs.r && lhs.g == rhs.g && lhs.b == rhs.b;
 }

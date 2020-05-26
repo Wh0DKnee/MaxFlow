@@ -106,7 +106,10 @@ void Renderer::render(sf::RenderWindow& window, const Graph& graph, float deltaT
 			line1.setFillColor(edge.renderInfo.getColor());
 			edges.push_back(line1);
 
-			ArrowShape arrow1 = ArrowShape(vert.pos + labelDelta * UI::arrowDistance, labelPos, UI::arrowLength + edge.renderedFlow, (UI::arrowLength + edge.renderedFlow) / 2.f);
+			float arrowLength = UI::arrowLength + ((edge.renderedFlow / graph.getMaxCapacity()) * UI::maxAdditionalArrowLength);
+			float arrowWidth = arrowLength / 2.f;
+
+			ArrowShape arrow1 = ArrowShape(vert.pos + labelDelta * UI::arrowDistance, labelPos, arrowLength, arrowWidth);
 			arrow1.setFillColor(edge.renderInfo.getColor());
 			arrows.push_back(arrow1);
 
@@ -116,7 +119,7 @@ void Renderer::render(sf::RenderWindow& window, const Graph& graph, float deltaT
 			line2.setFillColor(edge.renderInfo.getColor());
 			edges.push_back(line2);
 
-			ArrowShape arrow2 = ArrowShape(labelPos + labelDelta * UI::arrowDistance, neighborPos, UI::arrowLength + edge.renderedFlow, (UI::arrowLength + edge.renderedFlow) / 2.f);
+			ArrowShape arrow2 = ArrowShape(labelPos + labelDelta * UI::arrowDistance, neighborPos, arrowLength, arrowWidth);
 			arrow2.setFillColor(edge.renderInfo.getColor());
 			arrows.push_back(arrow2);
 		}
@@ -156,6 +159,7 @@ void Renderer::renderImGUI()
 	ImGui::SliderFloat("label radius", &UI::labelRadius, 0.f, 40.f);
 	ImGui::SliderFloat("arrow distance", &UI::arrowDistance, 0.f, 1.f);
 	ImGui::SliderFloat("arrow size", &UI::arrowLength, 0.f, 100.f);
+	ImGui::SliderFloat("max additional arrow size", &UI::maxAdditionalArrowLength, 0.f, 40.f);
 	ImGui::SliderFloat("arrow speed", &UI::arrowSpeed, 0.f, 3.f);
 	ImGui::SliderInt("font size", &UI::fontSize, 0, 30);
 	ImGui::Checkbox("node labels", &UI::drawNodeLabels);

@@ -23,5 +23,5 @@ private:
 	sf::Color activeColor = sf::Color(255, 136, 0);
 };
 
-bool colorEqualIngoreAlpha(const sf::Color& lhs, const sf::Color& rhs);
+bool colorEqualIgnoreAlpha(const sf::Color& lhs, const sf::Color& rhs);
 

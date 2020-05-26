@@ -31,6 +31,8 @@ public:
 	void setLevel(size_t index, int l);
 	int getLevel(size_t index) const;
 
+	int getMaxCapacity() const { return maxCapacity; }
+
 	void resetDinicLevels();
 
 	// TODO: this probably shouldn't be public - befriend all push relabel functions?
