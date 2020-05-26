@@ -53,12 +53,31 @@ void FileLogger::close()
 	outFile.close();
 }
 
+void ConsoleAndFileLogger::log(const std::string& s)
+{
+	consoleLogger.log(s);
+	fileLogger.log(s);
+}
+
+void ConsoleAndFileLogger::init()
+{
+	consoleLogger.init();
+	fileLogger.init();
+}
+
+void ConsoleAndFileLogger::close()
+{
+	consoleLogger.close();
+	fileLogger.close();
+}
+
+
 TestEnvironment::TestEnvironment(int numInstances, int numNodes, int maxCapacity, bool logToFile)
 	:numInstances(numInstances), numNodes(numNodes), maxCapacity(maxCapacity)
 {
 	if (logToFile)
 	{
-		logger = std::make_unique<FileLogger>();
+		logger = std::make_unique<ConsoleAndFileLogger>();
 	}
 	else
 	{

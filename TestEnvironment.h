@@ -16,15 +16,12 @@ public:
 class ConsoleLogger : public Logger
 {
 public:
-	ConsoleLogger() = default;
-
 	virtual void log(const std::string& s) override;
 };
 
 class FileLogger : public Logger
 {
 public:
-	// Inherited via Logger
 	virtual void log(const std::string& s) override;
 
 	virtual void init() override;
@@ -32,6 +29,21 @@ public:
 
 private:
 	std::ofstream outFile;
+};
+
+class ConsoleAndFileLogger : public Logger
+{
+public:
+
+	// Inherited via Logger
+	virtual void log(const std::string& s) override;
+
+	virtual void init() override;
+	virtual void close() override;
+	
+private:
+	FileLogger fileLogger;
+	ConsoleLogger consoleLogger;
 };
 
 class TestEnvironment
