@@ -5,6 +5,8 @@
 
 void Edge::addCapacity(int c)
 {
+	assert(residualCap + c >= 0);
+
 	residualCap += c;
 	if (combined != nullptr)
 	{

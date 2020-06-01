@@ -101,6 +101,7 @@ void TestEnvironment::runTest() const
 		Graph ekGraph = Graph(numNodes, maxCapacity, 1000, 1000, 0.f, seed);
 		Graph dinicGraph = Graph(numNodes, maxCapacity, 1000, 1000, 0.f, seed);
 		Graph prGraph = Graph(numNodes, maxCapacity, 1000, 1000, 0.f, seed);
+		std::vector<Graph*> testGraphs = { &ffGraph, &ekGraph, &dinicGraph, &prGraph };
 
 		Algorithm::fordFulkerson(ffGraph);
 		Algorithm::edmondsKarp(ekGraph);
@@ -111,6 +112,8 @@ void TestEnvironment::runTest() const
 		assert(ffGraph.getFlow() == ekGraph.getFlow());
 		assert(ekGraph.getFlow() == dinicGraph.getFlow());
 		assert(dinicGraph.getFlow() == prGraph.getFlow());
+
+		int flow1 = ffGraph.getFlow();
 		
 		logger->log("Max flow equal to " + std::to_string(ffGraph.getFlow()) + " for all algorithms.\n");
 
@@ -120,6 +123,42 @@ void TestEnvironment::runTest() const
 		testConservationOfFlow(prGraph);
 
 		logger->log("Conservation of flow and capacity contraints fulfilled for all algorithms. \n\n");
+
+		for (auto& g : testGraphs)
+		{
+			g->reset();
+			for (auto& e : (*g)[g->getSource()].edges)
+			{
+				if (e.isOriginal)
+				{
+					e.addCapacity(-e.getResidualCapacity()); // set capacity to zero on first edge.
+				}
+
+			}
+		}
+
+		for (auto& g : testGraphs)
+		{
+			auto& firstEdge = (*g)[g->getSource()].edges[0];
+			firstEdge.addCapacity(1);
+		}
+
+		Algorithm::fordFulkerson(ffGraph);
+		Algorithm::edmondsKarp(ekGraph);
+		Algorithm::dinic(dinicGraph);
+		Algorithm::pushRelabel(prGraph);
+
+		assert(ffGraph.getFlow() == ekGraph.getFlow());
+		assert(ekGraph.getFlow() == dinicGraph.getFlow());
+		assert(dinicGraph.getFlow() == prGraph.getFlow());
+
+		int flow2 = ffGraph.getFlow();
+
+		assert(flow2 <= 1);
+
+		//logger->log("Changed capacity on outgoing edge to zero, resulting flow was: ");
+		//logger->log(std::to_string(flow2));
+		//logger->log(".\n\n");
 	}
 
 	logger->log("All tests passed. \n\n");

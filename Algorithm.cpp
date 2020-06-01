@@ -275,7 +275,7 @@ void Algorithm::push(Graph& graph, Edge& edge, int excess)
 	edge.addResidualFlow(amountToPush);
 	if (graph[edge.targetNode].getExcess() == 0 
 		&& edge.targetNode != graph.getSource()		// don't wanna push source to active nodes
-		&& edge.targetNode != graph.getSink())	// also not the target
+		&& edge.targetNode != graph.getSink())		// also not the target
 	{
 		graph.verticesWithExcess.push(edge.targetNode);
 	}

@@ -194,6 +194,8 @@ void Graph::selectSourceAndSinkNodes()
 	vertices[source].renderInfo.setHighlightColor(UIConfig::startColor);
 	vertices[sink].renderInfo.setRegularColor(UIConfig::targetColor);
 	vertices[sink].renderInfo.setHighlightColor(UIConfig::targetColor);
+
+	// TODO: Could delete all edges going into source and out of sink.
 }
 
 void Graph::addBackwardEdges()

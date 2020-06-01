@@ -19,6 +19,7 @@
 	So, each edge in the residual graph has a pointer to its combined edge that it's a part of,
 	so that it can update the data in the combined edge whenever it changes.
 
+	TOOD: Update comment.
 
 	The whole point of the residual graph is that we don't need to differ between forward and
 	backward edges, which simplifies the algorithms. However, we still tag each edge whether it
