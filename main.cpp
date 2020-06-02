@@ -62,12 +62,18 @@ int main()
 		ImGui::InputInt("totalCapacity", &maxCapacity);
 		static float minDistance = 150.f;
 		ImGui::InputFloat("minDistance", &minDistance);
+		static int seed = 0;
+		ImGui::InputInt("custom seed", &seed);
+		static bool useCustomSeed = false;
+		ImGui::Checkbox("use custom seed", &useCustomSeed);
 
 		// A bit of ugly UI code - okay for now though (AKA I'll never touch this again)
 		if (ImGui::Button("re-generate"))
 		{
 			assert(numNodes >= 0 && maxCapacity >= 0);
-			graph = Graph(numNodes, maxCapacity, window.getSize().x, window.getSize().y, minDistance);
+			unsigned int s = useCustomSeed ? static_cast<unsigned int>(seed) : std::numeric_limits<unsigned int>::max();
+			
+			graph = Graph(numNodes, maxCapacity, window.getSize().x, window.getSize().y, minDistance, s);
 
 			for (auto& v : visualizers)
 			{
@@ -143,6 +149,10 @@ int main()
 
 			ImGui::SliderFloat("Auto-Step Delay", &autoStepDelay, 0.1f, 5.f);
 			
+			if (ImGui::Button("Show Min Cut"))
+			{
+				pushRelabelVis.saturatedCutVis();
+			}
 		}
 
 		if (currentVisualizer != nullptr)

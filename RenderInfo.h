@@ -35,6 +35,11 @@ struct VertexRenderInfo : public RenderInfo
 
 	enum LabelType { NONE, HEIGHT };
 	LabelType labelType = LabelType::NONE;
+
+	enum Shape { CIRCLE, RECT };
+	Shape shape = Shape::CIRCLE;
+
 	float radius = UIConfig::nodeRadius;
+	float squareLength = UIConfig::nodeSquareSize;
 };
 

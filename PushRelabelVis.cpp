@@ -3,6 +3,7 @@
 #include <cassert>
 
 const float PushRelabelVis::nodeRenderRadius = 10.f;
+const float PushRelabelVis::nodeSquareRenderLength = 23.f;
 
 void PushRelabelVis::reset()
 {
@@ -22,6 +23,7 @@ void PushRelabelVis::step()
 		for (auto& v : *graph)
 		{
 			v.renderInfo.radius = nodeRenderRadius;
+			v.renderInfo.squareLength = nodeSquareRenderLength;
 			v.renderInfo.labelType = VertexRenderInfo::LabelType::HEIGHT;
 		}
 	}
@@ -77,11 +79,13 @@ void PushRelabelVis::saturatedCutVis()
 		auto color = v.renderInfo.getColor();
 		if (searchResult.visited[index])
 		{
-			color.a = 255;
+			//color.a = 255;
+			v.renderInfo.shape = VertexRenderInfo::Shape::CIRCLE;
 		}
 		else
 		{
-			color.a = 120;
+			v.renderInfo.shape = VertexRenderInfo::Shape::RECT;
+			//color.a = 120;
 		}
 		v.renderInfo.setColor(color);
 		++index;

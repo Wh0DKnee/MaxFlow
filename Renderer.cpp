@@ -36,11 +36,22 @@ void Renderer::render(sf::RenderWindow& window, const Graph& graph, float deltaT
 
 	for (const auto& vert : graph)
 	{
-		sf::CircleShape nodeShape(vert.renderInfo.radius);
-		nodeShape.setFillColor(vert.renderInfo.getColor());
-		nodeShape.setPosition(vert.pos.x, vert.pos.y);
-		nodeShape.setOrigin(vert.renderInfo.radius, vert.renderInfo.radius);
-		window.draw(nodeShape);
+		if (vert.renderInfo.shape == VertexRenderInfo::Shape::CIRCLE)
+		{
+			sf::CircleShape nodeShape(vert.renderInfo.radius);
+			nodeShape.setFillColor(vert.renderInfo.getColor());
+			nodeShape.setPosition(vert.pos.x, vert.pos.y);
+			nodeShape.setOrigin(vert.renderInfo.radius, vert.renderInfo.radius);
+			window.draw(nodeShape);
+		}
+		else if (vert.renderInfo.shape == VertexRenderInfo::Shape::RECT)
+		{
+			sf::RectangleShape nodeShape(sf::Vector2f(vert.renderInfo.squareLength, vert.renderInfo.squareLength));
+			nodeShape.setFillColor(vert.renderInfo.getColor());
+			nodeShape.setPosition(vert.pos.x, vert.pos.y);
+			nodeShape.setOrigin(vert.renderInfo.squareLength / 2.f, vert.renderInfo.squareLength / 2.f);
+			window.draw(nodeShape);
+		}
 
 	}
 

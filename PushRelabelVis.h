@@ -11,12 +11,14 @@ public:
 
 	virtual void runAlgorithm() override;
 
+	// Push Relabel has height labels on nodes, so we make them bigger for readability.
 	static const float nodeRenderRadius;
+	static const float nodeSquareRenderLength;
+
+	void saturatedCutVis();
 
 private:
 	bool isFirstStep = true;
-
-	void saturatedCutVis();
 
 	size_t active = 0;
 	size_t previousActive = 0;

@@ -35,7 +35,9 @@ void VertexRenderInfo::reset()
 {
 	RenderInfo::resetHighlight();
 	labelType = LabelType::NONE;
+	shape = Shape::CIRCLE;
 	radius = UIConfig::nodeRadius;
+	squareLength = UIConfig::nodeSquareSize;
 }
 
 std::string VertexRenderInfo::getLabel(const Vertex& vert) const
