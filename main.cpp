@@ -56,7 +56,7 @@ int main()
 		ImGui::Begin("Debug"); // begin window
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
-		static int numNodes = 10;
+		static int numNodes = 15;
 		ImGui::InputInt("#nodes", &numNodes);
 		static int maxCapacity = 10;
 		ImGui::InputInt("totalCapacity", &maxCapacity);
@@ -147,12 +147,13 @@ int main()
 				currentVisualizer->autoStep();
 			}
 
-			ImGui::SliderFloat("Auto-Step Delay", &autoStepDelay, 0.1f, 5.f);
-			
 			if (ImGui::Button("Show Min Cut"))
 			{
 				pushRelabelVis.saturatedCutVis();
 			}
+
+			ImGui::SliderFloat("Auto-Step Delay", &autoStepDelay, 0.1f, 5.f);
+			
 		}
 
 		if (currentVisualizer != nullptr)

@@ -2,7 +2,7 @@
 #include "Algorithm.h"
 #include <cassert>
 
-const float PushRelabelVis::nodeRenderRadius = 10.f;
+const float PushRelabelVis::nodeRenderRadius = 11.5f;
 const float PushRelabelVis::nodeSquareRenderLength = 23.f;
 
 void PushRelabelVis::reset()

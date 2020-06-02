@@ -8,6 +8,7 @@
 #include "VectorUtils.h"
 #include "ArrowShape.h"
 #include <cmath>
+#include <algorithm>
 #include "Graph.h"
 
 #include "imgui.h"
@@ -117,7 +118,7 @@ void Renderer::render(sf::RenderWindow& window, const Graph& graph, float deltaT
 			line1.setFillColor(edge.renderInfo.getColor());
 			edges.push_back(line1);
 
-			float arrowLength = UI::arrowLength + ((edge.renderedFlow / graph.getMaxCapacity()) * UI::maxAdditionalArrowLength);
+			float arrowLength = UI::arrowLength + (std::min(edge.renderedFlow / static_cast<float>(graph.getMaxCapacity()), 1.f) * UI::maxAdditionalArrowLength);
 			float arrowWidth = arrowLength / 2.f;
 
 			ArrowShape arrow1 = ArrowShape(vert.pos + labelDelta * UI::arrowDistance, labelPos, arrowLength, arrowWidth);
