@@ -53,7 +53,7 @@ int main()
 		ImGui::SFML::Update(window, deltaTime);
 
 		ImGui::SetNextWindowBgAlpha(0.8f);
-		ImGui::Begin("Debug"); // begin window
+		ImGui::Begin("Controls"); // begin window
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
 		static int numNodes = 15;

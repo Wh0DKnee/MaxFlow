@@ -102,7 +102,7 @@ bool Algorithm::dinicDFS(Graph& graph, std::deque<Edge*>& outPath)
 			int validEdgeCount = 0;
 			for (auto& edge : graph[v].edges)
 			{
-				if (edge.getResidualCapacity() <= 0 || !edge.isInLevelGraph(graph))
+				if (!edge.isInLevelGraph(graph))
 				{
 					continue;
 				}
