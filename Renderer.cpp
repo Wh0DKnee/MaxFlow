@@ -53,7 +53,6 @@ void Renderer::render(sf::RenderWindow& window, const Graph& graph, float deltaT
 			nodeShape.setOrigin(vert.renderInfo.squareLength / 2.f, vert.renderInfo.squareLength / 2.f);
 			window.draw(nodeShape);
 		}
-
 	}
 
 	if (UI::drawNodeLabels)

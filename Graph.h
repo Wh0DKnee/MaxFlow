@@ -76,6 +76,8 @@ private:
 	// don't have to be reset and it makes the code cleaner.
 	std::vector<int> levels;
 
+	void spaceVertices(int iterations);
+
 	void selectSourceAndSinkNodes();
 
 	void addBackwardEdges();

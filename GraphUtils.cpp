@@ -21,8 +21,7 @@ bool GraphUtils::intersectWithWidth(sf::Vector2f a, sf::Vector2f b, sf::Vector2f
 		return intersect(a, b, c, d);
 	}
 
-	// TEST BEGIN
-
+	// offset starting points to ignore intersection close to nodes
 	static const float offset = 40.f;
 	auto bToA = b - a;
 	auto cToD = d - c;
@@ -30,9 +29,6 @@ bool GraphUtils::intersectWithWidth(sf::Vector2f a, sf::Vector2f b, sf::Vector2f
 	b = b - VectorUtils::normalize(bToA) * offset;
 	c = c + VectorUtils::normalize(cToD) * offset;
 	d = d - VectorUtils::normalize(cToD) * offset;
-	
-
-	// TEST END
 
 
 	float halfWidth = width / 2.f;

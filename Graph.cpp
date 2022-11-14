@@ -19,7 +19,7 @@ Graph::Graph(int numNodes, int maxCap, int windowWidth, int windowHeight, float 
 
 void Graph::Init()
 {
-	static int margin = 20;
+	const int margin = 20;
 	vertices.reserve(numNodes);
 
 	std::default_random_engine randEngine;
@@ -33,7 +33,7 @@ void Graph::Init()
 	// infinite loop for some inputs)
 	// TODO: Use a more sophisticated approach, for example https://en.wikipedia.org/wiki/Lloyd's_algorithm
 	int tries = 0;
-	static int maxTries = 10000;
+	const int maxTries = 10000;
 	for (int i = 0; i < numNodes; )
 	{
 		float x = xDis(randEngine);
@@ -50,6 +50,8 @@ void Graph::Init()
 			++tries;
 		}
 	}
+
+	spaceVertices(10);
 
 	std::vector<std::pair<size_t, size_t>> vertexPairs;
 	for (size_t i = 0; i < size() - 1; ++i)
@@ -163,6 +165,40 @@ int Graph::getLevel(size_t index) const
 void Graph::resetDinicLevels()
 {
 	levels.assign(size(), -1);
+}
+
+void Graph::spaceVertices(int iterations)
+{
+	while (iterations > 0)
+	{
+		const float influenceRadius = 300.f;
+		const float influenceRadiusSquared = influenceRadius * influenceRadius;
+
+		std::vector<sf::Vector2f> forces(vertices.size(), sf::Vector2f(0.f, 0.f));
+		for (size_t i = 0; i < vertices.size() - 1; ++i)
+		{
+			for (size_t j = i + 1; j < vertices.size(); ++j)
+			{
+				sf::Vector2f fromJToI = vertices[i].pos - vertices[j].pos;
+				float distSquared = fromJToI.x * fromJToI.x + fromJToI.y * fromJToI.y;
+				if (distSquared > influenceRadiusSquared)
+				{
+					continue;
+				}
+
+				const float multiplier = 1000.f;
+				forces[i] += (1.f / distSquared) * multiplier * fromJToI;
+				forces[j] += (1.f / distSquared) * -multiplier * fromJToI;
+			}
+		}
+
+		for (size_t i = 0; i < vertices.size() - 1; ++i)
+		{
+			vertices[i].pos += forces[i];
+		}
+
+		--iterations;
+	}
 }
 
 void Graph::selectSourceAndSinkNodes()
